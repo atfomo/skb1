@@ -1,44 +1,33 @@
-// Inside checkUserStatus.js
-const User = require('../models/User');
+// backend/middleware/checkUserStatus.js
+const User = require('../models/User'); // Import the User model
 
 const checkUserStatus = async (req, res, next) => {
-    console.log('--- CHECK USER STATUS MIDDLEWARE DEBUG ---');
-    console.log('CheckUserStatus: Request Path:', req.path); // This will show "/auth/me"
-
+    // req.user.id is populated by authenticateJWT middleware
     if (!req.user || !req.user.id) {
-        console.log('CheckUserStatus: req.user or req.user.id not found.');
-        return res.status(401).json({ message: 'Authentication required: User ID not available.' });
+        // This should ideally not happen if authenticateJWT runs first, but good for robustness
+        return res.status(401).json({ message: 'Authentication required to check user status.' });
     }
 
     try {
         const user = await User.findById(req.user.id);
-        req.fullUser = user;
 
         if (!user) {
-            console.log(`CheckUserStatus: User with ID ${req.user.id} not found in DB.`);
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        // *** THIS IS THE MOST IMPORTANT LOG ***
-        console.log(`CheckUserStatus: User ID ${user._id}, Username: ${user.username}, Account Status: ${user.accountStatus}`);
-
         if (user.accountStatus === 'banned') {
-            console.warn(`CheckUserStatus: BANNED user ${user._id} attempting to access protected route. Returning 403.`);
+            console.warn(`User ${user._id} (${user.username}) attempted action but is banned.`);
             return res.status(403).json({
                 message: 'Your account has been permanently banned due to fraudulent activity. All pending earnings have been forfeited. This decision is final.',
-                banned: true
+                banned: true // A flag for the frontend to easily detect and display a specific message
             });
         }
-        // If you have other statuses like 'pending_review' that should block access, check them here too
-        // if (user.accountStatus === 'pending_review') {
-        //     console.warn(`CheckUserStatus: User ${user._id} has pending_review status. Returning 403.`);
-        //     return res.status(403).json({ message: 'Your account is under review. Access denied.' });
-        // }
 
-        console.log('CheckUserStatus: User status is active. Proceeding.');
-        next();
+        // Attach the full user object to the request for subsequent handlers if needed
+        req.fullUser = user; 
+        next(); // User is active, proceed
     } catch (error) {
-        console.error('CheckUserStatus Error:', error.message, error.stack); // Log stack for more info
+        console.error('Error in checkUserStatus middleware:', error);
         res.status(500).json({ message: 'Server error during user status check.' });
     }
 };

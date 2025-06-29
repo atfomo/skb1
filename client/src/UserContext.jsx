@@ -1,16 +1,24 @@
+// client/src/UserContext.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Keep for initial checks, but don't rely solely on it for user state
 import { API_BASE_URL } from './config';
 
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
+    // State for the raw JWT token from localStorage
     const [token, setToken] = useState(() => localStorage.getItem('jwtToken'));
+
+    // State for the full user object, initialized to null or basic data
+    // We will populate this fully via fetchUserData
     const [user, setUser] = useState(null);
+
+    // Initial loading state - crucial for showing a loading spinner or delaying rendering
     const [loadingUser, setLoadingUser] = useState(true);
     const [hasDashboard, setHasDashboard] = useState(false);
 
+    // Derived state: isAuthenticated based on user object presence
     const isAuthenticated = !!user;
 
     const logout = useCallback(() => {
@@ -18,34 +26,39 @@ export const UserProvider = ({ children }) => {
         setToken(null);
         setUser(null);
         setHasDashboard(false);
-        localStorage.removeItem('jwtToken'); // <-- This is the key action of logout()
+        localStorage.removeItem('jwtToken');
         console.log('UserContext: Logout complete. Token and user state cleared.');
-    }, []);
+        // No need to set setLoadingUser(false) here, it will be handled by the useEffect.
+        // If it was already true when logout is called, it means fetchUserData failed,
+        // and fetchUserData's finally block will set it to false.
+    }, []); // No dependencies for logout
 
     const fetchUserData = useCallback(async (authToken) => {
-        setLoadingUser(true);
+        setLoadingUser(true); // Always set loading to true when fetching data
         console.log('UserContext: fetchUserData called. AuthToken:', authToken ? 'Present' : 'Absent');
 
         if (!authToken) {
             console.log('UserContext: No authToken provided for fetchUserData. Resetting user state.');
             setUser(null);
             setHasDashboard(false);
-            setLoadingUser(false);
+            setLoadingUser(false); // Finished loading (nothing to fetch)
             return;
         }
 
+        // Optional: Pre-decode to check for immediate expiration before API call (optimistic check)
         try {
             const decoded = jwtDecode(authToken);
             if (decoded.exp * 1000 < Date.now()) {
                 console.warn('UserContext: JWT found in localStorage is already expired locally. Initiating logout.');
-                logout(); // Call full logout if token is expired locally
+                logout();
                 return;
             }
         } catch (decodeError) {
             console.error('UserContext: Failed to decode stored JWT (malformed). Initiating logout.', decodeError);
-            logout(); // Call full logout for malformed token
+            logout();
             return;
         }
+
 
         try {
             const config = { headers: { 'Authorization': `Bearer ${authToken}` } };
@@ -54,6 +67,7 @@ export const UserProvider = ({ children }) => {
             const userRes = await axios.get(`${API_BASE_URL}/auth/me`, config);
             console.log('UserContext: User data fetched successfully from /auth/me:', userRes.data);
 
+            // Set full user data from backend response
             setUser(userRes.data);
 
             console.log('UserContext: Attempting to fetch dashboard status from /api/project/creator-dashboard-status...');
@@ -63,21 +77,17 @@ export const UserProvider = ({ children }) => {
 
         } catch (error) {
             console.error('UserContext: Failed to fetch user data or dashboard status:', error.response?.data?.message || error.message);
-            
+            // Handle 401 (Unauthorized) or 403 (Forbidden) specifically
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 console.log('UserContext: Server responded with 401/403. Token invalid/expired or unauthorized. Calling logout()...');
-                logout(); // Only call full logout for explicit auth errors
+                logout();
             } else {
-                // --- MODIFIED ERROR HANDLING HERE ---
-                console.warn('UserContext: Non-authentication error during fetchUserData. Clearing user state but keeping token in localStorage.');
-                setUser(null); // Clear user data in state
-                setHasDashboard(false); // Clear dashboard status
-                // Do NOT call logout() here, which would remove token from localStorage.
-                // The main useEffect will see the token is still there and retry on next render/token change
-                // or the user can refresh to retry. This prevents premature full logouts.
+                // For other errors (e.g., network error, 500 server error)
+                console.log('UserContext: Non-authentication error or server issue. Clearing user/token states locally and logging out.');
+                logout(); // Logout to ensure consistency, better safe than sorry
             }
         } finally {
-            setLoadingUser(false);
+            setLoadingUser(false); // Always set loading to false when fetch is complete
             console.log('UserContext: fetchUserData finished.');
         }
     }, [logout]); // logout is a dependency but it's memoized with useCallback
@@ -86,21 +96,26 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         console.log('UserContext: Main useEffect (token/initial load) triggered. Current token state:', token ? 'PRESENT' : 'ABSENT');
         if (token) {
+            // If token exists, attempt to fetch user data
             fetchUserData(token);
         } else {
+            // If no token, or token was just cleared by logout(), ensure states are reset
             setUser(null);
             setHasDashboard(false);
-            setLoadingUser(false);
+            setLoadingUser(false); // No token, so no loading needed
         }
-    }, [token, fetchUserData]);
+    }, [token, fetchUserData]); // fetchUserData is a dependency
 
+    // `login` function to be called from your login component
     const login = useCallback((jwtToken) => {
         console.log('UserContext: login called from external component. Setting token...');
         localStorage.setItem('jwtToken', jwtToken);
         console.log('UserContext: Token SET in localStorage. Verification:', localStorage.getItem('jwtToken') ? 'SUCCESS' : 'FAILED');
 
-        setToken(jwtToken);
-        setLoadingUser(true);
+        setToken(jwtToken); // Update token state, which will trigger the useEffect to fetch user data
+        // Do NOT set user directly here. Let fetchUserData populate the user state from the backend
+        // This ensures user data is always fresh from the authoritative source.
+        setLoadingUser(true); // Indicate loading while fetchUserData runs
     }, []);
 
     // Handles changes to localStorage from other tabs/windows
@@ -110,7 +125,7 @@ export const UserProvider = ({ children }) => {
                 const storedToken = localStorage.getItem('jwtToken');
                 if (storedToken !== token) {
                     console.log('UserContext: localStorage "jwtToken" changed externally. Updating token state.');
-                    setToken(storedToken);
+                    setToken(storedToken); // This will trigger the main useEffect
                 }
             }
         };
@@ -121,17 +136,19 @@ export const UserProvider = ({ children }) => {
 
     const contextValue = {
         user,
-        loadingUser,
+        loadingUser, // Important for components to know when data is ready
         token,
         isAuthenticated,
         hasDashboard,
         logout,
         login,
-        refetchUserData: fetchUserData,
+        refetchUserData: fetchUserData, // Expose to allow manual refetch if needed
+        // setUser is generally not exposed, as login/logout/fetchUserData manage it
     };
 
     return (
         <UserContext.Provider value={contextValue}>
+            {/* Render children only when loadingUser is false, or render a loading indicator */}
             {loadingUser ? <div>Loading user data...</div> : children}
         </UserContext.Provider>
     );
