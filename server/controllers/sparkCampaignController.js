@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const SparkCampaign = require('../models/SparkCampaign');
 const Action = require('../models/Action'); // Make sure you have this model
-const Project = require('../models/Project');
+const Project = require('../models/Project'); // Correctly importing Project model
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -44,54 +44,63 @@ const extractTelegramGroupId = (link) => {
 const validateSparkCampaignInput = (data, isUpdate = false) => {
     const errors = [];
 
+    // Name validation
     if (!isUpdate || data.name !== undefined) {
         if (!data.name || data.name.trim().length < 3 || data.name.trim().length > 100) {
             errors.push("Campaign name is required and must be between 3 and 100 characters.");
         }
     }
 
+    // Telegram Group Link validation
     if (!isUpdate || data.telegramGroupLink !== undefined) {
         if (!data.telegramGroupLink || !/^(https?:\/\/)?(www\.)?t\.me\/[a-zA-Z0-9_]+(\/[a-zA-Z0-9_]+)?\/?$/.test(data.telegramGroupLink)) {
             errors.push("Valid Telegram Group Link is required.");
         }
     }
+    // Telegram Chat ID validation (derived from link)
     if (!isUpdate || data.telegramChatId !== undefined) {
         if (!data.telegramChatId || typeof data.telegramChatId !== 'string' || data.telegramChatId.trim() === '') {
             errors.push("Could not extract a unique Telegram Chat ID from the provided link. Please check the format.");
         }
     }
 
-
+    // Tweet URL validation
     if (!isUpdate || data.tweetUrl !== undefined) {
         if (!data.tweetUrl || !/^(https?:\/\/)?(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+(\/)?$/.test(data.tweetUrl)) {
             errors.push("Valid X (Twitter) Tweet URL is required.");
         }
     }
 
+    // Budget validation
     if (!isUpdate || data.budget !== undefined) {
         if (typeof data.budget !== 'number' || isNaN(data.budget) || data.budget < 1) {
             errors.push("Budget must be a positive number.");
         }
     }
 
+    // Duration validation
     if (!isUpdate || data.durationHours !== undefined) {
         if (typeof data.durationHours !== 'number' || isNaN(data.durationHours) || data.durationHours < 1 || data.durationHours > 720) {
             errors.push("Duration must be a positive integer between 1 and 720 hours.");
         }
     }
 
+    // Required Actions validation (basic type check)
     if (!isUpdate || data.requiredActions !== undefined) {
         if (typeof data.requiredActions !== 'object' || data.requiredActions === null) {
             errors.push("Required actions data is malformed.");
         }
+        // Deeper validation of requiredActions can be added here if specific properties are expected
     }
 
+    // Additional Instructions validation
     if (!isUpdate || data.additionalInstructions !== undefined) {
         if (data.additionalInstructions && data.additionalInstructions.length > 500) {
             errors.push("Additional instructions cannot exceed 500 characters.");
         }
     }
 
+    // Hashtags validation
     if (data.hashtags !== undefined) {
         if (!Array.isArray(data.hashtags)) {
             errors.push("Hashtags must be an array of strings.");
@@ -100,12 +109,14 @@ const validateSparkCampaignInput = (data, isUpdate = false) => {
         }
     }
 
+    // Banner Image URL validation
     if (!isUpdate || data.bannerImageUrl !== undefined) {
         if (!data.bannerImageUrl || typeof data.bannerImageUrl !== 'string' || data.bannerImageUrl.trim() === '') {
             errors.push("Campaign banner image is required.");
         }
     }
 
+    // Campaign Type validation
     if (data.campaignType && data.campaignType !== 'spark') {
         errors.push("Campaign type must be 'spark'.");
     }
@@ -552,9 +563,9 @@ exports.createSparkCampaign = async (req, res, next) => {
         const currentRewardPoolBalance = userRewardPool; // Initial current balance is the full reward pool
 
         console.log(`Calculated values before creating SparkCampaign document:`);
-        console.log(`    userRewardPool: ${userRewardPool}`);
-        console.log(`    platformFeeAmount: ${platformFeeAmount}`);
-        console.log(`    currentRewardPoolBalance: ${currentRewardPoolBalance}`);
+        console.log(`     userRewardPool: ${userRewardPool}`);
+        console.log(`     platformFeeAmount: ${platformFeeAmount}`);
+        console.log(`     currentRewardPoolBalance: ${currentRewardPoolBalance}`);
 
         // --- 5. Create Spark Campaign Document ---
         const newSparkCampaign = new SparkCampaign({
@@ -572,7 +583,7 @@ exports.createSparkCampaign = async (req, res, next) => {
             additionalInstructions: additionalInstructions ? additionalInstructions.trim() : '',
             campaignType: campaignType || 'spark',
             status: 'pending', // Default status
-            userRewardPool,       // Set calculated values
+            userRewardPool,      // Set calculated values
             platformFeeAmount,
             currentRewardPoolBalance
         });
@@ -748,12 +759,36 @@ exports.updateSparkCampaign = async (req, res, next) => {
         // Logic for budget update: only allowed for 'pending' or 'paused' campaigns
         if (parsedUpdates.budget !== undefined && parsedUpdates.budget !== sparkCampaign.budget) {
             if (['pending', 'paused'].includes(sparkCampaign.status)) {
+                // If the budget is being increased, check user balance
+                if (parsedUpdates.budget > sparkCampaign.budget) {
+                    const creator = await User.findById(authenticatedUserId).session(session);
+                    const additionalBudgetNeeded = parsedUpdates.budget - sparkCampaign.budget;
+                    if (creator.balance < additionalBudgetNeeded) {
+                        await session.abortTransaction();
+                        return res.status(400).json({
+                            message: `Insufficient balance to increase campaign budget. Needed: ${additionalBudgetNeeded}, Available: ${creator.balance}.`,
+                            code: "INSUFFICIENT_BALANCE"
+                        });
+                    }
+                    creator.balance -= additionalBudgetNeeded;
+                    await creator.save({ session });
+                    console.log(`[SparkCampaignController] User ${authenticatedUserId} balance decreased by ${additionalBudgetNeeded} for budget increase. New balance: ${creator.balance}`);
+                }
+                // If the budget is being decreased, refund the difference to the user
+                else if (parsedUpdates.budget < sparkCampaign.budget) {
+                    const creator = await User.findById(authenticatedUserId).session(session);
+                    const refundAmount = sparkCampaign.budget - parsedUpdates.budget;
+                    creator.balance += refundAmount;
+                    await creator.save({ session });
+                    console.log(`[SparkCampaignController] User ${authenticatedUserId} balance increased by ${refundAmount} for budget decrease. New balance: ${creator.balance}`);
+                }
+
                 sparkCampaign.budget = parsedUpdates.budget;
                 // Recalculate related fields if budget changes
                 const effectiveBudget = (typeof parsedUpdates.budget === 'number' && !isNaN(parsedUpdates.budget) && parsedUpdates.budget >= 1) ? parsedUpdates.budget : 0;
                 sparkCampaign.userRewardPool = effectiveBudget * 0.80;
                 sparkCampaign.platformFeeAmount = effectiveBudget * 0.20;
-                sparkCampaign.currentRewardPoolBalance = sparkCampaign.userRewardPool; // Reset current pool to new user reward pool
+                sparkCampaign.currentRewardPoolBalance = sparkCampaign.userRewardPool; // Reset current pool to new user reward pool (assuming this is desired behavior on budget change)
                 console.log(`[SparkCampaignController] Budget updated for campaign ${campaignId}. New budget: ${parsedUpdates.budget}, New Reward Pool: ${sparkCampaign.currentRewardPoolBalance.toFixed(2)}.`);
             } else {
                 await session.abortTransaction();
@@ -772,7 +807,8 @@ exports.updateSparkCampaign = async (req, res, next) => {
             'additionalInstructions',
             'minMessageLength',
             'messageCooldownSeconds',
-            'bannerImageUrl'
+            'bannerImageUrl',
+            'reactionCooldownSeconds' // Added this field as it's relevant for Spark campaigns
         ];
 
         for (const key of allowedDirectUpdates) {
@@ -784,15 +820,26 @@ exports.updateSparkCampaign = async (req, res, next) => {
         // Status change logic
         if (parsedUpdates.status !== undefined && parsedUpdates.status !== sparkCampaign.status) {
             if (parsedUpdates.status === 'active' && sparkCampaign.status === 'pending') {
+                // When activating from pending, set start and end dates
                 sparkCampaign.startDate = new Date();
                 sparkCampaign.endDate = new Date(sparkCampaign.startDate.getTime() + sparkCampaign.durationHours * 60 * 60 * 1000);
             } else if (parsedUpdates.status === 'paused' && sparkCampaign.status === 'active') {
-                // Logic for pausing
+                // No specific date change for pausing, simply changes status
+                // You might want to save the remaining duration if you want to resume accurately
             } else if (parsedUpdates.status === 'ended' && sparkCampaign.status === 'active') {
-                // Logic for ending
+                // When explicitly ending an active campaign, set endDate to now
+                sparkCampaign.endDate = new Date();
+            } else if (parsedUpdates.status === 'pending' && sparkCampaign.status === 'paused') {
+                // If resuming from paused, you might need logic to adjust remaining duration
+                // For simplicity, for now, we'll just allow it to go back to pending.
+                // Re-activation will set new dates.
+            } else if (!['pending', 'active', 'paused', 'ended'].includes(parsedUpdates.status)) {
+                await session.abortTransaction();
+                return res.status(400).json({ message: "Invalid campaign status provided." });
             }
             sparkCampaign.status = parsedUpdates.status;
         }
+
 
         await sparkCampaign.save({ session }); // Save updated campaign within transaction
         console.log(`[SparkCampaignController] Spark Campaign updated: ${sparkCampaign.name} (ID: ${sparkCampaign._id}) by user ${authenticatedUserId}`);
@@ -862,8 +909,22 @@ exports.deleteSparkCampaign = async (req, res, next) => {
             return res.status(403).json({ message: "Forbidden: You are not authorized to delete this campaign." });
         }
 
+        // Refund the remaining currentRewardPoolBalance to the creator
+        const creator = await User.findById(authenticatedUserId).session(session);
+        if (!creator) {
+            await session.abortTransaction();
+            return res.status(404).json({ message: "Creator not found for refund." });
+        }
+
+        const refundAmount = sparkCampaign.currentRewardPoolBalance;
+        creator.balance += refundAmount;
+        await creator.save({ session });
+        console.log(`[SparkCampaignController] Refunded ${refundAmount.toFixed(2)} to creator ${authenticatedUserId} for deleted campaign ${campaignId}. New balance: ${creator.balance}`);
+
+        // Delete the campaign
         await sparkCampaign.deleteOne({ session });
 
+        // Remove the campaign ID from the user's createdSparkCampaigns array
         await User.findByIdAndUpdate(authenticatedUserId, {
             $pull: { createdSparkCampaigns: campaignId }
         }, { new: true, useFindAndModify: false, session });
@@ -871,7 +932,7 @@ exports.deleteSparkCampaign = async (req, res, next) => {
         await session.commitTransaction();
 
         console.log(`[SparkCampaignController] Spark Campaign deleted: ${sparkCampaign.name} (ID: ${sparkCampaign._id}) by user ${authenticatedUserId}`);
-        res.status(200).json({ message: "Spark Campaign deleted successfully!" });
+        res.status(200).json({ message: "Spark Campaign deleted successfully! Remaining budget refunded to your account." });
 
     } catch (error) {
         await session.abortTransaction();
@@ -891,10 +952,12 @@ exports.getUserEarnings = async (req, res, next) => {
         let userIdToQuery;
         const { telegramUserId, campaignId } = req.query;
 
+        // Determine user ID based on authentication (web or bot)
         if (req.user && req.user._id) {
             userIdToQuery = req.user._id;
             console.log(`[UserController] Web user ${userIdToQuery} requesting earnings.`);
         } else if (telegramUserId) {
+            // This path should only be taken if x-bot-secret is valid
             const user = await User.findOne({ telegramUserId: telegramUserId });
             if (!user) {
                 return res.status(404).json({ message: "Telegram user not found or not linked to FOMO." });
@@ -902,6 +965,8 @@ exports.getUserEarnings = async (req, res, next) => {
             userIdToQuery = user._id;
             console.log(`[UserController] Bot requesting earnings for Telegram user ${telegramUserId} (FOMO ID: ${userIdToQuery}).`);
         } else {
+            // This case should ideally be caught by auth middleware for web requests,
+            // but good to have a fallback.
             return res.status(400).json({ message: "User ID not provided. Please link your Telegram or ensure authentication." });
         }
 
