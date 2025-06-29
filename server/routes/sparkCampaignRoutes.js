@@ -1,10 +1,9 @@
 // backend/routes/sparkCampaignRoutes.js
-console.log('--- SPARK CAMPAIGN ROUTES FILE LOADED - VERSION: 2025-06-29T22:40:28Z (Bot Auth Fix) ---'); // Updated log for clarity and current time
+console.log('--- SPARK CAMPAIGN ROUTES FILE LOADED - VERSION: 2025-06-29T22:45:00Z (Bot Auth Fix - Corrected ReferenceError) ---'); // Updated log for clarity and current time
 const express = require('express');
 const router = express.Router();
 const sparkCampaignController = require('../controllers/sparkCampaignController');
-// No need to import authenticateJWT here if server.js handles its conditional application
-// const authenticateJWT = require('../middleware/authenticateJWT'); // IMPORTANT: Uncomment this line! (Only if other routes *directly* use it here)
+const authenticateJWT = require('../middleware/authenticateJWT'); // ⭐ IMPORTANT: THIS LINE MUST BE PRESENT ⭐
 const telegramController = require('../controllers/telegramController'); // Unused in this file, consider removing if not needed elsewhere
 
 // --- Multer and Cloudinary Setup for File Uploads ---
@@ -43,8 +42,8 @@ router.get('/public-active', sparkCampaignController.getPublicActiveSparkCampaig
 
 // These routes are specifically handled by the `apiRouter.use` middleware in `server.js`
 // for bot secret authentication. They should NOT have `authenticateJWT` here directly.
-router.post('/track-message', sparkCampaignController.trackMessage); // ⭐ REMOVED authenticateJWT ⭐
-router.post('/track-reaction', sparkCampaignController.trackReaction); // ⭐ REMOVED authenticateJWT ⭐
+router.post('/track-message', sparkCampaignController.trackMessage); // Correct: Removed authenticateJWT
+router.post('/track-reaction', sparkCampaignController.trackReaction); // Correct: Removed authenticateJWT
 
 // All other routes that require JWT authentication will automatically get it
 // because the `apiRouter.use` middleware in `server.js` applies `authenticateJWT` by default
