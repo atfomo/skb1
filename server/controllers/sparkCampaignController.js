@@ -958,6 +958,12 @@ exports.getUserEarnings = async (req, res, next) => {
             console.log(`[UserController] Web user ${userIdToQuery} requesting earnings.`);
         } else if (telegramUserId) {
             // This path should only be taken if x-bot-secret is valid
+            const botSecret = req.headers['x-bot-secret']; // Re-check secret for this endpoint as well if accessed by bot
+            if (botSecret !== SECRET_BOT_API_KEY) {
+                console.warn(`Unauthorized attempt to get user earnings with telegramUserId from IP: ${req.ip}. Secret Mismatch.`);
+                return res.status(403).json({ message: "Forbidden: Invalid bot secret for fetching earnings." });
+            }
+
             const user = await User.findOne({ telegramUserId: telegramUserId });
             if (!user) {
                 return res.status(404).json({ message: "Telegram user not found or not linked to FOMO." });
