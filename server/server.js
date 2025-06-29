@@ -1,5 +1,6 @@
 // backend/server.js
-console.log('--- SERVER.JS INITIALIZING - VERSION: 2025-06-29T22:48:15Z (Consolidated API Routing) ---', new Date().toISOString());
+// Updated version to reflect the change for /api/public/banners being handled by apiRouter
+console.log('--- SERVER.JS INITIALIZING - VERSION: 2025-06-30T00:21:44Z (Public Banners via apiRouter) ---', new Date().toISOString());
 require('dotenv').config();
 
 const express = require('express');
@@ -100,6 +101,8 @@ app.use('/uploads', express.static(uploadsBaseDir));
 // 1. Mount non-API routes (like /auth)
 app.use('/auth', authRoutes);
 
+// --- REMOVED THE app.use('/api/public', bannerRoutes); LINE FROM HERE ---
+
 // Create a dedicated API router for general API endpoints
 const apiRouter = express.Router();
 
@@ -107,11 +110,12 @@ const apiRouter = express.Router();
 const normalizePath = (p) => p.endsWith('/') ? p.slice(0, -1) : p;
 
 // Define paths that do *not* require JWT authentication (relative to /api)
+// '/public/banners' is now included here to be handled by the apiRouter middleware
 const noJwtPaths = [
     '/spark-campaigns/public-active',
     '/tasks/available',
     '/campaigns',
-    '/public/banners' // This path is now relative to /api (e.g., /api/public/banners)
+    '/public/banners' // <--- Now included here as it's mounted within apiRouter
 ].map(normalizePath);
 
 // Define paths that require ONLY the bot secret (and thus no JWT) (relative to /api)
@@ -172,7 +176,7 @@ apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/spark-campaigns', sparkCampaignRoutes);
 apiRouter.use('/upload', uploadRoutes);
-apiRouter.use('/public/banners', bannerRoutes); // Mounted under apiRouter, path is /api/public/banners
+apiRouter.use('/public/banners', bannerRoutes); // <--- Mounted under apiRouter, path is /api/public/banners
 apiRouter.use('/campaigns', campaignsRouter);
 apiRouter.use('/telegram', telegramRoutes);
 apiRouter.use('/drip-campaigns', dripCampaignsRoutes);

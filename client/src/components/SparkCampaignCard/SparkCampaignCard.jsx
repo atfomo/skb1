@@ -241,15 +241,6 @@ const SparkCampaignCard = ({ campaign }) => {
                             <FaClock /> {timeRemainingDisplay}
                         </div>
                     </div>
-
-                    {activeEarnersCount > 0 && (
-                        <div className="spark-card-stat-item">
-                            <p className="stats-label">🚀 Active Earners</p>
-                            <div className="stats-value">
-                                <FaUsers /> {activeEarnersCount}+
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
         </Link>
