@@ -25,7 +25,7 @@ const AvailableTasksPage = () => {
 
             try {
                 // Assuming your backend exposes active campaigns at this endpoint
-                const response = await fetch('http://localhost:5000/api/boost-volume/active', {
+                const response = await fetch('https://api.atfomo.com/api/boost-volume/active', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

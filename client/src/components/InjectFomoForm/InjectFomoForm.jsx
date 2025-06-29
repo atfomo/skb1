@@ -124,8 +124,8 @@ const InjectFomoForm = () => {
         console.log('Constructed Authorization Header:', authHeaderValue);
 
         try {
-            console.log('Sending fetch request to:', 'http://localhost:5000/api/boost-volume/campaigns');
-            const response = await fetch('http://localhost:5000/api/boost-volume/campaigns', {
+            console.log('Sending fetch request to:', 'https://api.atfomo.com/api/boost-volume/campaigns');
+            const response = await fetch('https://api.atfomo.com/api/boost-volume/campaigns', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

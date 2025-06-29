@@ -60,7 +60,7 @@ const ProjectDetail = () => {
 
             try {
                 // 1. Fetch Campaign Details
-                const campaignRes = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}`, {
+                const campaignRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}`, {
                     // This already has the token, good!
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -75,7 +75,7 @@ const ProjectDetail = () => {
                 // 2. Fetch Creator Dashboard Details
                 if (campaignData.createdBy && campaignData.createdBy._id) {
                     console.log(`[ProjectDetail] Fetching creator dashboard for user ID: ${campaignData.createdBy._id}`);
-                    const creatorDashboardRes = await fetch(`https://api.dev.atfomo.local:5000/api/project/creator-dashboard/${campaignData.createdBy._id}`, {
+                    const creatorDashboardRes = await fetch(`https://api.atfomo.com/api/project/creator-dashboard/${campaignData.createdBy._id}`, {
                         // FIX HERE: Add the Authorization header
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -100,7 +100,7 @@ const ProjectDetail = () => {
                 // 3. Fetch user's participations (if logged in)
                 if (user && user._id && token) {
                     console.log(`[ProjectDetail] User is logged in. Fetching participations for user ${user._id} and campaign ${campaignId}`);
-                    const participationsRes = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/user-participation`, {
+                    const participationsRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/user-participation`, {
                         // This already has the token, good!
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -175,7 +175,7 @@ const ProjectDetail = () => {
         console.log(`[ProjectDetail] Attempting to join task group: ${taskGroupKey}`);
 
         try {
-            const res = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/tasks/${taskGroupKey}/join`, {
+            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/join`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ userId: user._id })
@@ -193,7 +193,7 @@ const ProjectDetail = () => {
                     alert(data.message + " Refreshing participation status.");
                     // Trigger a re-fetch of all participation data
                     // This is crucial to sync the UI with the backend
-                    const participationsRes = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/user-participation`, {
+                    const participationsRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/user-participation`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const participationsData = await participationsRes.json();
@@ -285,7 +285,7 @@ const ProjectDetail = () => {
                 }
             }));
 
-            const res = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/tasks/${taskGroupKey}/verify-x-action`, {
+            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/verify-x-action`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ userId: user._id, subTaskIdentifier, xUsername: xUser, requiredContent })
@@ -348,7 +348,7 @@ const ProjectDetail = () => {
                 }
             }));
 
-            const res = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/tasks/${taskGroupKey}/submit-proof`, {
+            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/submit-proof`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 // --- MODIFIED PAYLOAD HERE ---
@@ -437,7 +437,7 @@ const ProjectDetail = () => {
         formData.append('link', subTaskIdentifier);
         formData.append('proofImage', file); // Make sure your backend expects 'proofImage' as the field name
 
-        const res = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/tasks/${taskGroupKey}/upload-proof`, {
+        const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/upload-proof`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -493,7 +493,7 @@ const ProjectDetail = () => {
 
         try {
             console.log(`[ProjectDetail] Attempting to leave task group: ${taskGroupKey}`);
-            const res = await fetch(`https://api.dev.atfomo.local:5000/api/campaigns/${campaignId}/tasks/${taskGroupKey}/leave`, {
+            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/leave`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

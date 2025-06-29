@@ -562,7 +562,7 @@ const AddProjectForm = () => {
         return;
       }
 
-      const response = await fetch("https://api.dev.atfomo.local:5000/api/campaigns", {
+      const response = await fetch("https://api.atfomo.com/api/campaigns", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`

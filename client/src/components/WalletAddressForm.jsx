@@ -10,7 +10,7 @@ const WalletAddressForm = ({ token }) => {
     // Optionally fetch existing wallet address on load
     const fetchWallet = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/me', {
+        const res = await axios.get('https://api.atfomo.com/api/me', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setWalletAddress(res.data.walletAddress || '');
@@ -32,7 +32,7 @@ const WalletAddressForm = ({ token }) => {
     setMessage('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/wallet',
+      const res = await axios.post('https://api.atfomo.com/api/wallet',
         { walletAddress },
         {
           headers: {

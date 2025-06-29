@@ -34,7 +34,7 @@ const ProjectGrid = ({ projects }) => {
                         bannerImageUrl = campaign.image;
                     } else {
                         // Assuming your backend serves images from /uploads
-                        bannerImageUrl = `http://localhost:5000${campaign.image}`;
+                        bannerImageUrl = `https://api.atfomo.com${campaign.image}`;
                     }
                 } else {
                     bannerImageUrl = 'https://via.placeholder.com/300x600?text=Campaign+Banner'; // Placeholder for 300x600
