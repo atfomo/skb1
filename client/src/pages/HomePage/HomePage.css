@@ -1,0 +1,549 @@
+/* client/src/pages/HomePage/HomePage.css */
+
+/* --- Global & Base Styles for the Page --- */
+body {
+    background-color: #0d111c; /* Very dark background for contrast */
+    color: #e0e0e0; /* Default light text color */
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.homepage-main {
+    max-width: 1400px; /* Wider main content area */
+    margin: 0 auto; /* Center the content */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 50px; /* Generous space between sections */
+}
+
+/* --- Reusable Glassmorphism Card Style --- */
+.glassmorphism-card {
+    background-color: var(--background-dark-glass); /* The desired main background color with transparency */
+    backdrop-filter: blur(15px); /* Stronger blur for prominent glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-subtle-light); /* Subtle white border */
+    border-radius: 20px; /* More rounded corners */
+    box-shadow: 0 15px 60px var(--shadow-deep); /* Deep, prominent shadow for depth */
+    padding: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* For inner elements positioning */
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-5px); /* Subtle lift on hover */
+    box-shadow: 0 20px 70px var(--shadow-deep); /* Stronger shadow on hover */
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    text-align: center;
+    padding: 60px 40px; /* More vertical padding */
+    margin-top: 30px;
+    animation: fadeIn 1s ease-out; /* Fade in animation */
+}
+
+.hero-title {
+    font-size: 2.6em; /* Large, impactful title */
+    font-weight: 900; /* Extra bold */
+    margin-bottom: 20px;
+    background-image: linear-gradient(180deg, #f5f5f5); /* Vibrant orange gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for non-webkit */
+    text-shadow: 0 0 10px rgba(255, 111, 0, 0.205); /* Stronger glow */
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.4em;
+    color: #c0c0c0;
+    max-width: 800px;
+    margin: 0 auto 40px; /* Center and add space below */
+    line-height: 1.5;
+}
+
+.hero-cta-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between buttons */
+}
+
+.hero-login-prompt {
+    font-size: 1.2em;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.hero-login-prompt p {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* --- Reusable Button Styles (Primary, Secondary, Tertiary) --- */
+.action-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px; /* More rounded buttons */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none; /* Ensure no underline on links */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space for icons */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.action-button .btn-icon {
+    font-size: 1.2em;
+}
+
+.action-button .btn-icon-right {
+    margin-left: 8px; /* For icons on the right */
+    font-size: 1.2em;
+}
+
+
+.primary-btn {
+    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Main vibrant orange gradient */
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.primary-btn:hover {
+    background: linear-gradient(45deg, #ff511c, #d83200);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6);
+    transform: translateY(-3px);
+}
+
+.secondary-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.secondary-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+.tertiary-btn {
+    background: linear-gradient(45deg, #00BFFF, #1DA1F2);
+    color: #ffffff; /* Twitter blue */
+    border: 1px solid #009dd1e3;
+}
+
+.tertiary-btn:hover {
+    background-color: rgba(0, 191, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+.connect-x-btn {
+    background: linear-gradient(45deg, #00BFFF, #1DA1F2); /* Twitter Blue gradient */
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.4);
+}
+
+.connect-x-btn:hover {
+    background: linear-gradient(45deg, #1DA1F2, #00BFFF);
+    box-shadow: 0 10px 30px rgba(0, 191, 255, 0.6);
+}
+
+
+.action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(50, 50, 50, 0.3);
+    box-shadow: none;
+    transform: none;
+}
+
+/* --- Section Headings & Descriptions --- */
+.homepage-section {
+    margin-bottom: 0; /* Handled by homepage-main gap */
+    padding: 0; /* Padding handled by glassmorphism-card */
+}
+
+.section-heading {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #E64A19; /* Orange for section headings */
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 110, 0, 0.3);
+}
+
+.section-description {
+    font-size: 1.1em;
+    color: #B0B0B0;
+    text-align: center;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Search Input Styling --- */
+.search-input-group {
+    position: relative;
+    max-width: 600px;
+    margin: 0px auto 40px auto; /* Center and add space */
+}
+
+.search-input-field {
+    width: 100%;
+    padding: 15px 15px 15px 50px; /* Left padding for icon */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.4); /* Darker input background */
+    color: #F0F0F0;
+    font-size: 1.05em;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.search-input-field:focus {
+    border-color: #333333;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.search-input-field::placeholder {
+    color: #A0A0A0;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #B0B0B0;
+    font-size: 1.2em;
+}
+
+/* --- DripGrid Specific Adjustments --- */
+.drip-grid-container {
+    /* Styles from DripGrid.css take over for the grid structure itself */
+    position: relative; /* For fade-out effect */
+    margin-top: 20px; /* Space below search */
+    /* REMOVED: max-height: 600px; directly from here */
+    overflow: hidden; /* Keep overflow hidden for the collapsed state */
+    transition: max-height 0.5s ease-out; /* Smooth expansion/collapse */
+}
+
+/* NEW CLASS: Applies max-height when in collapsed view */
+.drip-grid-container.collapsed-view {
+    max-height: 600px; /* Example: show limited tasks initially */
+}
+
+
+.drip-grid-container.fade-out-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; /* Height of the fade effect */
+    background: linear-gradient(to top, rgba(28, 32, 45, 0.8) 0%, rgba(28, 32, 45, 0) 100%);
+    pointer-events: none; /* Allow clicks through the overlay */
+    z-index: 5; /* Ensure it's above the grid content */
+}
+
+.view-more-container {
+    text-align: center;
+    margin-top: 30px; /* Space above button */
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.pagination-btn {
+    padding: 10px 20px;
+    font-size: 0.95em;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #E0E0E0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #00BFFF;
+    transform: translateY(-2px);
+}
+
+.pagination-btn.active-page-btn {
+    background: linear-gradient(45deg, #FF6F00, #FFBB00);
+    border-color: #FF6F00;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(255, 110, 0, 0.3);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.view-less-btn {
+    margin-left: 20px; /* Separate it slightly */
+    background-color: rgba(255, 50, 50, 0.1);
+    color: #FF7777;
+    border-color: rgba(255, 50, 50, 0.2);
+}
+
+.view-less-btn:hover:not(:disabled) {
+    background-color: rgba(255, 50, 50, 0.2);
+    box-shadow: 0 4px 10px rgba(255, 50, 50, 0.3);
+    color: #FF5555;
+}
+
+
+/* --- Loading & Error Overlays (Page-level) --- */
+.homepage-loading-overlay,
+.homepage-error-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Almost opaque dark overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Very high z-index to cover everything */
+    color: #E0E0E0;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+.loading-spinner {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid #E64A19; /* Orange spinner */
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.homepage-error-message {
+    background-color: rgba(255, 0, 0, 0.15);
+    color: #FF7777;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 600px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+.homepage-error-message .error-details {
+    font-size: 0.9em;
+    margin-top: 15px;
+    color: #FFB0B0;
+}
+
+.homepage-error-message .reload-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #FF5555, #FF8888);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 85, 85, 0.4);
+    transition: all 0.3s ease;
+}
+
+.homepage-error-message .reload-button:hover {
+    box-shadow: 0 6px 20px rgba(255, 85, 85, 0.6);
+    transform: translateY(-2px);
+}
+
+/* --- Card-specific Loading State --- */
+.card-loading-state {
+    min-height: 200px; /* Ensure loading state has some height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3); /* Darker background for specific card loading */
+    border-radius: 15px; /* Match card border-radius */
+    padding: 30px;
+}
+
+.card-loading-state .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border-width: 6px;
+}
+
+.card-loading-state .loading-text {
+    font-size: 1.1em;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1200px) {
+    .homepage-main {
+        padding: 15px;
+        gap: 40px;
+    }
+    .hero-title {
+        font-size: 3em;
+    }
+    .hero-subtitle {
+        font-size: 1.2em;
+    }
+    .glassmorphism-card {
+        padding: 30px;
+    }
+    .section-heading {
+        font-size: 2em;
+    }
+    .section-description {
+        font-size: 1em;
+    }
+    .action-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+    .search-input-field {
+        padding: 12px 12px 12px 45px;
+        font-size: 0.95em;
+    }
+    .search-icon {
+        left: 15px;
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 768px) {
+    .homepage-main {
+        padding: 10px;
+        gap: 30px;
+    }
+    .hero-section {
+        padding: 40px 20px;
+    }
+    .hero-title {
+        font-size: 2.2em;
+    }
+    .hero-subtitle {
+        font-size: 1em;
+    }
+    .hero-cta-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 15px;
+    }
+    .action-button {
+        width: 100%; /* Full width buttons */
+        box-sizing: border-box;
+    }
+    .glassmorphism-card {
+        padding: 25px;
+        border-radius: 15px;
+    }
+    .section-heading {
+        font-size: 1.8em;
+    }
+    .section-description {
+        font-size: 0.9em;
+    }
+    .search-input-group {
+        margin-bottom: 30px;
+    }
+    .pagination-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .pagination-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .view-less-btn {
+        margin-left: 0; /* Remove side margin when stacked */
+    }
+    .homepage-loading-overlay,
+    .homepage-error-message {
+        font-size: 1.1em;
+        padding: 20px;
+    }
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border-width: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .homepage-main {
+        gap: 20px;
+    }
+    .hero-section {
+        padding: 30px 15px;
+    }
+    .hero-title {
+        font-size: 1.8em;
+    }
+    .hero-subtitle {
+        font-size: 0.9em;
+    }
+    .glassmorphism-card {
+        padding: 20px;
+    }
+    .section-heading {
+        font-size: 1.5em;
+    }
+    .section-description {
+        font-size: 0.85em;
+    }
+    .search-input-field {
+        padding: 10px 10px 10px 40px;
+        font-size: 0.9em;
+    }
+    .search-icon {
+        left: 12px;
+        font-size: 1em;
+    }
+    .homepage-loading-overlay,
+    .homepage-error-message {
+        font-size: 1em;
+    }
+}

@@ -1,0 +1,634 @@
+/* client/src/pages/CreateDashboard/CreateDashboard.css */
+
+/*
+   IMPORTANT: This CSS file is designed to complement and override/extend
+   styles from your existing 'CreatorDashboard.css'.
+   Ensure 'CreatorDashboard.css' is loaded BEFORE this file in your HTML
+   or build process to allow these specific overrides to take effect.
+*/
+
+/* --- Global & Base Styles (Matching CreatorDashboard.css) --- */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #050505; /* Deep dark background */
+    color: #F0F0F0; /* Light text for contrast */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main container for the create dashboard page */
+.create-dashboard-main {
+    background-color: #050505; /* Deep dark background */
+    color: #e0e0e0; /* Light text for contrast */
+    min-height: 100vh; /* Ensure it takes full height */
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center; /* Center the card horizontally */
+    align-items: center; /* Center the card vertically */
+    min-height: calc(100vh - 40px); /* Adjust based on global layout (e.g., if you have fixed headers/footers) */
+    box-sizing: border-box;
+}
+
+/* Reusable Glass Card Style (Copied from CreatorDashboard.css) */
+/* This will be applied to .create-dashboard-card directly in JSX */
+.glass-card {
+    background-color: rgba(17, 16, 15, 0.7); /* Darker glass base */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    transition: all 0.2s ease-in-out;
+}
+
+.glass-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Specific Styles for CreateDashboard --- */
+
+.create-dashboard-card {
+    width: 100%; /* Fill the container */
+    max-width: 900px; /* Max width for the form card */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between sections within the card */
+    animation: fadeIn 0.8s ease-out; /* Fade in animation for the card */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.create-dashboard-title {
+    font-size: 2.5em; /* Matching .profile-name in CreatorDashboard */
+    font-weight: 800;
+    /* Using a gradient for the title, similar to HomePage hero title */
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(255, 110, 0, 0.4);
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.create-dashboard-subtitle {
+    font-size: 1.1em;
+    color: #c0c0c0; /* Matching subtitle/description color */
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.create-dashboard-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Space between form sections/groups */
+}
+
+/* Form Group Labels and Inputs (Matching CreatorDashboard's form styles) */
+.form-group {
+    margin-bottom: 10px; /* Adjusted margin */
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95em;
+    color: #999999; /* Consistent label color */
+    margin-bottom: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-input,
+.form-textarea { /* Renamed from .text-input to match CreatorDashboard */
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.4); /* Darker input background */
+    color: #f0f0f0;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #E64A19; /* Orange focus glow */
+    box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-grid { /* For name and username */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-grid-socials { /* For social links (matching CreatorDashboard's grid) */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* --- Form Section Headings (Matching CreatorDashboard.css) --- */
+.form-section-heading {
+    font-size: 1.8em;
+    color: #e1e1e1; /* Matching accent color */
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
+    font-weight: 500;
+}
+
+
+/* --- Image Uploads (Mirroring CreatorDashboard Profile Header) --- */
+.image-upload-section {
+    position: relative;
+    width: 100%;
+    margin-bottom: 50px; /* Space for the logo to overlap below */
+    padding: 0;
+    overflow: hidden; /* Ensure rounded corners clip children */
+}
+
+.banner-area {
+    width: 100%;
+    position: relative;
+    height: 280px; /* Matching CreatorDashboard banner height */
+    overflow: hidden;
+    border-radius: 16px 16px 0 0; /* Only top corners rounded */
+    background-color: #1a1a1a; /* Placeholder if no banner */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.banner-preview-display {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align label to bottom-right */
+    align-items: flex-end;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: filter 0.3s ease;
+}
+
+.banner-preview-display:hover {
+    filter: brightness(0.8); /* Subtle darken on hover */
+}
+
+.banner-upload-label { /* Matching CreatorDashboard's banner upload label */
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: inline-flex; /* Use inline-flex */
+    align-items: center;
+    justify-content: center;
+    color: #E64A19; /* Gold/Orange accent */
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.banner-upload-label:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.banner-upload-label .upload-icon {
+    font-size: 1.1em;
+}
+
+.logo-area {
+    position: absolute;
+    bottom: 50px; /* Position to overlap banner, adjust based on logo size */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    width: 170px; /* Wrapper size for border/shadow */
+    height: 170px;
+    border-radius: 50%;
+    padding: 5px; /* Spacing for gradient border */
+    transition: all 0.2s ease;
+}
+
+.logo-upload-label { /* Matching CreatorDashboard's logo upload label */
+    display: block;
+    cursor: pointer;
+    width: 160px; /* Inner size for actual image area */
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    background-color: #1a1a1a; /* Placeholder background */
+    border: 6px solid #E64A19; /* Inner border matching body background */
+    box-sizing: border-box; /*Include border in width/height */
+}
+
+.logo-preview-img { /* Renamed for clarity, was .logo-preview */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: filter 0.3s ease;
+}
+
+.logo-upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    font-weight: 500;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.logo-upload-label:hover .logo-upload-overlay {
+    opacity: 1; /* Show on hover */
+}
+
+.logo-upload-overlay .upload-icon {
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    color: #E64A19; /* Icon color consistent with accent */
+}
+
+.file-input {
+    display: none; /* Hide default file input */
+}
+
+/* --- Submit Button (Matching CreatorDashboard's save-changes-button) --- */
+.save-changes-button { /* Applied directly to the submit button */
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    color: #fff;
+    font-size: 1.1em;
+    padding: 14px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(230, 46, 0, 0.4);
+    margin-top: 30px;
+    width: 100%; /* Make it full width for forms */
+    display: flex; /* For centering content and spinner */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.save-changes-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    box-shadow: 0 8px 25px rgba(230, 46, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.save-changes-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(80%);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Spinner for submit button */
+.save-changes-button .spin-icon {
+    animation: spin 1s linear infinite;
+}
+
+/* --- Error/Loading Messages (Matching CreatorDashboard's styles) --- */
+.dashboard-loading-overlay,
+.dashboard-error-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: #e0e0e0;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+.dashboard-loading-overlay .loading-spinner {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid #E64A19; /* Matching accent color */
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.dashboard-loading-overlay .loading-text {
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.dashboard-error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #DC3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 600px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-error-message .error-icon {
+    font-size: 2.5em; /* Larger icon for central error */
+    margin-bottom: 20px;
+    color: #FF6F00; /* Matching accent color */
+}
+
+.dashboard-error-message .error-text {
+    font-weight: 500;
+    color: #FFB0B0;
+}
+
+.dashboard-error-message .reload-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #FF5555, #FF8888);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 85, 85, 0.4);
+    transition: all 0.3s ease;
+}
+
+.dashboard-error-message .reload-button:hover {
+    box-shadow: 0 6px 20px rgba(255, 85, 85, 0.6);
+    transform: translateY(-2px);
+}
+
+.submit-error-message.error-message { /* Specific styling for inline form errors */
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #DC3545;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align left for inline message */
+    gap: 10px;
+}
+.submit-error-message .error-icon { /* Reset size for inline icon */
+    font-size: 1.2em;
+    margin-bottom: 0;
+    color: #FF6F00; /* Match accent */
+}
+
+
+/* --- Responsive Adjustments (Matching CreatorDashboard.css) --- */
+@media (max-width: 1024px) {
+    .create-dashboard-main {
+        padding: 15px;
+    }
+    .create-dashboard-card {
+        padding: 25px;
+        gap: 25px;
+    }
+    .create-dashboard-title {
+        font-size: 2.2em;
+    }
+    .create-dashboard-subtitle {
+        font-size: 1em;
+    }
+    .image-upload-section {
+        margin-bottom: 40px;
+    }
+    .banner-area {
+        height: 220px;
+    }
+    .banner-upload-label {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+    .logo-area {
+        width: 140px;
+        height: 140px;
+        bottom: -60px;
+        padding: 4px;
+        box-shadow: 0 0 0 4px rgba(255, 110, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+    .logo-upload-label {
+        width: 132px;
+        height: 132px;
+        border-width: 5px;
+    }
+    .logo-upload-overlay .upload-icon {
+        font-size: 1.5em;
+    }
+    .form-section-heading {
+        font-size: 1.6em;
+    }
+    .form-group label {
+        font-size: 0.9em;
+    }
+    .form-input, .form-textarea {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+    .form-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+    }
+    .form-grid-socials {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .save-changes-button {
+        font-size: 1em;
+        padding: 12px 25px;
+    }
+    .dashboard-loading-overlay .loading-spinner,
+    .dashboard-error-message .error-icon {
+        width: 60px;
+        height: 60px;
+        border-width: 6px;
+    }
+    .dashboard-loading-overlay .loading-text,
+    .dashboard-error-message .error-text {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 768px) {
+    .create-dashboard-main {
+        padding: 10px;
+    }
+    .create-dashboard-card {
+        padding: 20px;
+        gap: 20px;
+        border-radius: 15px;
+    }
+    .create-dashboard-title {
+        font-size: 1.8em;
+    }
+    .create-dashboard-subtitle {
+        font-size: 0.9em;
+        margin-bottom: 30px;
+    }
+    .image-upload-section {
+        margin-bottom: 30px;
+    }
+    .banner-area {
+        height: 180px;
+    }
+    .banner-upload-label {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+    .logo-area {
+        width: 120px;
+        height: 120px;
+        bottom: -50px;
+        padding: 3px;
+        box-shadow: 0 0 0 3px rgba(255, 110, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.4);
+    }
+    .logo-upload-label {
+        width: 114px;
+        height: 114px;
+        border-width: 4px;
+    }
+    .logo-upload-overlay .upload-icon {
+        font-size: 1.2em;
+    }
+    .form-section-heading {
+        font-size: 1.4em;
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        font-size: 0.85em;
+    }
+    .form-input, .form-textarea {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+    .form-grid, .form-grid-socials {
+        grid-template-columns: 1fr; /* Stack columns on small screens */
+        gap: 15px;
+    }
+    .save-changes-button {
+        font-size: 0.95em;
+        padding: 10px 20px;
+    }
+    .dashboard-loading-overlay .loading-spinner,
+    .dashboard-error-message .error-icon {
+        width: 50px;
+        height: 50px;
+        border-width: 5px;
+    }
+    .dashboard-loading-overlay .loading-text,
+    .dashboard-error-message .error-text {
+        font-size: 1em;
+    }
+    .submit-error-message.error-message {
+        font-size: 0.85em;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-dashboard-main {
+        padding: 10px;
+    }
+    .create-dashboard-card {
+        padding: 15px;
+        gap: 15px;
+        border-radius: 12px;
+    }
+    .create-dashboard-title {
+        font-size: 1.5em;
+    }
+    .create-dashboard-subtitle {
+        font-size: 0.8em;
+        margin-bottom: 25px;
+    }
+    .image-upload-section {
+        margin-bottom: 20px;
+    }
+    .banner-area {
+        height: 140px;
+    }
+    .logo-area {
+        width: 100px;
+        height: 100px;
+        bottom: -40px;
+        padding: 2px;
+        box-shadow: 0 0 0 2px rgba(255, 110, 0, 0.3), 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .logo-upload-label {
+        width: 96px;
+        height: 96px;
+        border-width: 3px;
+    }
+    .logo-upload-overlay .upload-icon {
+        font-size: 1em;
+    }
+    .form-section-heading {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        font-size: 0.8em;
+    }
+    .form-input, .form-textarea {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+    .save-changes-button {
+        font-size: 0.85em;
+        padding: 8px 15px;
+    }
+}

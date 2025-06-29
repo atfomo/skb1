@@ -1,0 +1,571 @@
+/* client/src/pages/UserVolumeTask/UserVolumeTask.css */
+
+/* Main page wrapper */
+.user-volume-page-wrapper {
+    max-width: 900px; /* Constrain width for a focused experience */
+    margin: 30px auto; /* Center the container with space from top/bottom */
+    padding: 0 20px; /* Horizontal padding for responsiveness */
+    box-sizing: border-box; /* Include padding in width */
+    font-family: 'Inter', sans-serif; /* Ensure consistent font */
+}
+
+/* Main content container (glassmorphism card) */
+.user-task-container {
+    background-color: rgba(28, 32, 45, 0.5); /* The desired main background color */
+    backdrop-filter: blur(15px); /* Stronger blur for main card */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
+    border-radius: 20px; /* More rounded corners */
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6); /* Deep, prominent shadow */
+    padding: 40px;
+    color: #E0E0E0; /* Default text color */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between sections */
+}
+
+/* General Text Styles */
+.task-title {
+    font-size: 2.8em;
+    font-weight: 800;
+    text-align: center;
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); /* Orange gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 10px rgba(255, 110, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+.task-subtitle {
+    font-size: 1.1em;
+    text-align: center;
+    color: #C0C0C0;
+    line-height: 1.6;
+}
+
+.highlight-text {
+    color: #FFD700; /* Gold for specific highlights */
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+}
+
+.section-divider {
+    border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    width: 80%;
+    margin: 20px auto;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.section-heading {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #e1e1e1; /* Vibrant orange for section headings */
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(255, 110, 0, 0.2);
+}
+
+/* Section Styling */
+.campaign-overview-section,
+.wallet-section,
+.task-details-section,
+.submission-section {
+    background-color: rgba(28, 32, 45, 0.7); /* Slightly darker glass for inner sections */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Lighter border */
+}
+
+.overview-text,
+.task-detail-text,
+.submission-info-text,
+.note-text {
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #C0C0C0;
+    margin-bottom: 10px;
+}
+
+.value-highlight {
+    font-weight: 700;
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); /* Orange gradient for values */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Progress Bar */
+.progress-bar-overall-container {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar-overall-fill {
+    height: 100%;
+    width: 0; /* Controlled by JS */
+    background: linear-gradient(90deg, #4CAF50, #66BB6A); /* Green gradient */
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.progress-bar-overall-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #FFF;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.progress-percentage {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #FFD700;
+    margin-top: -10px; /* Pull closer to the bar */
+}
+
+.campaign-completed-message {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4CAF50; /* Green for success */
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(40, 200, 100, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(40, 200, 100, 0.2);
+    box-shadow: 0 2px 10px rgba(40, 200, 100, 0.2);
+}
+
+/* Wallet Section */
+.wallet-input-group,
+.connected-wallet-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.wallet-input {
+    flex-grow: 1;
+    padding: 14px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.3); /* Darker input background */
+    color: #F0F0F0;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    min-width: 250px; /* Ensure input is not too small */
+}
+
+.wallet-input:focus {
+    border-color: #FF6F00;
+    box-shadow: 0 0 0 3px rgba(255, 110, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.wallet-input::placeholder {
+    color: #A0A0A0;
+}
+
+.connected-status {
+    font-size: 1.1em;
+    color: #C0C0C0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.wallet-address-display {
+    font-weight: 600;
+    background-image: linear-gradient(45deg, #00BFFF, #87CEEB); /* Blue gradient for addresses */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+
+/* Action Buttons */
+.primary-action-button,
+.secondary-action-button {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0; /* Prevent buttons from shrinking in flex containers */
+}
+
+.primary-action-button {
+    background: linear-gradient(45deg, #FF6F00, #FF9900); /* Vibrant orange gradient */
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(255, 110, 0, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.primary-action-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #FF9900, #FF6F00);
+    box-shadow: 0 8px 25px rgba(255, 110, 0, 0.6);
+    transform: translateY(-3px);
+}
+
+.secondary-action-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #E0E0E0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.secondary-action-button:hover:not(:disabled) {
+    background-color: rgba(255, 110, 0, 0.15);
+    color: #FF8C00;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(255, 110, 0, 0.2);
+}
+
+.primary-action-button:disabled,
+.secondary-action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: rgba(100, 100, 100, 0.2);
+    color: #888;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Task Details Section */
+.instructions-card {
+    background-color: rgba(0, 0, 0, 0.2); /* Darker internal card for instructions */
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.instructions-card h4 {
+    font-size: 1.3em;
+    color: #FFD700; /* Gold for instruction title */
+    margin-bottom: 15px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.1);
+}
+
+.instructions-list {
+    list-style-type: decimal;
+    padding-left: 25px;
+    margin: 0;
+    color: #C0C0C0;
+    font-size: 1em;
+    line-height: 1.8;
+}
+
+.instructions-list li {
+    margin-bottom: 10px;
+}
+
+.instructions-list li:last-child {
+    margin-bottom: 0;
+}
+
+.dex-link {
+    color: #00BFFF; /* Twitter blue */
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.dex-link:hover {
+    color: #4ac0ff;
+}
+
+.instruction-step {
+    color: #FF9900; /* Orange for BUY/SELL emphasis */
+    font-weight: bold;
+}
+
+.token-address-short {
+    font-family: 'monospace', 'Courier New', Courier;
+    color: #ADD8E6; /* Light blue for code-like snippets */
+}
+
+.hint-text {
+    font-size: 0.9em;
+    color: #90B0B0; /* Muted teal for hints */
+    display: block;
+    margin-top: 5px;
+}
+
+.warning-text {
+    font-size: 0.95em;
+    color: #FF5555; /* Red for warnings */
+    background-color: rgba(255, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.15);
+}
+
+.highlight-earning {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #FFD700; /* Gold for earnings highlight */
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(255, 215, 0, 0.1); /* Light gold background */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+}
+
+
+/* Status Messages */
+.status-message,
+.info-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.status-message {
+    color: #ADD8E6; /* Light blue for general status */
+    background-color: rgba(0, 123, 255, 0.15);
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+}
+
+.info-message {
+    color: #FFD700; /* Gold for completion messages */
+    background-color: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+}
+
+.note-text {
+    font-size: 0.95em;
+    color: #A0A0A0;
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2); /* Darker background for notes */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
+/* Loading and Error States */
+.user-volume-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Darker overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    color: #f0f0f0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.loading-spinner {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid #E64A19; /* Orange spinner */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-weight: 500;
+    color: #E0E0E0;
+}
+
+.user-volume-error-message {
+    text-align: center;
+    color: #FF7777; /* Softer red for error messages */
+    font-size: 1.1em;
+    padding: 30px;
+    margin: 50px auto;
+    background-color: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 15px;
+    max-width: 700px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    line-height: 1.6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .user-volume-page-wrapper {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .user-task-container {
+        padding: 25px;
+        border-radius: 15px;
+        gap: 20px;
+    }
+
+    .task-title {
+        font-size: 2em;
+    }
+
+    .task-subtitle {
+        font-size: 1em;
+    }
+
+    .section-heading {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    .overview-text,
+    .task-detail-text,
+    .submission-info-text,
+    .note-text {
+        font-size: 0.95em;
+    }
+
+    .progress-bar-overall-container {
+        height: 18px;
+    }
+
+    .progress-bar-overall-text {
+        line-height: 18px;
+        font-size: 0.8em;
+    }
+
+    .progress-percentage {
+        font-size: 1em;
+    }
+
+    .wallet-input-group,
+    .connected-wallet-info {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch; /* Stretch items to full width */
+    }
+
+    .wallet-input {
+        width: 100%;
+        min-width: unset;
+        box-sizing: border-box; /* Include padding in width */
+    }
+
+    .primary-action-button,
+    .secondary-action-button {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .instructions-card {
+        padding: 20px;
+    }
+
+    .instructions-card h4 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+
+    .instructions-list {
+        font-size: 0.95em;
+        padding-left: 20px;
+    }
+
+    .warning-text,
+    .highlight-earning {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+
+    .status-message,
+    .info-message {
+        font-size: 0.9em;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-volume-page-wrapper {
+        padding: 0 10px;
+    }
+
+    .user-task-container {
+        padding: 15px;
+        border-radius: 10px;
+        gap: 15px;
+    }
+
+    .task-title {
+        font-size: 1.6em;
+    }
+
+    .task-subtitle {
+        font-size: 0.9em;
+    }
+
+    .section-heading {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+
+    .overview-text,
+    .task-detail-text,
+    .submission-info-text,
+    .note-text {
+        font-size: 0.9em;
+    }
+
+    .primary-action-button,
+    .secondary-action-button {
+        font-size: 0.95em;
+        padding: 10px 15px;
+    }
+}

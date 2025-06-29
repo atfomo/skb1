@@ -1,0 +1,148 @@
+/* client/src/components/TaskCard/TaskCard.css */
+
+.task-card {
+    background-color: #2a2a2a; /* Dark background */
+    border: 1px solid #444444;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.task-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center header content */
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.task-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 2px solid #ffffff; /* Accent color border */
+}
+
+.task-name {
+    color: #ffffff;
+    margin: 0;
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+.task-token, .task-dex {
+    font-size: 0.95em;
+    color: #bbbbbb;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center text with icon */
+}
+
+.task-icon {
+    color: #f75d00; /* Accent color for icons */
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.task-icon.large {
+    font-size: 1.5em; /* Larger icon for earnings */
+}
+
+.task-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 15px;
+    margin: 15px 0;
+    padding: 15px 0;
+    border-top: 1px dashed #555555;
+    border-bottom: 1px dashed #555555;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-label {
+    color: #999999;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    color: #e0e0e0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* Updated style for total earnings */
+.task-earnings-total {
+    font-size: 1.4em; /* Make it more prominent */
+    font-weight: bold;
+    color: #f75d00; /* Orange for earnings */
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-status {
+    font-size: 0.9em;
+    color: #bbbbbb;
+    margin-bottom: 25px;
+}
+
+.status-active {
+    color: #00ffc0; /* Green for active */
+    font-weight: bold;
+}
+
+.status-starting_soon {
+    color: #ffc107; /* Yellow for starting soon */
+    font-weight: bold;
+}
+
+.status-full {
+    color: #dc3545; /* Red for full */
+    font-weight: bold;
+}
+
+
+.join-task-button {
+    display: block;
+    width: 80%; /* Slightly narrower button */
+    margin: 0 auto; /* Center the button */
+    padding: 12px 20px;
+    background-color: #6a00ff; /* Purple accent */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.join-task-button:hover {
+    background-color: #8c2bff;
+    transform: translateY(-2px);
+}

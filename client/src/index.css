@@ -1,0 +1,27 @@
+/* client/src/index.css */
+
+/* Hide horizontal scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Keyframes for banner scroller */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  /* If you have 3 banners, move past 2 of them to loop */
+  /* If you have 4 banners, move past 3 of them */
+  100% {
+    transform: translateX(-66.66%); /* Adjust this percentage based on num banners */
+  }
+}
+
+/* Apply the animation */
+.animate-scroll-banner {
+  animation: scroll-left 20s linear infinite; /* Adjust duration and timing as needed */
+}

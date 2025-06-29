@@ -1,0 +1,1184 @@
+/* General container for the dashboard */
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #050505;
+    color: #F0F0F0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.creator-dashboard-container {
+    background-color: #050505; /* Deep dark background */
+    color: #e0e0e0; /* Light text for contrast */
+    min-height: 100vh; /* Ensure it takes full height */
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between main sections */
+    max-width: 1400px; /* Max width for content area */
+    margin: 0 auto; /* Center the dashboard */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+/* Add to your existing CSS file, e.g., CreatorDashboard.css */
+
+.campaign-id-copy {
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center; /* Vertically align items */
+    font-size: 0.9em; /* Slightly smaller font for the ID */
+    color: var(--text-dimmed); /* Dimmed text color */
+    cursor: pointer; /* Indicate it's clickable */
+    margin-top: -8px; /* Adjust spacing below the title */
+    margin-bottom: 15px; /* Space between ID and details list */
+    transition: color 0.2s ease;
+}
+
+.campaign-id-copy:hover {
+    color: var(--text-secondary); /* Slightly brighter on hover */
+}
+
+.campaign-id-copy .copy-icon {
+    margin-right: 6px; /* Space between icon and text */
+    font-size: 0.8em; /* Adjust icon size */
+    color: var(--primary-orange); /* Make icon orange */
+}
+
+.campaign-id-copy:hover .copy-icon {
+    color: var(--accent-orange-light); /* Brighter orange on hover */
+}
+
+/* Optional: Adjust campaign-card padding if needed due to new element */
+.campaign-card {
+    padding: 25px; /* Adjust as necessary */
+    /* ... other existing styles */
+}
+
+/* Reusable Glass Card Style (for major sections/forms) */
+.glass-card {
+    background-color: rgba(17, 16, 15, 0.7); /* Darker glass base */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    transition: all 0.2s ease-in-out;
+}
+
+.glass-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Nested Glass Card Style (for forms within cards) */
+.glass-card-nested {
+    background-color: rgba(0, 0, 0, 0.4); /* More transparent for nested elements */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Inner shadow for nested glass */
+    padding: 15px;
+}
+
+
+/* --- Main Profile Header Section (top part of dashboard) --- */
+.creator-profile-header-section {
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px; /* Adjusted margin to ensure content below starts correctly */
+    padding: 0; /* Remove padding here as sub-elements have it */
+    overflow: hidden; /* Ensure rounded corners clip children */
+}
+
+/* Banner Section */
+.banner-section {
+    position: relative;
+    width: 100%;
+    height: 280px; /* Taller banner */
+    overflow: hidden; /* Important for banner image radius */
+}
+
+.banner-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a; /* Dark placeholder if no banner */
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px 16px 0 0; /* Only top corners rounded for banner */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.banner-upload-input, .logo-upload-input {
+    display: none;
+}
+
+.banner-upload-label-two {
+    position: absolute;
+    bottom: 170px;
+    right: 600px; /* Positioned inside the banner area */
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f84e1a; /* Gold/Orange accent */
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.banner-upload-label:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.banner-upload-icon {
+    font-size: 1.1em;
+}
+
+/* Profile Info Area - Contains Profile Pic, Actions, and Details */
+.profile-info-area {
+    position: relative; /* For positioning children */
+    padding: 20px 30px 190px; /* Padding for the entire info area */
+    margin-top: -50px; /* Pulls content up over the banner */
+    z-index: 5; /* Ensure it's above the banner */
+    display: flex; /* Main flex container for profile pic and text/actions wrapper */
+    align-items: flex-start; /* Align items to the top */
+    gap: 30px; /* Space between profile pic and text/actions */
+    
+}
+
+/* creatordashboard.css */
+
+/* --- Profile Picture Wrapper (The main circular area for the user's profile pic) --- */
+.profile-pic-wrapper {
+    width: 160px; /* Larger profile pic */
+    height: 160px;
+    border-radius: 50%;
+    /* Use variables for consistency */
+    border: 6px solid var(--background-deep-black); /* Border matching background to make it pop */
+    overflow: hidden;
+    position: relative; /* Crucial for positioning inner elements */
+    z-index: 10;
+    background-color: var(--background-card-dark); /* Placeholder if no pic */
+    box-shadow: 0 0 0 6px var(--primary-orange), 0 8px 25px rgba(0, 0, 0, 0.5); /* Orange accent border and shadow */
+    transition: all 0.2s ease;
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex; /* For centering placeholder icon/text if no image */
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dimmed); /* Placeholder icon color */
+    font-size: 3em; /* Placeholder icon size */
+}
+
+/* Optional: Placeholder for when no image is uploaded */
+.profile-pic-wrapper.no-image::before {
+    content: '\f007'; /* Example: Font Awesome user icon (ensure Font Awesome is linked) */
+    font-family: 'Font Awesome 5 Free'; /* Specify font family */
+    font-weight: 900; /* For solid icon */
+    color: var(--text-dimmed);
+    font-size: 0.8em; /* Adjust size relative to wrapper */
+}
+
+.profile-pic-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block; /* Remove extra space below image */
+}
+
+/* --- Profile Picture Edit Button (The small circular button on the profile pic) --- */
+.profile-pic-edit-button { /* RENAMED FROM .logo-upload-label */
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+    border-radius: 50%; /* Circular edit button */
+    padding: 8px; /* Slightly reduced padding */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-orange); /* Use variable for consistency */
+    font-size: 1em; /* Slightly smaller icon */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 15; /* Ensure it's above the profile image */
+    width: 40px; /* Fixed size for a consistent circle */
+    height: 40px;
+}
+
+.profile-pic-edit-button:hover {
+    background-color: rgba(255, 140, 0, 0.15); /* Orange tint on hover */
+    color: var(--accent-orange-light); /* Lighter orange on hover */
+    transform: translateY(-2px); /* Subtle lift */
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3); /* Enhanced shadow */
+}
+
+/* Ensure the input element associated with this label is hidden */
+.profile-pic-input { /* Assuming you use a class for your hidden input */
+    display: none;
+}
+
+/* NEW: Wrapper for profile details and action buttons */
+.profile-details-and-actions-wrapper {
+    flex-grow: 1; /* Takes up remaining space */
+    display: flex;
+    flex-direction: column; /* Stack details and actions vertically */
+    /* align-items: flex-start; /* Default for column, but good to be explicit */ 
+    gap: 15px;
+}
+
+
+/* Profile Actions (Edit Profile, Create Campaign) */
+.profile-action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end; /* Pushes buttons to the right */
+    /* Removed margin-left: auto as justify-content handles it within this flex item */
+    margin-top: -200px; /* Pulls buttons up to align with top of profile pic */
+    position: relative; /* Needed for z-index or other layering if applied later */
+    z-index: 10; /* Ensure buttons are above overlapping elements if any */
+}
+
+/* Reusable Action Button (for edit, create, save) */
+.action-button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 8px; /* Changed from gap */
+    white-space: nowrap;
+    text-decoration: none; /* For Link components */
+    justify-content: center; /* Center content in button */
+}
+
+.action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(80%); /* Visually indicate disabled */
+    transform: none;
+    box-shadow: none;
+}
+
+.edit-profile-button {
+    background: linear-gradient(45deg, #ffffff, #bbbbbb); /* Green gradient for edit */
+    color: #0f0f0f;
+    box-shadow: 0 4px 15px rgba(221, 221, 221, 0.3);
+}
+.edit-profile-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #ffffff, #bbbbbb);
+    box-shadow: 0 6px 20px rgba(228, 228, 228, 0.5);
+    transform: translateY(-2px);
+}
+
+.create-campaign-button {
+    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Blue gradient for create */
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(255, 72, 0, 0.3);
+}
+
+.create-campaign-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #ff511c, #d83200);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+
+/* Create Campaign Dropdown */
+.create-campaign-dropdown {
+    position: relative;
+}
+
+.create-campaign-dropdown .dropdown-content {
+    position: absolute;
+    background-color: rgba(10, 10, 10, 0.9); /* Slightly more opaque for better contrast */
+    backdrop-filter: blur(12px); /* Refined blur */
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15); /* More visible subtle border */
+    min-width: 240px; /* Slightly wider */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05); /* Enhanced shadow */
+    z-index: 100;
+    border-radius: 14px; /* Slightly more rounded */
+    padding: 8px 0; /* Adjusted padding */
+    right: 0;
+    top: calc(100% + 12px); /* Adjusted spacing from button */
+    opacity: 0;
+    transform: translateY(8px); /* Subtle slide-in effect */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.create-campaign-dropdown .dropdown-content.active {
+    opacity: 1;
+    transform: translateX(20px);
+    visibility: visible;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.dropdown-content .dropdown-item {
+    color: #e0e0e0;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    column-gap: 12px; /* Increased gap for icons/text */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; /* Added transform transition */
+    border-radius: 50px;
+    margin: 4px 8px; /* Added vertical margin between items */
+}
+
+.dropdown-content .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.12); /* Slightly brighter hover */
+    color: #fff;
+    border-radius: 50px;
+    transform: translateX(3px); /* Slight slide-right on hover */
+}
+
+.dropdown-item.disabled-link {
+    opacity: 0.5; /* Makes the text and background faded */
+    pointer-events: none; /* Prevents all click, hover, and other pointer events */
+    cursor: not-allowed; /* Changes the cursor to a 'not allowed' symbol */
+    /* Optional: Add a filter for a more "blurred" look */
+    filter: blur(0.5px); /* Subtle blur effect */
+    transition: opacity 0.3s ease, filter 0.3s ease; /* Smooth transition */
+}
+
+/* If you want to explicitly remove hover effects for disabled links */
+.dropdown-item.disabled-link:hover {
+    background-color: transparent; /* Or whatever your default dropdown item background is */
+    color: inherit; /* Or whatever your default dropdown item text color is */
+}
+
+/* Profile Name, Username, Description */
+.profile-details-content {
+    /* flex-grow: 1; /* No longer needed here, handled by parent profile-details-and-actions-wrapper */
+    padding-top: 0;
+}
+
+.profile-name {
+    font-size: 2.5em; /* Larger, bolder name */
+    font-weight: 800;
+    color: #ffffff; /* Gold/Orange for main name */
+    margin-bottom: -20px;
+    text-shadow: 0 0 10px rgba(255, 136, 0, 0.3);
+
+}
+
+.profile-username {
+    font-size: 1.1em;
+    color: #999999;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.profile-description {
+    font-size: 1em; /* Standard size for description */
+    color: #cccccc;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Social Links */
+.social-links-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px; /* Space between social links */
+    margin-bottom: 20px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    padding: 8px 15px;
+    border-radius: 20px; /* Pill shape */
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e0e0e0;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.social-link .social-icon {
+    font-size: 1.1em;
+}
+
+.social-link.twitter:hover { background-color: #1DA1F2; color: #fff; }
+.social-link.website:hover { background-color: #00e676; color: #fff; }
+.social-link.discord:hover { background-color: #5865F2; color: #fff; }
+
+
+/* Tags */
+.profile-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Smaller gap for tags */
+    margin-bottom: 0; /* No bottom margin, handled by parent section gap */
+}
+
+.profile-tag {
+    background-color: rgba(230, 84, 0, 0.15); /* Light green tint */
+    color: #ff511c; /* Green text */
+    padding: 6px 12px;
+    border-radius: 15px; /* Pill shape */
+    font-size: 0.85em;
+    font-weight: 500;
+    border: 1px solid rgba(230, 0, 0, 0.3);
+    white-space: nowrap; /* Prevent tag text from breaking */
+}
+
+/* --- Main Content Area (Form & Campaign Lists below profile header) --- */
+.main-content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between the form and campaign sections */
+    position: relative; /* Create a new stacking context for form */
+    z-index: 10; /* Ensure this area sits above any potential lower-z-index elements */
+}
+
+/* Profile Edit Form */
+.edit-profile-form {
+    padding: 30px; /* Consistent padding with other glass cards */
+    margin-top: 0; /* Handled by parent gap */
+    position: relative; /* Important for layering within main-content-area */
+    z-index: 20; /* Higher z-index than other campaign sections */
+}
+
+.form-section-heading {
+    font-size: 1.8em;
+    color: #e1e1e1;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
+}
+
+.form-subsection-heading {
+    font-size: 1.4em;
+    color: #e1e1e1;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    color: #999999;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #f0f0f0;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #FFBB00;
+    box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-grid { /* For name and username */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-grid-socials { /* For social links */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.save-changes-button {
+    background: linear-gradient(45deg, #FF6F00, #ff8324);
+    color: #fff;
+    font-size: 1.1em;
+    padding: 14px 30px; /* Larger button */
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(230, 130, 0, 0.4);
+    margin-top: 30px;
+    width: auto;
+    display: block; /* Make it a block to take full width if needed or for centering */
+    margin-left: auto; /* Center button */
+    margin-right: auto;
+}
+
+.save-changes-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #FF6F00, #ff872b);
+    box-shadow: 0 8px 25px rgba(230, 130, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Campaign Sections Overview Title */
+.campaign-sections-title {
+    padding: 30px;
+    text-align: center;
+    margin-top: 30px; /* Space from edit form */
+}
+.campaign-sections-title h2 {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #f5f5f5;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+}
+.campaign-sections-title p {
+    font-size: 1.1em;
+    color: #cccccc;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+
+/* --- General Campaign Section Styling --- */
+.campaign-section {
+    padding: 30px; /* Consistent padding */
+    margin-top: 0; /* Handled by main-content-area gap */
+}
+
+.section-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: #e1e1e1;
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255, 136, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
+}
+
+.error-message {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #DC3545;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.error-icon {
+    font-size: 1.2em;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.loading-spinner {
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-top: 6px solid #fff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: #b0b0b0;
+    font-size: 1.1em;
+}
+
+.no-campaigns-message {
+    text-align: center;
+    font-size: 1.1em;
+    color: #b0b0b0;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.no-campaigns-message .create-campaign-link {
+    color: #FF6F00;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: color 0.2s ease;
+}
+
+.no-campaigns-message .create-campaign-link:hover {
+    color: #FF6F00;
+    text-decoration: underline;
+}
+
+.campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.campaign-card {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.campaign-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px; /* Top border accent */
+    background: linear-gradient(90deg, #ff511c, #d83200); /* Default green gradient top border */
+    border-radius: 16px 16px 0 0;
+}
+
+.campaign-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.campaign-title {
+    font-size: 1.5em; /* Slightly smaller for card title */
+    font-weight: 700;
+    color: #d83200;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.campaign-status-tag {
+    font-size: 0.7em;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+.campaign-status-tag .status-icon {
+    font-size: 1.1em;
+}
+
+.campaign-status-tag.active {
+    background-color: rgba(0, 230, 118, 0.2);
+    color: #00e676;
+    border: 1px solid #00e676;
+}
+
+.campaign-status-tag.completed {
+    background-color: rgba(255, 110, 0, 0.2);
+    color: #FF6F00;
+    border: 1px solid #FF6F00;
+}
+.campaign-status-tag.pending {
+    background-color: rgba(255, 187, 0, 0.2);
+    color: #FFBB00;
+    border: 1px solid #FFBB00;
+}
+
+.campaign-details-list {
+    margin-bottom: 20px;
+}
+
+.campaign-detail {
+    font-size: 0.95em;
+    color: #b0b0b0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+}
+
+.campaign-detail .detail-icon {
+    color: #E64A19;
+    font-size: 1.1em;
+    flex-shrink: 0;
+}
+
+.campaign-detail .highlight-value {
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.campaign-remaining-time {
+    font-weight: 700;
+    color: #00e676;
+    font-size: 1em;
+}
+.campaign-remaining-time.completed-time {
+    color: #e53935;
+}
+
+.campaign-tweets-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.tweets-heading {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.campaign-tweets-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.campaign-tweets-list li {
+    margin-bottom: 6px;
+}
+
+.tweet-link {
+    color: #64b5f6;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    word-break: break-all;
+    transition: color 0.2s ease;
+}
+
+.tweet-link:hover {
+    color: #90caf9;
+    text-decoration: underline;
+}
+
+.tweet-icon {
+    font-size: 1em;
+    color: #1DA1F2;
+}
+
+.campaign-card-footer {
+    margin-top: auto; /* Pushes footer to the bottom */
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-tweet-button {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.add-tweet-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #1976D2, #2196F3);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.5);
+}
+
+.add-tweet-form {
+    margin-top: 20px;
+    /* Uses glass-card-nested for styling */
+}
+
+.form-label-small {
+    font-size: 0.85em;
+    color: #b0b0b0;
+    margin-bottom: 10px;
+}
+
+.tweet-add-input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-end;
+}
+
+.submit-add-tweet {
+    background: linear-gradient(45deg, #00e676, #00c853);
+    color: #fff;
+}
+
+.submit-add-tweet:hover:not(:disabled) {
+    background: linear-gradient(45deg, #00c853, #00e676);
+}
+
+.cancel-add-tweet {
+    background: linear-gradient(45deg, #ff5252, #e53935);
+    color: #fff;
+}
+
+.cancel-add-tweet:hover:not(:disabled) {
+    background: linear-gradient(45deg, #e53935, #ff5252);
+}
+
+
+/* Specific section top border colors */
+.drip-campaigns-section .campaign-card::before {
+    background: linear-gradient(90deg, #FFBB00, #FF6F00); /* Orange gradient for Drip */
+}
+.volume-boost-campaigns-section .campaign-card::before {
+    background: linear-gradient(90deg, #2196F3, #1976D2); /* Blue gradient for Volume Boost */
+}
+.fomo-campaigns-section .campaign-card::before {
+    background: linear-gradient(90deg, #9C27B0, #673AB7); /* Purple gradient for FOMO */
+}
+
+
+/* --- Dashboard Loading & Error Overlays --- */
+.dashboard-loading-overlay,
+.dashboard-error-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: #e0e0e0;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+.dashboard-loading-overlay .loading-spinner {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid #00e676;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.dashboard-loading-overlay .loading-text {
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.dashboard-error-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #DC3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 600px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-error-message .reload-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #FF5555, #FF8888);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 85, 85, 0.4);
+    transition: all 0.3s ease;
+}
+
+.dashboard-error-message .reload-button:hover {
+    box-shadow: 0 6px 20px rgba(255, 85, 85, 0.6);
+    transform: translateY(-2px);
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    .creator-dashboard-container {
+        padding: 15px;
+    }
+    .profile-info-area {
+        flex-direction: column; /* Stack profile pic and details */
+        align-items: center;
+        text-align: center;
+        padding-top: 0;
+        margin-top: -60px; /* Adjust overlap for stacked elements */
+        gap: 20px; /* Space between stacked elements */
+    }
+    .profile-pic-wrapper {
+        margin-right: 0;
+        margin-bottom: 0; /* No explicit margin-bottom, let parent gap handle */
+    }
+    .profile-details-and-actions-wrapper {
+        width: 100%; /* Take full width when stacked */
+        flex-direction: column-reverse; /* Put buttons above details content for better flow */
+        align-items: center; /* Center items in this column */
+        gap: 20px; /* Space between buttons and details */
+    }
+    .profile-action-buttons {
+        margin-left: 0; /* Reset margin-left */
+        margin-top: 0; /* Reset negative margin */
+        justify-content: center; /* Center buttons when stacked */
+        width: 100%; /* Allow buttons to take more width */
+    }
+    .profile-name {
+        font-size: 2.2em;
+    }
+    .profile-username {
+        font-size: 1em;
+    }
+    .profile-description {
+        font-size: 0.95em;
+    }
+    .social-links-container {
+        justify-content: center;
+    }
+    .profile-tags-container {
+        justify-content: center;
+    }
+    .save-changes-button {
+        width: 80%; /* Make save button a bit wider on tablets */
+    }
+    .campaigns-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Slightly smaller cards */
+    }
+}
+
+@media (max-width: 768px) {
+    .creator-dashboard-container {
+        padding: 10px;
+    }
+    .banner-image-placeholder {
+        height: 180px;
+    }
+    .profile-pic-wrapper {
+        width: 110px;
+        height: 110px;
+        bottom: -60px; /* Adjusted position on smaller screens */
+        /* left: 50%; */
+        /* transform: translateX(-50%); */ /* Removed these, profile-info-area handles centering now */
+        border-width: 4px;
+        box-shadow: 0 0 0 4px #00e676, 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    .profile-info-area {
+        margin-top: -50px;
+        padding: 15px;
+    }
+    .profile-action-buttons {
+        gap: 10px;
+    }
+    .action-button {
+        padding: 10px 18px;
+        font-size: 0.9em;
+    }
+    .profile-name {
+        font-size: 1.8em;
+    }
+    .profile-username {
+        font-size: 0.9em;
+    }
+    .profile-description {
+        font-size: 0.9em;
+    }
+    .social-link {
+        padding: 6px 12px;
+        font-size: 0.85em;
+        gap: 6px;
+    }
+    .profile-tag {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+    .glass-card {
+        padding: 20px;
+    }
+    .form-section-heading, .section-title, .campaign-sections-title h2 {
+        font-size: 1.6em;
+    }
+    .form-subsection-heading {
+        font-size: 1.1em;
+    }
+    .form-input, .form-textarea {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+    .save-changes-button {
+        font-size: 1em;
+        padding: 12px 25px;
+    }
+    .campaign-title {
+        font-size: 1.3em;
+    }
+    .campaign-detail {
+        font-size: 0.9em;
+    }
+    .add-tweet-form .form-actions {
+        flex-direction: column;
+    }
+    .submit-add-tweet, .cancel-add-tweet {
+        width: 100%;
+    }
+    .dashboard-error-message, .dashboard-loading-overlay {
+        font-size: 1.1em;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .creator-dashboard-container {
+        padding: 10px;
+        gap: 25px;
+    }
+    .banner-image-placeholder {
+        height: 120px;
+    }
+    .profile-pic-wrapper {
+        width: 90px;
+        height: 90px;
+        bottom: -45px;
+        border-width: 3px;
+        box-shadow: 0 0 0 3px #00e676, 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .profile-info-area {
+        margin-top: -40px;
+        padding: 10px;
+    }
+    .banner-upload-label {
+        padding: 8px 12px;
+        font-size: 0.8em;
+        right: 15px;
+        bottom: 10px;
+    }
+    .logo-upload-label {
+        padding: 8px;
+        font-size: 1em;
+    }
+    .profile-name {
+        font-size: 1.5em;
+    }
+    .profile-username {
+        font-size: 0.85em;
+    }
+    .profile-description {
+        font-size: 0.8em;
+    }
+    .social-link {
+        font-size: 0.8em;
+        padding: 5px 10px;
+    }
+    .profile-tag {
+        font-size: 0.75em;
+    }
+    .action-button {
+        font-size: 0.85em;
+        padding: 8px 15px;
+    }
+    .create-campaign-dropdown .dropdown-content {
+        min-width: 180px;
+    }
+    .dropdown-content .dropdown-item {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+    .form-section-heading, .section-title, .campaign-sections-title h2 {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+    }
+    .campaigns-grid {
+        gap: 15px;
+    }
+    .campaign-card {
+        padding: 15px;
+    }
+    .campaign-title {
+        font-size: 1.2em;
+    }
+    .campaign-detail {
+        font-size: 0.8em;
+    }
+    .tweets-heading {
+        font-size: 0.85em;
+    }
+    .tweet-link {
+        font-size: 0.8em;
+    }
+    .loading-text {
+        font-size: 0.9em;
+    }
+}

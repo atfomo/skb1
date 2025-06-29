@@ -1,0 +1,349 @@
+/* client/src/components/RulesModal.css */
+
+
+:root {
+    --color-bg-dark: #0F141A;
+    --color-bg-medium: #1A202C;
+    --color-bg-light: #2A303C;
+
+    --color-accent-primary: #E64A19;
+    --color-accent-secondary: #ff3c00;
+    --color-accent-green: #2ECC71;
+    --color-accent-orange: #F39C12; 
+    --color-accent-red: #E74C3C;
+
+    --color-text-primary: #E2E8F0;
+    --color-text-secondary: #A0AEC0;
+    --color-text-dark: #5B6B7C;
+
+    --border-radius-large: 16px;
+    --border-radius-medium: 12px;
+    --border-radius-small: 8px;
+
+    --glass-border: 1px solid rgba(42, 48, 60, 0.4);
+    --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+
+/* --- Modal Overlay --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Use a darker version of your main background for the overlay */
+    background-color: rgba(0, 0, 0, 0.85); /* Slightly more opaque than 0.75 for deeper feel */
+    backdrop-filter: blur(10px); /* Slightly more blur than 8px for stronger effect */
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Modal Overlay when visible (Assuming .show is added to .modal-overlay) */
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- Modal Content (The Box Itself) --- */
+.modal-content {
+    /* Use glass-panel styles for consistency */
+    background-color: rgba(17, 16, 15, 0.7); /* Matching glass-panel background */
+    backdrop-filter: blur(15px); /* Stronger blur for glass effect, matching glass-panel */
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: var(--border-radius-large); /* Consistent border-radius */
+    border: var(--glass-border); /* Consistent glass border */
+    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
+
+    padding: 30px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px) scale(0.95);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    color: var(--color-text-primary); /* Use dashboard's primary text color */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Modal Content when visible (assuming .show is applied to .modal-overlay) */
+.modal-overlay.show .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* --- Modal Close Button --- */
+.modal-close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2.2em;
+    color: var(--color-text-secondary); /* Use dashboard's secondary text color */
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.modal-close-button:hover {
+    color: var(--color-accent-primary); /* Use dashboard's primary accent orange on hover */
+    transform: rotate(90deg);
+}
+
+/* --- Modal Title --- */
+.modal-title {
+    font-size: 2.2em;
+    color: #e1e1e1; /* Use dashboard's secondary accent orange for emphasis */
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    /* Use dashboard's title shadow for consistency */
+    text-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+}
+
+/* --- Tab Navigation Styling --- */
+.rules-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-text-dark); /* Use dashboard's dark text color for subtle borders */
+    padding-bottom: 0px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-text-dark); /* Dimmed for inactive, use dashboard's very muted text */
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+.tab-button:hover:not(.active) {
+    color: var(--color-text-secondary); /* Use dashboard's secondary text color */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.1); /* Subtle white glow on hover */
+}
+
+.tab-button.active {
+    color: #E64A19; /* Highlight with dashboard's primary accent orange */
+    border-bottom-color: #E64A19; /* Orange underline */
+    text-shadow: 0 0 10px rgba(255, 81, 0, 0.5); /* Consistent glow for active elements */
+    background-color: rgba(255, 140, 0, 0.05); /* Very subtle orange tint for active tab background */
+    border-radius: 4px 4px 0 0;
+}
+
+/* --- Modal Body Content & Tab Pane --- */
+.modal-body {
+    flex-grow: 1;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: var(--color-text-secondary); /* Use dashboard's secondary text color for body */
+}
+
+.tab-pane {
+    padding: 15px 0;
+}
+
+.modal-body h3 {
+    font-size: 1.6em;
+    color: #E64A19; /* Use dashboard's secondary orange for subheadings */
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgba(255, 165, 0, 0.1);
+}
+
+.modal-body h4 {
+    font-size: 1.3em;
+    color: var(--color-text-primary); /* Use dashboard's primary text for h4 */
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.modal-body p {
+    margin-bottom: 15px;
+}
+
+.modal-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.modal-body ul li {
+    background-color: #141414; /* Use dashboard's light background for list items, slightly transparent if desired */
+    border-left: 4px solid #E64A19; /* Use dashboard's primary orange left border */
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: var(--border-radius-small); /* Consistent rounding */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-body ul li:hover {
+    background-color: rgba(255, 81, 0, 0.12); /* Subtle orange tint on hover */
+    box-shadow: 0 0 15px rgba(255, 81, 0, 0.15); /* Subtle glow on hover */
+}
+
+.modal-body ul li strong {
+    color: var(--color-text-primary); /* Use dashboard's primary text */
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* --- Scrollbar Styling for Glassmorphism --- */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(42, 48, 60, 0.2); /* Use a transparent version of a background color */
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #E64A19; /* Primary orange for thumb */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 81, 0, 0.2); /* Subtle border for the thumb */
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #e61919; /* Secondary orange on hover */
+}
+
+/* --- Modal Footer and Acknowledge Button --- */
+.modal-footer {
+    padding-top: 20px;
+    border-top: 1px solid var(--color-text-dark); /* Use dashboard's dark text for subtle border */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.acknowledge-button {
+    /* Use primary action button style from dashboard */
+    background: linear-gradient(45deg, #E64A19, #d83200);
+    color: #fff; /* White text for primary buttons */
+    border: none;
+    border-radius: var(--border-radius-small); /* Consistent border radius */
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Use 'all' for smoother transitions */
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow from dashboard */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.acknowledge-button:hover {
+    background: linear-gradient(45deg, #ff511c, #d83200); /* Consistent hover gradient from dashboard */
+    transform: translateY(-3px); /* Consistent lift effect */
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6); /* Consistent hover shadow */
+}
+
+.acknowledge-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(255, 140, 0, 0.3); /* Press effect (can be adjusted for consistency) */
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 25px;
+        max-width: 95%;
+    }
+
+    .modal-title {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .modal-body h3 {
+        font-size: 1.4em;
+    }
+
+    .modal-body h4 {
+        font-size: 1.1em;
+    }
+
+    .modal-body {
+        font-size: 1em;
+    }
+
+    .modal-close-button {
+        font-size: 1.8em;
+        top: 10px;
+        right: 10px;
+    }
+
+    .tab-button {
+        padding: 10px 15px;
+        font-size: 1em;
+        flex-grow: 1;
+        text-align: center;
+    }
+    .rules-tabs {
+        gap: 8px;
+    }
+    .acknowledge-button {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px;
+        border-radius: var(--border-radius-small); /* Consistent small border-radius */
+    }
+
+    .modal-title {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+
+    .modal-body h3 {
+        font-size: 1.2em;
+    }
+
+    .modal-body h4 {
+        font-size: 1em;
+    }
+
+    .modal-body ul li {
+        padding: 12px 15px;
+        border-left-width: 3px;
+    }
+    .tab-button {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+    .rules-tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .acknowledge-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}

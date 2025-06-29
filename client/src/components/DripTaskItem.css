@@ -1,0 +1,302 @@
+/* client/src/components/DripTaskItem/DripTaskItem.css */
+
+.drip-item-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1.5fr 0.8fr 1.2fr; /* Similar column structure to DripGrid rows */
+    gap: 15px;
+    align-items: center;
+    padding: 15px 25px; /* Padding inside the row for content */
+    margin-bottom: 15px; /* Space between task items */
+
+    background-color: rgba(28, 32, 45, 0.4); /* Slightly lighter than the main DripGrid container */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #E0E0E0;
+    position: relative; /* For the absolute positioning of the new badge */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.drip-item-row:hover {
+    background-color: rgba(28, 32, 45, 0.6); /* Darker on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Specific row states */
+.drip-item-row.drip-item-new-task {
+    border-left: 5px solid #FFD700; /* Gold for new tasks */
+    padding-left: 20px; /* Adjust padding for the border */
+}
+
+.drip-item-row.drip-item-completed-task {
+    background-color: rgba(40, 200, 100, 0.1); /* Very light green background */
+    border-left: 5px solid #4CAF50; /* Green for completed tasks */
+    opacity: 0.8; /* Slightly dim completed tasks */
+    padding-left: 20px; /* Adjust padding for the border */
+}
+
+/* Individual cells */
+.drip-item-creator,
+.drip-item-campaign-link,
+.drip-item-actions,
+.drip-item-earnings,
+.drip-item-progress {
+    padding: 0; /* Cell content defines padding */
+    display: flex;
+    align-items: center;
+    min-height: 40px; /* Ensure consistent cell height */
+}
+
+.drip-item-creator {
+    font-weight: 600;
+}
+
+.drip-item-creator-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.drip-item-creator-name {
+    color: #00BFFF; /* Twitter blue */
+}
+
+.drip-item-campaign-link a {
+    color: #00BFFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.drip-item-campaign-link a:hover {
+    color: #4ac0ff;
+    text-decoration: underline;
+}
+
+.drip-item-tweet-icon {
+    font-size: 1.2em;
+}
+
+.drip-item-actions {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.drip-item-action-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #B0B0B0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    white-space: nowrap; /* Prevent text from wrapping within button */
+}
+
+.drip-item-action-btn .action-text {
+    font-weight: 500;
+}
+
+.drip-item-action-btn:hover:not(:disabled) {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #00BFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.drip-item-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgba(100, 100, 100, 0.1);
+    border-color: rgba(255, 255, 255, 0.04);
+}
+
+.drip-item-action-btn.drip-item-action-completed {
+    background-color: rgba(40, 200, 100, 0.2); /* Light green when done */
+    color: #4CAF50; /* Darker green */
+    border-color: rgba(40, 200, 100, 0.1);
+}
+
+.drip-item-spinner-icon {
+    animation: drip-item-spin 1s linear infinite;
+    font-size: 0.9em; /* Adjust size for spinner in button */
+}
+
+@keyframes drip-item-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.drip-item-earnings {
+    font-weight: 700;
+    color: #FFD700; /* Gold for earnings */
+}
+
+.drip-item-progress {
+    font-size: 0.9em;
+    color: #C0C0C0;
+}
+
+.drip-item-status-completed {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: rgba(40, 200, 100, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(40, 200, 100, 0.1);
+}
+
+.drip-item-status-incomplete {
+    font-weight: 500;
+    color: #B0B0B0;
+}
+
+.drip-item-new-badge {
+    background-color: #FF6F00; /* Bright orange for new */
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    position: absolute;
+    top: 10px; /* Position top-right */
+    right: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px rgba(255, 110, 0, 0.3);
+    z-index: 5;
+}
+
+/* --- Responsive Design for DripTaskItem --- */
+@media (max-width: 992px) {
+    .drip-item-row {
+        grid-template-columns: 1fr 1.5fr 1fr 0.7fr 1fr; /* Adjust for medium screens */
+        padding: 12px 20px;
+    }
+
+    .drip-item-action-btn {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
+    .drip-item-creator-avatar {
+        width: 25px;
+        height: 25px;
+    }
+
+    .drip-item-status-completed {
+        font-size: 0.8em;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .drip-item-row {
+        display: flex; /* Stack elements vertically */
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        margin-bottom: 20px; /* More space when stacked */
+        /* Maintain existing background/border for card-like appearance */
+    }
+
+    /* Hide the direct content, use pseudo-elements for labels */
+    .drip-item-creator,
+    .drip-item-campaign-link,
+    .drip-item-actions,
+    .drip-item-earnings,
+    .drip-item-progress {
+        width: 100%; /* Take full width */
+        padding: 8px 0; /* Vertical padding between sections */
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.05); /* Subtle separator */
+        flex-wrap: wrap; /* Allow contents to wrap within cell */
+        align-items: flex-start; /* Align content to the top within its section */
+    }
+
+    .drip-item-progress {
+        border-bottom: none; /* No border for the last element */
+    }
+
+    /* Data labels for mobile view */
+    .drip-item-creator::before,
+    .drip-item-campaign-link::before,
+    .drip-item-actions::before,
+    .drip-item-earnings::before,
+    .drip-item-progress::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #FF9900; /* Highlight label */
+        margin-right: 10px;
+        min-width: 90px; /* Give label some space */
+        display: inline-block;
+        flex-shrink: 0; /* Prevent label from shrinking */
+    }
+
+    /* Specific adjustments for mobile layouts */
+    .drip-item-creator-avatar {
+        order: -1; /* Place avatar before the name */
+        margin-bottom: 5px; /* Space below avatar */
+    }
+
+    .drip-item-creator-name {
+        margin-left: 0; /* Reset margin */
+    }
+
+    .drip-item-actions {
+        justify-content: flex-start; /* Ensure buttons stay left-aligned */
+    }
+
+    .drip-item-new-badge {
+        position: static; /* Let it flow normally */
+        margin-top: 10px; /* Add some space if it wraps */
+        margin-left: auto; /* Push to the right if possible */
+    }
+}
+
+@media (max-width: 480px) {
+    .drip-item-row {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .drip-item-action-btn {
+        font-size: 0.8em;
+        padding: 6px 8px;
+    }
+
+    .drip-item-status-completed {
+        font-size: 0.75em;
+        padding: 4px 8px;
+    }
+
+    .drip-item-creator-avatar {
+        width: 25px;
+        height: 25px;
+    }
+
+    .drip-item-creator-name {
+        font-size: 0.9em;
+    }
+}

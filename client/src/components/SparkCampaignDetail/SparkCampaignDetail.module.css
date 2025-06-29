@@ -1,0 +1,746 @@
+/* src/components/SparkCampaignDetail/SparkCampaignDetail.module.css - REVISED FOR CLEAN, MINIMALISTIC AESTHETICS */
+
+/* --- Base Variables & Global Styles --- */
+:root {
+    --color-bg-dark: #0A0A0A; /* Deeper, cleaner dark background */
+    --color-bg-medium: #1A1A1A; /* Slightly lighter for main panels */
+    --color-bg-light: #2A2A2A; /* For nested elements, subtle contrast */
+
+    --color-accent-primary: #FF6F00; /* PRIMARY ORANGE - main brand color */
+    --color-accent-secondary: #FFA343; /* Lighter shade of orange for highlights */
+    --color-accent-green: #2ECC71; /* Success */
+    --color-accent-red: #E74C3C; /* Error */
+    --color-telegram-blue: #0088cc;
+    --color-twitter-blue: #1DA1F2;
+
+    --color-text-primary: #F0F0F0; /* Clean white-ish for main text */
+    --color-text-secondary: #A9A9A9; /* Muted gray for descriptions/labels */
+    --color-text-dark: #6C6C6C; /* Very subtle gray for hints */
+
+    --border-radius-large: 16px;
+    --border-radius-medium: 12px;
+    --border-radius-small: 8px;
+
+    /* Subtler glass effect */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1); /* Very light, almost invisible border */
+    --glass-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Less intense shadow */
+    --glass-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 111, 0, 0.2); /* Subtler glow on hover */
+
+    --font-family-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sparkCampaignDetailPage {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-bg-dark);
+    color: #c0c0c0;
+    min-height: 100vh;
+    padding-bottom: 80px; /* Increased padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Status Screens (Loading, Error, No Data) --- */
+.statusScreen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-primary);
+}
+
+.statusScreen .iconLarge {
+    font-size: 4.5rem; /* Slightly larger icons */
+    margin-bottom: 30px;
+    color: var(--color-text-secondary);
+}
+
+.loadingScreen .iconLarge {
+    color: var(--color-accent-primary);
+}
+
+.loadingSpinner {
+    animation: spin 1.5s linear infinite;
+}
+
+.errorScreen .iconLarge {
+    color: var(--color-accent-red);
+}
+
+.noDataScreen .iconLarge {
+    color: var(--color-accent-secondary); /* Use secondary accent for no data, less alarming */
+}
+
+.statusTitle {
+    font-size: 2.8rem; /* Slightly larger */
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--color-text-primary);
+}
+
+.statusText {
+    font-size: 1.15rem; /* Slightly larger */
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    line-height: 1.7; /* Increased line height for readability */
+    margin-bottom: 40px; /* More space */
+}
+
+/* --- Campaign Header Section --- */
+.campaignHeader {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Taller header for more impact */
+    overflow: hidden;
+    background-color: var(--color-bg-medium);
+    display: flex;
+    align-items: flex-end; /* Align content to bottom */
+    justify-content: center;
+    padding-bottom: 50px; /* More padding */
+}
+
+.campaignBannerImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.3) grayscale(5%); /* More subtle darkening, less grayscale */
+    z-index: 1;
+}
+
+.campaignHeaderContent {
+    position: relative;
+    z-index: 2;
+    color: var(--color-text-primary);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px; /* Wider content in header */
+    width: 100%;
+    padding: 0 40px; /* More horizontal padding */
+}
+
+.campaignLogo {
+    width: 140px; /* Larger logo */
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid #E64A19; /* Slightly thinner border */
+    object-fit: cover;
+    margin-bottom: 100px;
+    box-shadow: 0 0 15px rgba(255, 111, 0, 0.4); /* Subtler glow for logo */
+    background-color: var(--color-bg-light);
+}
+
+.campaignTitle {
+    font-size: 3.5rem; /* Larger, more prominent title */
+    font-weight: 800; /* Bolder */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    letter-spacing: -0.05em; /* Tighter letter spacing */
+    background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.3); /* Subtler glow */
+}
+
+.campaignBrief {
+    font-size: 1.25rem; /* Larger brief */
+    color: var(--color-text-secondary);
+    max-width: 750px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    font-weight: 300; /* Lighter font weight */
+}
+
+.creatorSocialLinks {
+    display: flex;
+    gap: 30px; /* More space between icons */
+    margin-top: 25px;
+}
+
+.socialIcon {
+    font-size: 2.5rem; /* Larger icons */
+    color: var(--color-text-secondary);
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.socialIcon:hover {
+    color: var(--color-accent-primary); /* Primary orange on hover */
+    transform: translateY(-7px) scale(1.1); /* More pronounced hover effect */
+}
+
+/* Specific social icon colors - keep these for brand recognition */
+.socialIcon[data-icon="FaTwitter"] { color: var(--color-twitter-blue); }
+.socialIcon[data-icon="FaDiscord"] { color: #5865F2; }
+.socialIcon[data-icon="FaTelegramPlane"] { color: var(--color-telegram-blue); }
+.socialIcon[data-icon="FaGlobe"] { color: var(--color-text-secondary); /* Default for globe */ }
+
+
+/* --- Main Content Layout --- */
+.campaignContentWrapper {
+    display: flex;
+    gap: 50px; /* Increased gap */
+    padding: 0 50px;
+    max-width: 1600px; /* Even wider content area */
+    margin-top: -40px; /* More overlap with header */
+    position: relative;
+    z-index: 3;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.campaignMainContent {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* More spacing between sections */
+}
+
+.campaignSidebar {
+    flex: 1;
+    min-width: 380px; /* Slightly wider sidebar */
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* --- Glass Panel Styling (Reused for cards) --- */
+.glassPanel {
+    background-color: rgba(17, 17, 17, 0.7); /* Lighter, cleaner transparency */
+    backdrop-filter: blur(12px); /* Slightly less blur, feels cleaner */
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--border-radius-large);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 40px; /* More internal padding */
+    transition: all 0.3s ease;
+}
+
+.glassPanel:hover {
+    transform: translateY(-7px); /* More movement on hover */
+    box-shadow: var(--glass-shadow-hover);
+}
+
+.sectionHeader {
+    font-size: 2rem; /* Larger section titles */
+    font-weight: 700;
+    color: #e1e1e1; /* Primary text for section headers for clarity */
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(var(--color-text-dark), 0.2); /* Subtler border */
+    padding-bottom: 15px;
+    letter-spacing: -0.03em;
+}
+
+.sectionHeader svg {
+    font-size: 2.2rem;
+    color: #E64A19;
+}
+
+.subHeader {
+    font-size: 1.6rem; /* Larger sub-headers */
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 35px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --- Info Grid --- */
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Larger min width for items */
+    gap: 25px; /* More space */
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    padding: 20px 25px; /* More padding */
+    background-color: #141414;
+    border-radius: var(--border-radius-medium);
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Very subtle white border */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Lighter shadow */
+}
+
+.infoItem span {
+    font-weight: 600; /* Bolder values */
+    color: var(--color-text-primary);
+    font-size: 1.15rem;
+}
+
+.infoItem svg {
+    color: #E64A19; /* Primary accent for icons */
+    font-size: 1.8rem; /* Larger icons */
+    margin-bottom: 5px;
+}
+
+.statusBadge {
+    padding: 8px 16px; /* More padding */
+    border-radius: 25px; /* More rounded */
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase; /* Uppercase for a modern look */
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin-left: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.statusActive {
+    background-color: #08c255;
+    color: #ffffff;
+}
+
+.statusPending {
+    background-color: var(--color-accent-secondary); /* Use secondary orange for pending */
+    color: var(--color-bg-dark);
+}
+
+.statusEnded {
+    background-color: var(--color-text-dark); /* Muted gray for ended */
+    color: var(--color-text-primary);
+}
+
+/* --- Required Actions --- */
+.actionList {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 35px;
+}
+
+.actionList li {
+    display: flex;
+    align-items: flex-start; /* Align icon to top of text */
+    gap: 18px; /* More space */
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+}
+
+.actionList li svg {
+    color: var(--color-accent-primary);
+    font-size: 1.5rem;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    margin-top: 4px; /* Adjust alignment */
+}
+
+.additionalInstructions p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}
+
+.externalLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px; /* More space */
+    margin-top: 35px;
+}
+
+.actionLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #E64A19;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    padding: 12px 22px; /* More padding */
+    border: 1px solid #E64A19;
+    border-radius: var(--border-radius-small);
+    background-color: rgba(255, 111, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(255, 111, 0, 0.2);
+}
+
+.actionLink:hover {
+    color: #ffffff; /* White text on hover */
+    background-color: #ff3c00;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 111, 0, 0.5);
+}
+
+.actionLink svg {
+    font-size: 1.3rem;
+}
+
+.hashtagsSection {
+    margin-top: 35px;
+}
+
+.hashtagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px; /* More space */
+}
+
+.hashtagItem {
+    background-color: var(--color-bg-light);
+    color: #E64A1f; /* Text secondary for hashtags */
+    padding: 10px 18px; /* More padding */
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid rgba(var(--color-text-dark), 0.2); /* Subtler border */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+}
+
+/* --- Earnings Potential Section (Sidebar) --- */
+.earningsSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* More space */
+    margin-bottom: 35px;
+}
+
+.earningBox {
+    background-color: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Consistent subtle border */
+    border-radius: var(--border-radius-medium);
+    padding: 30px; /* More padding */
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.earningBox .label {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.earningBox .value {
+    font-size: 2.8rem; /* Larger values */
+    font-weight: 700;
+    color: #E64A19;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 8px rgba(255, 111, 0, 0.3); /* Subtler glow */
+}
+
+.earningBox .value.noEarningPotential {
+    color: var(--color-text-dark); /* Muted gray for no earnings */
+    text-shadow: none;
+}
+
+.earningBox .value svg {
+    font-size: 2.5rem; /* Larger icons */
+}
+
+.earningBox .note {
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+    line-height: 1.5;
+}
+
+.rewardPool .value {
+    color: #e1e1e1;
+    text-shadow: 0 0 8px rgba(255, 140, 0, 0.2);
+}
+
+.progressBarContainer {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter track */
+    border-radius: 8px; /* Slightly more rounded */
+    height: 14px; /* Taller bar */
+    margin-top: 18px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, #E64A19, #ff3c00);
+    border-radius: 8px;
+    transition: width 0.6s ease-in-out; /* Slower transition */
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); /* More prominent glow */
+}
+
+.progressText {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem; /* Slightly larger text */
+    color: #ffffff; /* White text for better contrast on gradient */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+.timeRemainingDetail,
+.participantsDetail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.2rem; /* Larger detail text */
+    color: var(--color-text-primary);
+    margin-bottom: 18px;
+    font-weight: 500;
+}
+
+.timeRemainingDetail svg,
+.participantsDetail svg {
+    color: var(--color-accent-primary); /* Primary accent for icons */
+    font-size: 1.6rem;
+}
+
+.timeRemainingDetail .iconEnded {
+    color: var(--color-text-dark); /* Muted gray for ended icon */
+}
+
+/* --- Action Button --- */
+.campaignActionCta {
+    margin-top: 50px; /* More space for CTA */
+    text-align: center;
+}
+
+.actionButton {
+    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Gradient button */
+    color: #ffffff;
+    border: none;
+    border-radius: var(--border-radius-medium); /* Consistent with other large radius */
+    padding: 18px 40px; /* More prominent button */
+    font-size: 1.35rem; /* Larger font */
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 450px; /* Max width for button */
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(255, 111, 0, 0.5); /* Stronger shadow/glow */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.actionButton:hover:not(:disabled) {
+    background: linear-gradient(45deg, #ff511c, #d83200); /* Invert gradient or slightly shift */
+    transform: translateY(-5px); /* More pronounced hover */
+    box-shadow: 0 12px 35px rgba(255, 111, 0, 0.7);
+}
+
+.actionButton:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(255, 111, 0, 0.4);
+}
+
+.actionButton.disabled {
+    background: var(--color-bg-light); /* Muted background */
+    color: var(--color-text-dark);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.5; /* More faded */
+}
+
+.actionButton svg {
+    font-size: 1.8rem;
+}
+
+/* Spinner for loading state */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1200px) {
+    .campaignContentWrapper {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 30px;
+        margin-top: -100px; /* Adjust overlap */
+        gap: 35px;
+    }
+
+    .campaignMainContent,
+    .campaignSidebar {
+        width: 100%;
+        max-width: 900px; /* Wider for tablets */
+    }
+
+    .campaignSidebar {
+        min-width: unset;
+    }
+
+    .campaignHeader {
+        height: 350px;
+        padding-bottom: 40px;
+    }
+
+    .campaignLogo {
+        width: 120px;
+        height: 120px;
+        margin-top: calc(-120px / 2);
+    }
+
+    .campaignTitle {
+        font-size: 3rem;
+    }
+
+    .campaignBrief {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .campaignHeader {
+        height: 300px;
+        padding-bottom: 30px;
+    }
+
+    .campaignLogo {
+        width: 100px;
+        height: 100px;
+        margin-top: calc(-100px / 2);
+    }
+
+    .campaignTitle {
+        font-size: 2.5rem;
+        margin-top: 20px;
+    }
+
+    .campaignBrief {
+        font-size: 1.05rem;
+        margin-bottom: 25px;
+    }
+
+    .creatorSocialLinks {
+        gap: 25px;
+    }
+
+    .socialIcon {
+        font-size: 2rem;
+    }
+
+    .campaignContentWrapper {
+        padding: 0 20px;
+        margin-top: -80px;
+        gap: 30px;
+    }
+
+    .glassPanel {
+        padding: 30px;
+    }
+
+    .sectionHeader {
+        font-size: 1.7rem;
+        margin-bottom: 20px;
+        gap: 12px;
+    }
+    .sectionHeader svg {
+        font-size: 1.9rem;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .earningBox .value {
+        font-size: 2.4rem;
+    }
+
+    .actionButton {
+        font-size: 1.2rem;
+        padding: 15px 30px;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sparkCampaignDetailPage {
+        padding-bottom: 60px;
+    }
+    .campaignHeader {
+        height: 250px;
+        padding-bottom: 25px;
+    }
+
+    .campaignLogo {
+        width: 80px;
+        height: 80px;
+        margin-top: calc(-80px / 2);
+    }
+
+    .campaignTitle {
+        font-size: 2rem;
+    }
+
+    .campaignBrief {
+        font-size: 0.95rem;
+    }
+
+    .creatorSocialLinks {
+        gap: 20px;
+    }
+
+    .socialIcon {
+        font-size: 1.8rem;
+    }
+
+    .campaignContentWrapper {
+        padding: 0 15px;
+        margin-top: -60px;
+        gap: 25px;
+    }
+
+    .glassPanel {
+        padding: 25px;
+    }
+
+    .sectionHeader {
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+    }
+    .sectionHeader svg {
+        font-size: 1.7rem;
+    }
+
+    .infoItem {
+        padding: 15px 20px;
+    }
+
+    .actionList li,
+    .timeRemainingDetail,
+    .participantsDetail {
+        font-size: 1.05rem;
+    }
+
+    .earningBox .value {
+        font-size: 2rem;
+    }
+
+    .actionButton {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        gap: 10px;
+    }
+}

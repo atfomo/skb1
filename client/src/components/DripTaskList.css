@@ -1,0 +1,111 @@
+/* client/src/components/DripCampaign/DripTaskList.css */
+
+.drip-list-container {
+    background-color: rgba(28, 32, 45, 0.5); /* The desired main background color */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+    overflow: hidden; /* Ensures child elements respect border-radius */
+    color: #E0E0E0; /* Default text color */
+}
+
+.drip-list-header {
+    display: grid;
+    /* Match the column structure of DripTaskItem for alignment */
+    grid-template-columns: 1fr 2fr 1.5fr 0.8fr 1.2fr;
+    gap: 15px;
+    padding: 18px 25px;
+    background-color: rgba(35, 40, 55, 0.7); /* Slightly darker, more opaque header background */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #FF6F00; /* Orange for header text */
+    text-shadow: 0 0 5px rgba(255, 110, 0, 0.1);
+}
+
+.drip-list-header-item {
+    text-align: left;
+    white-space: nowrap; /* Prevent wrapping in header */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drip-list-body {
+    padding: 15px 25px; /* Padding around the list of items */
+    display: flex;
+    flex-direction: column; /* Stack DripTaskItems vertically */
+    gap: 15px; /* Space between each DripTaskItem */
+}
+
+/* Empty state message styling */
+.drip-list-empty-state-message {
+    background-color: rgba(28, 32, 45, 0.4); /* Consistent with the main container glass effect */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+    padding: 40px 20px;
+    text-align: center;
+    margin: 30px auto; /* Center the message */
+    max-width: 600px;
+    color: #E0E0E0;
+}
+
+.drip-list-empty-state-title {
+    font-size: 1.8em;
+    color: #FF6F00; /* Orange for the title */
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.drip-list-empty-state-text {
+    font-size: 1.1em;
+    color: #B0B0B0; /* Lighter grey for descriptive text */
+}
+
+/* --- Responsive Design for DripTaskList --- */
+@media (max-width: 992px) {
+    .drip-list-header {
+        grid-template-columns: 1fr 1.5fr 1fr 0.7fr 1fr; /* Adjust for medium screens */
+        font-size: 1em;
+        padding: 15px 20px;
+    }
+
+    .drip-list-body {
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .drip-list-container {
+        margin: 20px 10px; /* Less margin on smaller screens */
+    }
+
+    .drip-list-header {
+        display: none; /* Hide header on small screens when items stack */
+    }
+
+    .drip-list-body {
+        padding: 15px; /* Adjust padding for stacked view */
+    }
+
+    /* The DripTaskItem component itself will handle its mobile layout (stacking into cards) */
+    /* No need to define row-specific mobile styles here */
+}
+
+@media (max-width: 480px) {
+    .drip-list-empty-state-title {
+        font-size: 1.5em;
+    }
+
+    .drip-list-empty-state-text {
+        font-size: 1em;
+    }
+
+    .drip-list-body {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,592 @@
+/* client/src/components/TaskGroupCard/TaskGroupCard.css */
+
+/* Re-use variables from ProjectDetail.css or a global variables file */
+/* Assuming these variables are available in the scope where this CSS is used */
+/* If not, you'd re-define them here or import a common variables file */
+:root {
+    /* Colors */
+    --color-primary-dark: #0d111c;
+    --color-secondary-dark: rgba(17, 16, 15, 0.7);
+    --color-tertiary-dark: rgba(255, 255, 255, 0.1);
+    --color-text-light: #e0e0e0;
+    --color-text-muted: #b0b0b0;
+    --color-text-dimmed: #888;
+
+    --color-accent-primary-orange: #FF6F00;
+    --color-accent-secondary-orange: #FFBB00;
+    --color-accent-orange-hover: #FF9900; /* New: for button/link hover background */
+
+    --color-border-subtle: rgba(255, 255, 255, 0.1);
+    --color-border-dark: #3e3e60; /* Existing dark border/divider color - can still be used for darker dividers */
+    --color-error: #ff6b6b;
+
+    /* Shadows */
+    --shadow-glass-deep: 0 15px 60px rgba(0, 0, 0, 0.6);
+    --shadow-glass-hover: 0 20px 70px rgba(0, 0, 0, 0.8);
+    --shadow-medium: 0 6px 18px rgba(0, 0, 0, 0.35); /* For smaller cards */
+    --shadow-inset: inset 0 0 12px rgba(0, 0, 0, 0.25);
+    --shadow-glow-secondary-orange: 0 0 20px rgba(255, 187, 0, 0.4);
+    --shadow-glow-primary-orange: 0 0 20px rgba(255, 111, 0, 0.6);
+
+    /* Typography */
+    --font-family-base: 'Inter', sans-serif;
+    --font-size-base: 1rem;
+    --font-size-sm: 0.9rem;
+    --font-size-md: 1.1rem;
+    --font-size-lg: 1.2rem;
+    --font-size-xl: 1.8rem;
+    --font-size-xxl: 2.2rem;
+    --font-size-xxxl: 3rem;
+    --line-height-base: 1.7;
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0.01em;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+    --spacing-xxl: 3rem;
+
+    /* Border Radii */
+    --border-radius-sm: 8px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 16px;
+    --border-radius-pill: 9999px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease-out;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease-in-out;
+}
+
+.task-group-card {
+    background-color: var(--color-secondary-dark); /* Use transparent dark background from variables */
+    backdrop-filter: blur(15px); /* Slightly stronger blur for a more prominent glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--color-border-subtle); /* Subtle white border */
+    border-radius: var(--border-radius-md); /* Consistent border radius */
+    box-shadow: var(--shadow-glass-deep); /* Deeper glass shadow */
+    margin-bottom: var(--spacing-md); /* Use spacing variable */
+    overflow: hidden;
+    transition: all var(--transition-normal); /* Use transition variable */
+    display: flex;
+    flex-direction: column;
+}
+
+.task-group-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glass-hover); /* Stronger shadow on hover */
+    border-color: rgba(255, 255, 255, 0.15); /* Slightly more prominent border on hover */
+}
+
+/* Status-specific card borders/shadows - adapted to new orange colors */
+.task-group-card.not-joined {
+    border-left: 1px solid #ff3c00; /* Vibrant orange indicator */
+}
+
+.task-group-card.in-progress {
+    border-left: 5px solid #00BFFF; /* Keeping original blue for in-progress, but can be a variable if needed */
+}
+
+.task-group-card.completed-group {
+    border-left: 5px solid #4CAF50; /* Keeping original green for completed, but can be a variable if needed */
+}
+
+.card-header {
+    padding: var(--spacing-md) var(--spacing-lg); /* Use spacing variables */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs); /* Use spacing variable */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Slightly more visible separator */
+    background-color: rgba(0, 0, 0, 0.2); /* Very subtle dark transparent header background */
+    backdrop-filter: blur(5px); /* Add a subtle blur to the header */
+    -webkit-backdrop-filter: blur(5px);
+    transition: background-color var(--transition-fast);
+}
+
+.card-header:hover {
+    background-color: rgba(0, 0, 0, 0.3); /* Slightly darker transparent on hover */
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.card-title {
+    font-size: var(--font-size-lg); /* Using variable */
+    /* Apply gradient text effect */
+    background-image: linear-gradient(90deg, #e1e1e1, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for browsers not supporting background-clip */
+    margin: 0;
+    font-weight: 700;
+}
+
+.rewards-badge {
+    background-color: rgba(255, 187, 0, 0.2); /* Use accent-secondary-orange with transparency */
+    color: var(--color-accent-secondary-orange); /* Use accent-secondary-orange for text */
+    padding: var(--spacing-xs) var(--spacing-sm); /* Use spacing variables */
+    border-radius: var(--border-radius-pill); /* Pill shape */
+    font-size: var(--font-size-sm); /* Use variable */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgba(255, 187, 0, 0.1);
+    box-shadow: 0 0 5px rgba(255, 187, 0, 0.2); /* Subtle glow for the badge */
+}
+
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-sm); /* Use variable */
+    color: var(--color-text-muted); /* Use variable for muted text */
+}
+
+.participants-info {
+    font-weight: 500;
+}
+
+.expand-icon {
+    font-size: var(--font-size-md); /* Use variable */
+    transition: transform var(--transition-normal);
+    color: #ff3c00; /* Make icon orange */
+}
+
+.expand-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.card-content-area {
+    padding: var(--spacing-md) var(--spacing-lg); /* Use spacing variables */
+    background-color: rgba(0, 0, 0, 0.15); /* Slightly lighter transparent background for content */
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Subtle top border */
+    flex-grow: 1;
+}
+
+.task-description {
+    color: var(--color-text-light); /* Use variable */
+    font-size: var(--font-size-base); /* Use variable */
+    line-height: var(--line-height-base);
+    margin-bottom: var(--spacing-md); /* Use spacing variable */
+    padding-bottom: var(--spacing-sm); /* Use spacing variable */
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08); /* More visible dashed separator */
+}
+
+.sub-tasks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm); /* Use spacing variable */
+    margin-bottom: var(--spacing-lg); /* Use spacing variable */
+}
+
+.sub-task-item {
+    background-color: var(--color-tertiary-dark); /* Use transparent tertiary dark for sub-task items */
+    border-radius: var(--border-radius-sm); /* Consistent border radius */
+    padding: var(--spacing-sm); /* Use spacing variable */
+    border: 1px solid var(--color-border-subtle); /* Subtle white border */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs); /* Use spacing variable */
+    transition: all var(--transition-fast);
+}
+
+.sub-task-item:hover {
+    background-color: rgba(255, 243, 233, 0.08); /* Subtle orange tint on hover */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.3); /* Slight orange border highlight */
+}
+
+.sub-task-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs); /* Use spacing variable */
+}
+
+.sub-task-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs); /* Use spacing variable */
+    flex-grow: 1;
+}
+
+.sub-task-icon {
+    color: var(--color-accent-primary-orange); /* Use primary orange for icons */
+    font-size: 1.3em;
+    filter: drop-shadow(0 0 3px rgba(255, 111, 0, 0.3)); /* Subtle glow for icons */
+}
+
+.sub-task-name {
+    color: var(--color-text-light); /* Use variable */
+    font-size: var(--font-size-base); /* Use variable */
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.task-display-link {
+    color: #4ac0ff; /* Keeping original blue for now, can be a variable */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color var(--transition-fast);
+}
+
+.task-display-link:hover {
+    color: #4ac0ff;
+    text-decoration: underline;
+}
+
+.sub-task-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs); /* Use spacing variable */
+    flex-wrap: wrap;
+}
+
+.task-link-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light); /* Use variable */
+    padding: 8px 15px;
+    border-radius: var(--border-radius-sm); /* Consistent rounding */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border: 1px solid var(--color-border-subtle); /* Subtle white border */
+}
+
+.task-link-button:hover {
+    background-color: var(--color-accent-orange-hover); /* Use new hover orange */
+    color: var(--color-primary-dark); /* Text changes to primary dark on hover */
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-primary-orange); /* Stronger orange glow */
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: var(--border-radius-pill); /* Pill shape */
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid; /* Make border dynamic with color */
+}
+
+.status-verified {
+    background-color: rgba(40, 200, 100, 0.2);
+    color: #4CAF50; /* Green */
+    border-color: rgba(40, 200, 100, 0.1);
+}
+
+.status-pending {
+    background-color: rgba(255, 180, 0, 0.2);
+    color: #FFC107; /* Amber */
+    border-color: rgba(255, 180, 0, 0.1);
+}
+
+.status-verifying {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #00BFFF; /* Blue */
+    border-color: rgba(0, 123, 255, 0.1);
+}
+
+.status-rejected {
+    background-color: rgba(255, 0, 0, 0.15);
+    color: #FF5555; /* Red */
+    border-color: rgba(255, 0, 0, 0.1);
+}
+
+.spin-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.sub-task-action-row {
+    margin-top: var(--spacing-xs); /* Use spacing variable */
+    padding-top: var(--spacing-xs); /* Use spacing variable */
+    border-top: 1px dashed rgba(255, 255, 255, 0.05); /* Slightly more visible dashed border */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm); /* Use spacing variable */
+}
+
+.sub-task-description-box {
+    background-color: rgba(0, 0, 0, 0.15); /* Slightly darker transparent background */
+    padding: var(--spacing-xs) var(--spacing-sm); /* Use spacing variables */
+    border-radius: var(--border-radius-sm); /* Consistent rounding */
+    font-size: 0.9em;
+    color: var(--color-text-muted); /* Use muted text color */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle white border */
+}
+
+.sub-task-description-box strong {
+    color: var(--color-accent-orange-hover); /* Highlight instructions title with a consistent orange */
+}
+
+.manual-proof-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm); /* Use spacing variable */
+}
+
+.proof-input-group {
+    display: flex;
+    gap: var(--spacing-xs); /* Use spacing variable */
+    flex-wrap: wrap;
+}
+
+.proof-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--color-border-subtle); /* Subtle white border */
+    border-radius: var(--border-radius-sm); /* Consistent rounding */
+    background-color: rgba(0, 0, 0, 0.3); /* Darker transparent input background */
+    color: var(--color-text-light); /* Use variable */
+    font-size: var(--font-size-base); /* Use variable */
+    outline: none;
+    transition: all var(--transition-fast);
+    min-width: 180px;
+}
+
+.proof-input:focus {
+    border-color: var(--color-accent-primary-orange);
+    box-shadow: 0 0 0 2px rgba(255, 110, 0, 0.25); /* Stronger orange glow on focus */
+    background-color: rgba(0, 0, 0, 0.4); /* Even darker on focus */
+}
+
+.proof-input::placeholder {
+    color: var(--color-text-dimmed); /* Use dimmed text for placeholder */
+}
+
+/* Common button styles inherited from HomePage */
+.action-button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-sm); /* Use variable */
+    font-weight: 600;
+    transition: all var(--transition-normal); /* Use transition variable */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submit-action-button {
+    flex-shrink: 0;
+}
+
+.submit-action-button-green {
+    background: linear-gradient(45deg, #4CAF50, #66BB6A);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.submit-action-button-green:hover:not(:disabled) {
+    background: linear-gradient(45deg, #66BB6A, #4CAF50);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+    transform: translateY(-2px);
+}
+
+.submit-action-button-grey,
+.action-button:disabled {
+    background-color: rgba(100, 100, 100, 0.2);
+    color: var(--color-text-dimmed); /* Use dimmed text for disabled */
+    cursor: not-allowed;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.submit-action-button-grey:hover {
+    transform: none;
+}
+
+
+/* File Upload Specific Styles */
+.file-upload .file-upload-label {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light); /* Use variable */
+    padding: 12px 18px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
+    border: 1px solid var(--color-border-subtle); /* Subtle white border */
+    flex-grow: 1;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-upload .file-upload-label:hover:not(.disabled-label) {
+    background-color: var(--color-accent-orange-hover); /* Use new hover orange */
+    color: var(--color-primary-dark); /* Text changes to primary dark on hover */
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-primary-orange); /* Stronger orange glow */
+}
+
+.file-upload .file-upload-label.disabled-label {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: rgba(100, 100, 100, 0.1);
+    color: var(--color-text-dimmed);
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.card-actions-bottom {
+    margin-top: var(--spacing-md); /* Use spacing variable */
+    padding-top: var(--spacing-md); /* Use spacing variable */
+    border-top: 1px solid rgba(255, 255, 255, 0.08); /* Stronger separator for bottom actions */
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm); /* Use spacing variable */
+    flex-wrap: wrap;
+}
+
+.action-button.join-button {
+    background: linear-gradient(45deg, #007bff, #00bfff);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.action-button.join-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #00bfff, #007bff);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.action-button.leave-button {
+    background-color: rgba(255, 0, 0, 0.15);
+    color: #FF5555;
+    border: 1px solid rgba(255, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.1);
+}
+
+.action-button.leave-button:hover {
+    background-color: rgba(255, 0, 0, 0.25);
+    color: #FF8888;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+}
+
+.group-completed-message {
+    color: #4CAF50;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-base); /* Use variable */
+    margin-right: auto;
+}
+
+.no-subtasks {
+    color: var(--color-text-muted); /* Use muted text color */
+    font-style: italic;
+    text-align: center;
+    padding: var(--spacing-md) 0; /* Use spacing variable */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .task-group-card {
+        margin-left: var(--spacing-xs); /* Use spacing variable */
+        margin-right: var(--spacing-xs); /* Use spacing variable */
+    }
+
+    .card-header, .card-content-area {
+        padding: var(--spacing-sm) var(--spacing-md); /* Use spacing variables */
+    }
+
+    .card-title {
+        font-size: var(--font-size-md); /* Use variable */
+    }
+
+    .rewards-badge {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+
+    .sub-task-item {
+        padding: var(--spacing-xs); /* Use spacing variable */
+    }
+
+    .sub-task-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sub-task-controls {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: var(--spacing-xs); /* Use spacing variable */
+    }
+
+    .task-link-button {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .proof-input-group {
+        flex-direction: column;
+    }
+
+    .proof-input, .file-upload .file-upload-label, .action-button {
+        width: 100%;
+        box-sizing: border-box;
+        min-width: unset;
+    }
+
+    .card-actions-bottom {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .group-completed-message {
+        justify-content: center;
+        margin-bottom: var(--spacing-sm); /* Use spacing variable */
+    }
+}
+
+@media (max-width: 480px) {
+    .card-title {
+        font-size: var(--font-size-base); /* Use variable */
+    }
+    .rewards-badge {
+        font-size: 0.8em;
+        padding: 5px 10px;
+    }
+    .action-button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}

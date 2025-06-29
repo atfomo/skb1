@@ -1,0 +1,731 @@
+/* --- Base Variables & Global Styles --- */
+:root {
+    --color-bg-dark: #0F141A; /* Main background */
+    --color-bg-medium: #1A202C; /* Card/Panel background */
+    --color-bg-light: #2A303C; /* Nested card/input background */
+
+    --color-accent-primary: #E64A19; /* PRIMARY ORANGE for actions/progress */
+    --color-accent-secondary: #ff3c00; /* SLIGHTLY LIGHTER ORANGE for emphasis/icons */
+    --color-accent-green: #2ECC71; /* Success */
+    --color-accent-orange: #F39C12; /* Warning (kept for specific warnings, distinct from primary) */
+    --color-accent-red: #E74C3C; /* Error */
+    --color-telegram-blue: #0088cc; /* Telegram brand color */ /* NEW: Telegram color */
+
+
+    --color-text-primary: #E2E8F0; /* Light text for main content */
+    --color-text-secondary: #A0AEC0; /* Muted text for labels/placeholders */
+    --color-text-dark: #5B6B7C; /* Very muted text */
+
+    --border-radius-large: 16px;
+    --border-radius-medium: 12px;
+    --border-radius-small: 8px;
+
+    --glass-border: 1px solid rgba(42, 48, 60, 0.4);
+    --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-dark);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Core Layout --- */
+.dashboard-outer-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px; /* Wider container for more content */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Consistent spacing between main sections */
+}
+
+.dashboard-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-accent-secondary);
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: -0.03em;
+    /* Updated gradient for title */
+    background: linear-gradient(90deg, #e1e1e1, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Updated text shadow */
+    text-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+}
+
+/* --- Glass Panel Styling (Reused across components) --- */
+.glass-panel {
+    background-color: rgba(17, 16, 15, 0.7); /* Slightly transparent background */
+    backdrop-filter: blur(15px); /* Stronger blur for glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: var(--border-radius-large);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.1); /* Updated hover shadow */
+}
+
+/* --- Profile Card --- */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    text-align: center;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column; /* Stack on smaller screens */
+    align-items: center;
+    gap: 20px;
+    width: 100%; /* Take full width */
+}
+
+@media (min-width: 768px) {
+    .profile-details {
+        flex-direction: row; /* Row on larger screens */
+        text-align: left;
+        align-items: flex-start;
+    }
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #E64A19;
+    object-fit: cover;
+    /* Updated avatar shadow */
+    box-shadow: 0 0 15px rgba(255, 111, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    /* Updated avatar hover shadow */
+    box-shadow: 0 0 20px rgba(255, 111, 0, 0.6);
+}
+
+.user-info {
+    flex-grow: 1; /* Allows user info to take available space */
+}
+
+.user-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.user-username {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* NEW: X and Telegram Handle Styles */
+.user-x-handle,
+.user-telegram-handle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.x-icon {
+    color: #1DA1F2; /* Twitter/X blue */
+    font-size: 1.1em;
+}
+
+.telegram-icon {
+    color: var(--color-telegram-blue); /* Telegram blue */
+    font-size: 1.1em;
+}
+
+
+/* --- Trust Score --- */
+.trust-score-container {
+    width: 100%;
+    max-width: 400px; /* Limit width for a cleaner look */
+    margin: 15px auto 0; /* Center if stacked, push down */
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .trust-score-container {
+        margin: 0; /* Align left with other text */
+        text-align: left;
+    }
+}
+
+.trust-score-label {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: inline-block;
+    vertical-align: center;
+}
+
+.trust-score-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #E64A19; /* Uses the secondary orange */
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.trust-score-bar {
+    width: 100%;
+    height: 12px;
+    background-color: var(--color-bg-light);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.trust-score-fill {
+    height: 100%;
+    /* Updated gradient for trust score fill */
+    background: linear-gradient(90deg, #E64A19, #ff3c00);
+    border-radius: 6px;
+    transition: width 0.5s ease-out;
+    /* Updated glow for trust score fill */
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+.trust-score-info-text {
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.info-icon {
+    color: #E64A19; /* Uses the secondary orange */
+    flex-shrink: 0;
+}
+
+/* --- Action Buttons (General Styling) --- */
+.action-button-primary,
+.action-button-secondary {
+    padding: 12px 25px;
+    border-radius: var(--border-radius-small);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+}
+
+.action-button-primary {
+    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Main vibrant orange gradient */
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.action-button-primary:hover {
+    background: linear-gradient(45deg, #ff511c, #d83200);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6);
+    transform: translateY(-3px);
+}
+
+.action-button-primary:disabled {
+    background-color: var(--color-bg-light);
+    color: #e1e1e1;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.6;
+}
+
+.action-button-secondary {
+    background-color: transparent;
+    color: #e1e1e1; /* Secondary Orange */
+    border: 1px solid #797979;
+    /* Updated secondary button shadow */
+    box-shadow: 0 2px 10px rgba(255, 81, 0, 0.096);
+}
+
+.action-button-secondary:hover {
+    background-color: rgba(255, 17, 0, 0.1); /* Subtle orange tint on hover */
+    color: #FFFFFF;
+    /* Updated secondary button hover shadow */
+    box-shadow: 0 4px 15px rgba(255, 38, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.action-button-secondary:disabled {
+    background-color: transparent;
+    color: var(--color-text-dark);
+    border-color: var(--color-text-dark);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.6;
+}
+
+.button-icon {
+    font-size: 1.1em;
+}
+
+.icon-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Specific button in profile card */
+.profile-card .rules-button {
+    margin-top: 25px; /* Separate from profile info */
+    width: auto; /* Allow content to dictate width */
+    min-width: 160px; /* Ensure minimum size */
+}
+
+
+/* --- Dashboard Metrics Grid --- */
+.dashboard-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.metric-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.metric-box-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-title {
+    color: #ff3c00; /* Secondary Orange */
+    font-size: 1.6rem;
+}
+
+.metric-value {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #E64A19; /* Primary Orange */
+    margin-bottom: 20px;
+    letter-spacing: -0.05em;
+    /* Updated metric value shadow */
+    text-shadow: 0 0 15px rgba(255, 111, 0, 0.3);
+}
+
+/* --- Wallet Management Section --- */
+.wallet-management .input-group {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 15px;
+    gap: 10px; /* Space between input and button */
+}
+
+.wallet-management .input-field {
+    flex-grow: 1; /* Input takes up remaining space */
+}
+
+.wallet-management .save-button {
+    flex-shrink: 0; /* Button doesn't shrink */
+}
+
+/* --- Input Field Common Style --- */
+.input-group {
+    width: 100%;
+    max-width: 450px;
+    margin-top: 15px;
+    gap: 12px; /* Space between input and button */
+    display: flex;
+    flex-direction: column; /* Force column layout for input and button */
+    align-items: stretch; /* Make children (input, button) stretch to full width */
+}
+
+.input-field {
+    padding: 14px 20px;
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-text-dark);
+    border-radius: var(--border-radius-small);
+    color: var(--color-text-primary);
+    font-size: 1.05rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.input-field::placeholder {
+    color: var(--color-text-dark);
+    opacity: 0.8;
+}
+
+.input-field:focus {
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.3);
+}
+
+.save-button {
+    width: 100%; /* Make button take full width in column layout */
+}
+
+/* --- Payout Request Section --- */
+.payout-request {
+    grid-column: span 2; /* Occupy two columns for wider layout */
+    max-width: unset; /* Remove max-width constraint for full grid span */
+}
+
+@media (max-width: 900px) {
+    .payout-request {
+        grid-column: unset; /* Revert to single column on smaller screens */
+    }
+}
+
+.payout-request .request-payout-button {
+    min-width: 200px;
+}
+
+.payout-form-expanded {
+    width: 100%;
+    max-width: 500px; /* Limit internal width of form */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.payout-amount-input {
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.payout-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.submit-payout-button,
+.cancel-payout-button {
+    flex: 1;
+    max-width: 180px;
+}
+
+/* --- NEW: Telegram Account Link Box Styling --- */
+.metric-box.telegram-account-management {
+    /* Specific styling for the Telegram link box */
+    grid-column: span 1; /* Adjust grid span as needed for your layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes button/info to bottom */
+}
+
+.telegram-account-management .linked-account-info {
+    text-align: center;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.telegram-account-management .linked-status {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-accent-green); /* Success color */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.telegram-account-management .success-icon {
+    font-size: 1.5rem;
+    color: var(--color-accent-green);
+}
+
+.telegram-account-management .linked-detail {
+    font-size: 1rem;
+    color: var(--color-text-secondary); /* Muted text for detail */
+}
+
+.telegram-account-management .info-text {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+    align-items: flex-start; /* Align icon with text top */
+    gap: 0.3rem;
+    text-align: center;
+}
+
+.telegram-account-management .link-account-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0; /* Adjust padding as needed */
+}
+
+/* Style for the container where Telegram widget will render */
+.telegram-login-button-wrapper {
+    /* Ensure it takes up appropriate space */
+    min-height: 40px; /* Adjust based on widget size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%; /* Ensure it spans the width if needed */
+}
+
+.telegram-login-button-wrapper iframe {
+    border: none; /* Remove default iframe border */
+}
+
+/* Style for the "Connecting..." button */
+.connect-telegram-button {
+    background-color: var(--color-bg-light); /* Example: darker shade of primary */
+    color: var(--color-text-secondary);
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius-small);
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* --- Feedback Messages --- */
+.feedback-card {
+    margin-top: 20px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left: 6px solid; /* For color coding */
+    box-shadow: var(--glass-shadow);
+    opacity: 0; /* Start hidden for animation */
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-card.success {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--color-accent-green);
+}
+
+.feedback-card.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--color-accent-red);
+}
+
+.feedback-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.feedback-card.success .feedback-icon {
+    color: var(--color-accent-green);
+}
+
+.feedback-card.error .feedback-icon {
+    color: var(--color-accent-red);
+}
+
+.feedback-text {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+/* --- Special Screens (Banned/Loading) --- */
+.dashboard-message-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    background-color: var(--color-bg-dark); /* Ensure dark background */
+}
+
+.dashboard-message-screen .message-icon {
+    font-size: 4rem;
+    margin-bottom: 30px;
+}
+
+.dashboard-message-screen.banned .message-icon {
+    color: var(--color-accent-red);
+}
+
+.dashboard-message-screen.loading .message-icon {
+    color: var(--color-accent-primary); /* Primary Orange */
+}
+
+.dashboard-message-screen .message-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 20px;
+}
+
+.dashboard-message-screen .message-text,
+.dashboard-message-screen .message-detail {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+.dashboard-message-screen .loading-spinner {
+    animation: spin 1.5s linear infinite;
+}
+
+.ban-reason-text {
+    font-weight: 600;
+    color: var(--color-accent-orange); /* Using the specific warning orange */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 900px) {
+    .dashboard-container {
+        gap: 25px;
+    }
+
+    .dashboard-title {
+        font-size: 2.5rem;
+    }
+
+    .profile-card,
+    .metric-box {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 2rem;
+    }
+
+    .user-name {
+        font-size: 1.8rem;
+    }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .dashboard-metrics-grid {
+        grid-template-columns: 1fr; /* Stack columns on small screens */
+    }
+
+    .payout-request {
+        grid-column: unset; /* Remove span on small screens */
+    }
+
+    /* Adjust input groups to stack on smaller screens */
+    .wallet-management .input-group,
+    .x-account-management .input-group {
+        flex-direction: column;
+        align-items: center;
+        max-width: unset; /* Allow it to fill the box if needed */
+    }
+
+    .wallet-management .save-button,
+    .x-account-management .save-button {
+        width: 100%;
+        max-width: 300px; /* Limit button width when stacked */
+    }
+
+    .payout-action-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-outer-wrapper {
+        padding: 20px 15px;
+    }
+
+    .dashboard-title {
+        font-size: 1.8rem;
+    }
+
+    .metric-box-title {
+        font-size: 1.2rem;
+    }
+
+    .icon-title {
+        font-size: 1.4rem;
+    }
+
+    .metric-value {
+        font-size: 2.2rem;
+    }
+
+    .input-field {
+        padding: 10px 15px;
+    }
+
+    .action-button-primary,
+    .action-button-secondary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,416 @@
+/* client/src/pages/AuthForms.css */
+
+/* General Reset and Base Styles */
+:root {
+    --primary-orange: #E64A19;
+    --accent-orange: #ff3c00;
+    --dark-background: #0D0D0D; /* Near black, but not pure black for better contrast */
+    --light-text: #E0E0E0;
+    --placeholder-text: #888;
+    --glass-background: rgba(255, 255, 255, 0.08); /* Lighter for glass effect */
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --input-background: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --gradient-start: #E64A19;
+    --gradient-end: #ff3c00;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', 'Poppins', 'Roboto', sans-serif; /* Prioritize modern fonts */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--dark-background);
+    color: var(--light-text);
+}
+
+/* Page Wrapper */
+.register-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden; /* Crucial for containing animated elements */
+    background: linear-gradient(135deg, #070707, #0a0a0a); /* Subtle dark gradient background */
+}
+
+/* Animated Background Spheres (Subtle, Billions-of-dollars tech feel) */
+.animated-background-sphere {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3;
+    filter: blur(100px);
+    pointer-events: none; /* Ensure they don't interfere with clicks */
+    animation: floatAndGlow 20s infinite ease-in-out alternate;
+}
+
+.sphere-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--accent-orange) 0%, transparent 70%);
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.sphere-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--primary-orange) 0%, transparent 70%);
+    bottom: 5%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+.sphere-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, #333 0%, transparent 70%); /* Darker, subtle sphere */
+    top: 50%;
+    left: 40%;
+    animation-delay: 10s;
+}
+
+@keyframes floatAndGlow {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(20px, -20px) scale(1.05);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+}
+
+
+/* Left Side Graphic Section */
+.graphic-left {
+    position: relative; /* For positioning child shapes */
+    flex: 1; /* Takes up available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    height: 100%;
+    overflow: hidden; /* Ensures shapes don't spill out */
+    max-width: 50%; /* Control its width relative to the form */
+    text-align: center;
+    z-index: 1; /* Ensure it's above background elements */
+}
+
+.graphic-text {
+    z-index: 2; /* Ensure text is above graphic shapes */
+    color: var(--light-text);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.graphic-text h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    background: linear-gradient(45deg, var(--primary-orange), var(--accent-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.graphic-text p {
+    font-size: 1.2rem;
+    max-width: 500px;
+    opacity: 0.8;
+}
+
+.graphic-shape {
+    position: absolute;
+    background: linear-gradient(45deg, var(--primary-orange), var(--accent-orange));
+    opacity: 0.15; /* Very subtle */
+    filter: blur(50px);
+    border-radius: 50%;
+    animation: moveAndRotate 15s infinite ease-in-out alternate;
+}
+
+.graphic-shape.shape-1 {
+    width: 150px;
+    height: 150px;
+    top: 15%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.graphic-shape.shape-2 {
+    width: 200px;
+    height: 200px;
+    bottom: 20%;
+    right: 15%;
+    animation-delay: 5s;
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; /* Organic shape */
+}
+
+.graphic-shape.shape-3 {
+    width: 100px;
+    height: 100px;
+    top: 60%;
+    left: 30%;
+    animation-delay: 10s;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; /* Another organic shape */
+}
+
+@keyframes moveAndRotate {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(30px, 30px) rotate(10deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+
+/* Form Container */
+.register-form-container {
+    flex: 1; /* Takes up remaining space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    z-index: 10; /* Ensure form is on top */
+}
+
+.auth-form.glassmorphism-card {
+    background: #111111;
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 450px;
+    width: 100%;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--light-text);
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.form-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-orange), var(--accent-orange));
+    border-radius: 2px;
+}
+
+
+/* Form Elements */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--light-text);
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.form-group input {
+    background-color: rgba(0, 0, 0, 0.4); /* Darker input background */
+    color: #F0F0F0;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.form-group input::placeholder {
+    color: var(--placeholder-text);
+    opacity: 0.7;
+}
+
+.form-group input:focus {
+    border-color: #333333;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Error Message */
+.error-message {
+    color: var(--accent-orange);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: -1rem; /* Adjust spacing */
+    margin-bottom: 1rem;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+/* Submit Button */
+.auth-submit-button {
+    background: linear-gradient(to right, var(--primary-orange), var(--accent-orange));
+    color: white;
+    padding: 1.2rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 60, 0, 0.4);
+    letter-spacing: 0.05em;
+}
+
+.auth-submit-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 60, 0, 0.6);
+    filter: brightness(1.1); /* Slightly brighter on hover */
+}
+
+.auth-submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(255, 60, 0, 0.3);
+}
+
+/* Link Text */
+.auth-link-text {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--light-text);
+    opacity: 0.8;
+}
+
+.auth-link-text a {
+    color: var(--accent-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-link-text a:hover {
+    color: var(--primary-orange);
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .register-page-wrapper {
+        flex-direction: column; /* Stack graphic and form vertically */
+        justify-content: flex-start; /* Align content to top */
+        padding: 1.5rem;
+    }
+
+    .graphic-left {
+        max-width: 100%;
+        height: auto;
+        padding-bottom: 0; /* Adjust padding for mobile */
+        margin-bottom: 2rem; /* Space between graphic and form */
+    }
+
+    .graphic-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .graphic-text p {
+        font-size: 1rem;
+    }
+
+    .graphic-shape {
+        opacity: 0.1; /* Make them even more subtle on small screens */
+        filter: blur(30px);
+    }
+
+    .graphic-shape.shape-1 {
+        width: 100px;
+        height: 100px;
+        top: 5%;
+        left: 5%;
+    }
+    .graphic-shape.shape-2 {
+        width: 150px;
+        height: 150px;
+        bottom: 5%;
+        right: 5%;
+    }
+    .graphic-shape.shape-3 {
+        width: 80px;
+        height: 80px;
+        top: 40%;
+        left: 50%;
+    }
+
+
+    .register-form-container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .auth-form.glassmorphism-card {
+        padding: 2rem 1.5rem;
+        width: 95%; /* Adjust width for smaller screens */
+    }
+
+    .form-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-form.glassmorphism-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .form-group input {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .auth-submit-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .graphic-text h1 {
+        font-size: 2rem;
+    }
+    .graphic-text p {
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,66 @@
+/* client/src/pages/AvailableTasksPage/AvailableTasksPage.css */
+
+.available-tasks-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #1c1c1c; /* Dark background */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+.page-title {
+    color: #00ffc0; /* Accent color */
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    text-align: center;
+    color: #bbbbbb;
+    margin-bottom: 40px;
+    font-size: 1.2em;
+}
+
+.loading-message, .error-message, .no-tasks-message {
+    text-align: center;
+    padding: 20px;
+    background-color: #333333;
+    border-radius: 8px;
+    margin-top: 30px;
+    color: #e0e0e0;
+    font-size: 1.1em;
+}
+
+.error-message {
+    background-color: #5c2020;
+    border: 1px solid #ff4d4d;
+    color: #ffcccc;
+}
+
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .available-tasks-container {
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .page-title {
+        font-size: 2em;
+    }
+
+    .page-subtitle {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+}

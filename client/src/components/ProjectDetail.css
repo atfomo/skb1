@@ -1,0 +1,626 @@
+:root {
+    /* Colors - Unified with SparkCampaignDetail & Dashboard */
+    --color-bg-dark: #0F141A; /* Main background - from dashboard.css */
+    --color-bg-medium: #1A202C; /* Card/Panel background - from dashboard.css */
+    --color-bg-light: #2A303C; /* Nested card/input background - from dashboard.css */
+
+    --color-accent-primary: #E64A19; /* PRIMARY ORANGE for actions/progress - from dashboard.css */
+    --color-accent-secondary: #ff3c00; /* SLIGHTLY LIGHTER ORANGE for emphasis/icons - from dashboard.css */
+    --color-accent-green: #2ECC71; /* Success - from dashboard.css */
+    --color-accent-orange-warning: #F39C12; /* Warning (kept for specific warnings, distinct from primary) - from dashboard.css */
+    --color-accent-red: #E74C3C; /* Error - from dashboard.css */
+
+    --color-text-primary: #E2E8F0; /* Light text for main content - from dashboard.css */
+    --color-text-secondary: #A0AEC0; /* Muted text for labels/placeholders - from dashboard.css */
+    --color-text-dimmed: #5B6B7C; /* Very muted text - from dashboard.css (renamed from text-dark to avoid confusion) */
+
+    /* Glass Effect (from SparkCampaignDetail/dashboard) */
+    --glass-background-base: rgba(17, 16, 15, 0.7); /* Base transparency for glass panels */
+    --glass-blur: 15px; /* Stronger blur for prominent glass effect */
+    --glass-border: 1px solid rgba(42, 48, 60, 0.4); /* Consistent glass border */
+    --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); /* Consistent glass shadow */
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.1); /* Consistent hover shadow */
+
+    /* Glows (from SparkCampaignDetail/dashboard) */
+    --glow-primary-orange: 0 0 15px rgba(255, 111, 0, 0.4); /* General primary orange glow */
+    --glow-secondary-orange: 0 0 15px rgba(255, 187, 0, 0.2); /* Softer secondary orange glow */
+
+    /* Typography - Adjusted to Inter and consistent sizes */
+    --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-size-base: 1rem;
+    --font-size-sm: 0.9rem;
+    --font-size-md: 1.05rem; /* Slightly adjusted */
+    --font-size-lg: 1.15rem; /* Slightly adjusted */
+    --font-size-xl: 1.6rem; /* Adjusted for headings */
+    --font-size-xxl: 2.2rem; /* Adjusted for headings */
+    --font-size-xxxl: 3.2rem; /* Adjusted for main titles */
+    --line-height-base: 1.7;
+    --letter-spacing-tight: -0.04em; /* Tighter for impact headings */
+    --letter-spacing-normal: 0.01em;
+
+    /* Spacing - Consistent */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+    --spacing-xxl: 3rem;
+
+    /* Border Radii - Consistent */
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px; /* Consistent with SparkCampaignDetail/Dashboard */
+    --border-radius-lg: 16px; /* Consistent with SparkCampaignDetail/Dashboard */
+    --border-radius-pill: 9999px;
+
+    /* Transitions - Consistent */
+    --transition-fast: 0.2s ease-out;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease-in-out;
+}
+
+/* --- Base Page Layout --- */
+.project-detail-page {
+    max-width: 1200px;
+    margin: var(--spacing-lg) auto;
+    padding: var(--spacing-xl); /* Increased padding */
+    background-color: var(--glass-background-base); /* Use consistent glass background */
+    backdrop-filter: blur(var(--glass-blur)); /* Stronger blur */
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: var(--glass-border); /* Consistent subtle border */
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
+    color: var(--color-text-primary); /* Use primary text color */
+    font-family: var(--font-family-base);
+    animation: fadeIn var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(var(--spacing-md)); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.project-detail-container.loading,
+.project-detail-container.error,
+.project-detail-container.not-found {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary); /* Use secondary text for muted status */
+    background-color: var(--color-bg-medium); /* Use medium background for these states */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: var(--glass-border); /* Consistent subtle border */
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow); /* Consistent subtle shadow */
+}
+
+.project-detail-container.error {
+    color: var(--color-accent-red); /* Use consistent error red */
+    font-weight: 600;
+}
+
+/* --- Creator Dashboard Section --- */
+.creator-dashboard-section {
+    margin-bottom: var(--spacing-xl);
+    background-color: var(--glass-background-base); /* Consistent glass background */
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--border-radius-md); /* Slightly smaller radius for nested panels */
+    overflow: hidden;
+    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
+    border: var(--glass-border); /* Consistent subtle border */
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.creator-dashboard-section:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-shadow-hover); /* Consistent hover shadow */
+}
+
+.creator-banner {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: var(--spacing-md);
+    /* Remove background-image property here as it's typically dynamic via style attribute */
+    /* Only apply the overlay */
+    background-color: var(--color-bg-medium); /* Fallback background color */
+}
+
+.creator-banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%); /* Stronger dark overlay */
+    z-index: 1; /* Ensure overlay is above image but below content */
+}
+
+.creator-profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #1a1a1a; /* Border matches page background for separation */
+    box-shadow: 0 0 0 5px #ff3c00; /* Primary orange outline + subtle glow */
+    position: absolute;
+    bottom: -60px;
+    background-color: var(--color-bg-dark); /* Dark background for logo placeholder */
+    object-fit: cover;
+    z-index: 10;
+}
+
+.creator-details {
+    padding: 70px var(--spacing-lg) var(--spacing-lg);
+    text-align: center;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.25); /* More visible subtle dark transparent layer */
+    z-index: 5;
+}
+
+.creator-details h2 {
+    font-size: var(--font-size-xxl);
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: var(--letter-spacing-tight);
+    /* Gradient for titles, consistent with SparkCampaignDetail and dashboard */
+    background-image: linear-gradient(45deg, var(--color-text-primary), #ffffff); /* White gradient for name */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: var(--glow-secondary-orange); /* Subtle glow */
+}
+
+.creator-username {
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary); /* Use secondary text color */
+    margin-bottom: var(--spacing-sm);
+}
+
+.creator-bio {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: var(--color-text-secondary); /* Use secondary text color */
+    max-width: 700px;
+    margin: 0 auto var(--spacing-md);
+}
+
+.creator-tags {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.creator-tags .tag {
+    background-color: var(--color-bg-light); /* Use consistent light background */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 0.4rem var(--spacing-sm);
+    border-radius: var(--border-radius-pill);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary); /* Use primary text color */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Consistent subtle border */
+    transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.creator-tags .tag:hover {
+    background-color: rgba(230, 74, 25, 0.2); /* Primary accent orange tint on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px rgba(230, 74, 25, 0.4); /* Primary accent orange glow on hover */
+}
+
+.creator-socials {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.creator-socials a {
+    color: var(--color-text-secondary); /* Muted by default */
+    font-size: 1.8rem;
+    transition: color var(--transition-normal), transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.creator-socials a:hover {
+    color: #ff3c00; /* Primary orange on hover */
+    transform: translateY(-3px);
+    filter: drop-shadow(0 0 8px var(--color-accent-primary)); /* Stronger glow on hover */
+}
+
+.creator-section-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Consistent subtle border */
+    margin: var(--spacing-lg) auto;
+    width: 80%;
+    opacity: 0.3; /* Slightly more subtle */
+}
+
+/* --- Campaign Details Section --- */
+.campaign-title {
+    font-size: var(--font-size-xxxl);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: var(--letter-spacing-tight);
+    /* Gradient for titles, consistent with SparkCampaignDetail and dashboard */
+    background-image: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: var(--glow-primary-orange); /* Stronger glow for main title */
+}
+
+.campaign-description {
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-base);
+    color: var(--color-text-secondary); /* Use secondary text for descriptions */
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.campaign-summary {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xxl);
+    background-color: var(--color-bg-medium); /* Use medium background, not transparent glass */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow); /* Consistent subtle shadow */
+    border: var(--glass-border); /* Consistent subtle border */
+}
+
+.summary-item {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+    padding: var(--spacing-xs);
+    border-right: 1px solid rgba(255, 255, 255, 0.08); /* Consistent lighter border */
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.summary-item:last-child {
+    border-right: none;
+}
+
+.summary-item:hover {
+    background-color: rgba(230, 74, 25, 0.1); /* Subtle primary accent orange tint on hover */
+    border-radius: var(--border-radius-sm);
+    transform: translateY(-2px);
+}
+
+.summary-item span {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-dimmed); /* Dimmed text for labels */
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.summary-item strong {
+    font-size: 1.6rem;
+    color: var(--color-text-primary); /* Primary text for numbers */
+    font-weight: 700;
+    display: block;
+    /* Use orange gradient for strong numbers/data */
+    background-image: linear-gradient(90deg, #E64A19, #ff3c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: var(--glow-secondary-orange); /* Subtle glow */
+}
+
+/* --- NEW: Two-Column Grid Layout for Main Content --- */
+.campaign-main-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+}
+
+/* Sidebar for rules and social links */
+.campaign-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.campaign-image-container {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.campaign-image {
+    max-width: 100%;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow); /* Consistent subtle shadow */
+    object-fit: cover;
+    height: 350px;
+    width: 100%;
+    border: var(--glass-border); /* Consistent subtle border */
+}
+
+.campaign-rules,
+.campaign-social-links,
+.campaign-tasks-section {
+    background-color: var(--glass-background-base); /* Consistent glass background */
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow); /* Consistent subtle shadow */
+    border: var(--glass-border); /* Consistent subtle border */
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.campaign-rules:hover,
+.campaign-social-links:hover,
+.campaign-tasks-section:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--glass-shadow-hover); /* Consistent hover shadow */
+}
+
+
+.campaign-rules h3,
+.campaign-social-links h3,
+.tasks-heading {
+    color: var(--color-accent-secondary); /* Secondary orange for headings */
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15); /* Slightly more visible border */
+    padding-bottom: var(--spacing-xs);
+    text-align: center;
+    letter-spacing: var(--letter-spacing-tight);
+    /* Gradient for headings */
+    background-image: linear-gradient(90deg, #e1e1e1, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.campaign-rules ul {
+    list-style: none;
+    padding: 0;
+}
+
+.campaign-rules li {
+    background-color: var(--color-bg-light); /* Consistent lighter background for list items */
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: flex-start;
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary); /* Primary text for list content */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border for list items */
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.campaign-rules li:hover {
+    background-color: rgba(230, 74, 25, 0.1); /* Primary accent orange tint on hover */
+    transform: translateX(5px);
+}
+
+.campaign-rules li::before {
+    content: '•';
+    color: var(--color-accent-primary); /* Primary accent for bullets */
+    font-size: 1.5em;
+    line-height: 1;
+    margin-right: 0.7rem;
+    display: inline-block;
+    width: 1em;
+    font-weight: bold;
+}
+
+.campaign-social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.campaign-social-links h3 {
+    width: 100%;
+}
+
+.campaign-social-links a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-primary); /* Primary text color for links */
+    font-size: var(--font-size-md);
+    text-decoration: none;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background-color: var(--color-bg-light); /* Consistent lighter background for social links */
+    border-radius: var(--border-radius-pill);
+    transition: background-color var(--transition-normal), transform var(--transition-fast), box-shadow var(--transition-normal), color var(--transition-normal); /* Add color transition */
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Consistent subtle border */
+}
+
+.campaign-social-links a .social-icon {
+    font-size: 1.5rem;
+    color: var(--color-accent-primary); /* Primary accent for icons */
+}
+
+.campaign-social-links a:hover {
+    background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary)); /* Gradient on hover */
+    color: #ffffff; /* White text on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px rgba(255, 111, 0, 0.6); /* Stronger primary orange glow */
+}
+
+/* Tasks heading within its own section */
+.campaign-tasks-section .tasks-heading {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+.campaign-tasks-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: 0;
+}
+
+.no-tasks-message {
+    text-align: center;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary); /* Secondary text for muted message */
+    grid-column: 1 / -1;
+    padding: var(--spacing-lg);
+    background-color: var(--color-bg-medium); /* Consistent medium background */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow); /* Consistent subtle shadow */
+    border: var(--glass-border); /* Consistent subtle border */
+}
+
+/* --- Responsive adjustments --- */
+@media (min-width: 992px) {
+    .campaign-main-content-grid {
+        grid-template-columns: 1fr 2.5fr;
+        gap: var(--spacing-xl);
+    }
+}
+
+@media (max-width: 991px) {
+    .campaign-main-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campaign-sidebar {
+        order: 2;
+    }
+
+    .campaign-tasks-section {
+        order: 1;
+    }
+
+    .campaign-rules,
+    .campaign-social-links,
+    .campaign-tasks-section {
+        margin-bottom: var(--spacing-lg);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .project-detail-page {
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) auto;
+    }
+
+    .creator-banner {
+        height: 150px;
+    }
+
+    .creator-profile-pic {
+        width: 100px;
+        height: 100px;
+        bottom: -50px;
+        border-width: 4px;
+    }
+
+    .creator-details {
+        padding-top: 60px;
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+    }
+
+    .creator-details h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    .campaign-title {
+        font-size: var(--font-size-xxl);
+    }
+
+    .campaign-description {
+        font-size: var(--font-size-sm);
+    }
+
+    .campaign-summary {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .summary-item {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Consistent subtle border */
+        width: 100%;
+        padding-bottom: var(--spacing-sm);
+    }
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+    .campaign-image {
+        height: 250px;
+    }
+
+    .campaign-rules,
+    .campaign-social-links,
+    .campaign-tasks-section {
+        padding: var(--spacing-md);
+    }
+
+    .campaign-social-links a {
+        width: 90%;
+        justify-content: center;
+        font-size: var(--font-size-base);
+    }
+}
+
+@media (max-width: 480px) {
+    .project-detail-page {
+        padding: var(--spacing-sm);
+        margin: var(--spacing-sm) auto;
+    }
+
+    .creator-details {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+    }
+
+    .campaign-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .campaign-rules h3,
+    .campaign-social-links h3,
+    .tasks-heading {
+        font-size: var(--font-size-lg);
+    }
+
+    .creator-socials a {
+        font-size: 1.5rem;
+    }
+
+    .campaign-social-links a .social-icon {
+        font-size: 1.2rem;
+    }
+}

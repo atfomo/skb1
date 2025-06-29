@@ -1,0 +1,201 @@
+/* client/src/components/BannerScroller/BannerScroller.css */
+
+/* Overall Section Wrapper for Glassmorphism */
+.banner-scroller-section {
+    background-color: rgba(20, 20, 20, 0.5); /* Consistent glassmorphism background */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+    padding: 30px; /* Generous padding */
+    margin-top: 30px; /* Space from previous section */
+    overflow: hidden; /* Ensure nothing breaks out */
+}
+
+.banner-scroller-heading {
+    color: #FF6F00; /* Vibrant orange for headings */
+    font-size: 2.2em; /* Prominent size */
+    font-weight: 700;
+    margin-bottom: 25px; /* More space below heading */
+    text-align: center; /* Center align headings */
+    text-shadow: 0 0 8px rgba(255, 110, 0, 0.3); /* Subtle glow */
+}
+
+/* Main scroller wrapper */
+.banner-scroller-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Fixed height for the scroller viewport */
+    overflow: hidden; /* Hide content outside the viewport */
+    border-radius: 10px; /* Slightly rounded overall scroller */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Define CSS variables at the root or a suitable parent for calculations */
+:root {
+    --banner-item-display-width: 50vw; /* This is the width each banner will occupy visually */
+    --banner-gap: 20px; /* Gap between banners */
+    --banner-total-visible-width: calc(var(--banner-item-display-width) + var(--banner-gap));
+    /* --animation-duration is set dynamically by JS on .banner-scroller-inner */
+    /* --banner-count is set dynamically by JS on .banner-scroller-inner */
+}
+
+
+/* Inner container for the scrolling items */
+/* This is the element that gets animated (translateX) */
+.banner-scroller-inner {
+    display: flex; /* Arranges the single .banner-items-container horizontally */
+    width: max-content; /* Allow content to dictate the width (all banners + duplicates) */
+    animation: autoScroll var(--animation-duration, 30s) linear infinite; /* Use dynamic duration, fallback to 30s */
+    animation-play-state: running; /* Start animation automatically */
+}
+
+/* Container holding the actual banner items (the content that moves) */
+/* This is now a direct child of .banner-scroller-inner.
+   It contains ALL banners (original + duplicates). */
+.banner-items-container {
+    display: flex; /* Arrange individual banner items side by side */
+    /* No specific width needed here, as it's flexed within .banner-scroller-inner */
+}
+
+
+/* Individual banner item link */
+.banner-item-link {
+    flex-shrink: 0; /* Prevent items from shrinking */
+    width: var(--banner-item-display-width); /* Each banner occupies this visual width */
+    margin-right: var(--banner-gap); /* Space between banners */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Ensure it behaves like a block */
+}
+
+/* Banner Card Styling */
+.banner-card {
+    position: relative;
+    width: 100%;
+    /* Use padding-bottom for aspect ratio based on banner-item-display-width */
+    padding-bottom: calc(var(--banner-item-display-width) * 0.5625); /* 16:9 aspect ratio relative to its own width */
+    background-color: rgba(255, 255, 255, 0.08); /* Light glass effect for card itself */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.banner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.banner-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will stretch/crop the image to fit the 16:9 ratio */
+    filter: brightness(0.8); /* Slightly darken image for overlay readability */
+    transition: filter 0.3s ease;
+}
+
+.banner-card:hover .banner-card-image {
+    filter: brightness(0.9); /* Slightly brighten on hover */
+}
+
+/* Content Overlay for text */
+.banner-content-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Dark gradient fade up */
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.banner-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin: 0;
+    background-image: linear-gradient(45deg, #FF6F00, #FFBB00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback */
+    text-shadow: 0 0 8px rgba(255, 110, 0, 0.3);
+}
+
+/* Animation for infinite scroll */
+@keyframes autoScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* This needs to scroll exactly the width of one set of original banners (before duplication) */
+        /* If original banner count is 'N', then we need to scroll N * (banner-item-display-width + banner-gap) */
+        /* We pass --banner-count from JS, but using its direct length for calculation here */
+        transform: translateX(calc( -1 * var(--banner-count, 10) * (var(--banner-item-display-width) + var(--banner-gap)) ));
+        /* The '--banner-count, 10' means use --banner-count if available, otherwise default to 10 */
+    }
+}
+
+/* Pause animation on hover */
+.banner-scroller-wrapper:hover .banner-scroller-inner { /* Target the animated element */
+    animation-play-state: paused;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    :root {
+        --banner-item-display-width: 60vw;
+        --banner-gap: 15px;
+    }
+    .banner-title {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner-scroller-section {
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .banner-scroller-heading {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    :root {
+        --banner-item-display-width: 90vw; /* Show one almost full banner at a time */
+        --banner-gap: 10px;
+    }
+    /* Keyframes are now dynamic based on --banner-count, so no need for specific media query keyframes */
+    .banner-title {
+        font-size: 1.3em;
+    }
+    .banner-content-overlay {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner-scroller-section {
+        padding: 15px;
+    }
+    .banner-scroller-heading {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    :root {
+        --banner-item-display-width: 95vw; /* Even narrower for smaller mobiles */
+        --banner-gap: 8px;
+    }
+    .banner-title {
+        font-size: 1.1em;
+    }
+    .banner-content-overlay {
+        padding: 10px;
+    }
+}

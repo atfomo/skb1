@@ -1,0 +1,180 @@
+/* client/src/pages/FOMOCampaignsPage/FOMOCampaignsPage.css */
+
+/* --- Base Styles for the Page --- */
+/* Inherit from body in global CSS if you have it, otherwise set here */
+/* For consistency, ensuring body styles are applied is important */
+body {
+    background-color: #050505; /* Very dark background for contrast */
+    color: #e0e0e0; /* Default light text color */
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.fomo-campaigns-container {
+    max-width: 1400px; /* Match homepage width */
+    margin: 40px auto; /* Center with top/bottom margin */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Space between title, subtitle, and grid */
+
+    /* Apply glassmorphism card style to the container itself if you want the whole page content to be inside a card,
+       or apply it to individual sections within the container if you introduce them.
+       For this example, let's make the main container a glassmorphism card. */
+    background-color: rgba(17, 16, 15, 0.7); /* The desired main background color with transparency */
+    backdrop-filter: blur(15px); /* Stronger blur for prominent glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
+    border-radius: 20px; /* More rounded corners */
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6); /* Deep, prominent shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fomo-campaigns-container:hover {
+    transform: translateY(-5px); /* Subtle lift on hover */
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.8); /* Stronger shadow on hover */
+}
+
+
+/* --- Page Title and Subtitle --- */
+.fomo-campaigns-title {
+    font-size: 2.8em; /* Slightly smaller than hero title, but still impactful */
+    font-weight: 800; /* Bold */
+    margin-bottom: 10px;
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); /* Vibrant orange gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for non-webkit */
+    text-shadow: 0 0 15px rgba(255, 72, 0, 0.4); /* Glow */
+    text-align: center;
+    line-height: 1.2;
+}
+
+.fomo-campaigns-subtitle {
+    font-size: 1.2em;
+    color: #c0c0c0;
+    max-width: 800px;
+    margin: 0 auto 30px auto; /* Center and add space below */
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* --- Loading and Error Messages --- */
+.fomo-campaigns-container.loading-message,
+.fomo-campaigns-container.error-message {
+    min-height: 300px; /* Ensure sufficient height for messages */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: 500;
+    text-align: center;
+    /* Remove glassmorphism if these are overlaying the page,
+       but if they are the sole content of the container, keep it */
+    background-color: rgba(17, 16, 15, 0.7); /* Keep glassmorphism for consistency */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6);
+}
+
+.loading-message {
+    color: #E64A19; /* Orange for loading */
+}
+
+.error-message {
+    color: #FF7777; /* Red for errors */
+}
+
+/* You might want to reuse the loading spinner from HomePage if available globally,
+   or define a simple one here */
+/* Example simple spinner (copy from HomePage.css if you don't have it global) */
+.fomo-campaigns-container.loading-message::before {
+    content: '';
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-top: 6px solid #E64A19; /* Matching orange */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* --- Responsive Design (Matching HomePage.css) --- */
+@media (max-width: 1200px) {
+    .fomo-campaigns-container {
+        padding: 15px;
+        margin: 30px auto;
+        gap: 25px;
+    }
+    .fomo-campaigns-title {
+        font-size: 2.4em;
+    }
+    .fomo-campaigns-subtitle {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 768px) {
+    .fomo-campaigns-container {
+        padding: 15px;
+        margin: 20px auto;
+        border-radius: 15px;
+        gap: 20px;
+    }
+    .fomo-campaigns-title {
+        font-size: 2em;
+    }
+    .fomo-campaigns-subtitle {
+        font-size: 1em;
+    }
+    .fomo-campaigns-container.loading-message,
+    .fomo-campaigns-container.error-message {
+        font-size: 1.3em;
+        min-height: 250px;
+    }
+    .fomo-campaigns-container.loading-message::before {
+        width: 40px;
+        height: 40px;
+        border-width: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fomo-campaigns-container {
+        padding: 10px;
+        margin: 15px auto;
+        border-radius: 12px;
+        gap: 15px;
+    }
+    .fomo-campaigns-title {
+        font-size: 1.6em;
+    }
+    .fomo-campaigns-subtitle {
+        font-size: 0.9em;
+    }
+    .fomo-campaigns-container.loading-message,
+    .fomo-campaigns-container.error-message {
+        font-size: 1em;
+        min-height: 200px;
+    }
+    .fomo-campaigns-container.loading-message::before {
+        width: 35px;
+        height: 35px;
+        border-width: 4px;
+    }
+}

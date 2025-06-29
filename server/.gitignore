@@ -1,0 +1,94 @@
+# Node.js specific files and directories
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.cjs
+.pnp.js
+.parcel-cache/ # Parcel build cache
+.webpack/     # Webpack build cache
+.next/        # Next.js build output
+out/          # Common output directory
+dist/         # Distribution or compiled output
+build/        # Build output (e.g., React build)
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local # Matches any .env.xxxx.local variations
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# macOS specific files
+.DS_Store
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows specific files
+Thumbs.db
+Desktop.ini
+
+# IDE and Editor specific files
+.vscode/        # VS Code settings and workspace
+.idea/          # IntelliJ IDEA and WebStorm
+*.iml           # IntelliJ IDEA module files
+.project        # Eclipse project files
+.classpath      # Eclipse classpath files
+.c9/            # Cloud9 IDE
+*.sublime-project # Sublime Text project files
+*.sublime-workspace # Sublime Text workspace files
+*.atom-workspace # Atom editor workspace files
+.history        # VS Code Local History extension
+
+# Dependency directories
+bower_components/
+
+# Sass/Less compiled CSS
+*.css.map
+
+# Temporary files or backup files
+*~
+*.bak
+*.swp # Vim swap files
+.fuse_hidden*
+
+# Uploads or user-generated content (if not part of source)
+/uploads/
+/public/images/
+/public/files/
+
+# Test/Coverage results
+/coverage/
+.nyc_output/
+
+# Minified/Uglified files (if committed separately from source)
+*.min.js
+*.min.css
+
+# Database files (if not using an external DB and it's temporary)
+*.sqlite
+*.db
+
+# Certificates and keys (CRITICAL to ignore sensitive data!)
+*.pem
+*.key
+*.crt
+*.pfx
+client_secrets.json # Example for Google API secrets
+credentials.json # Example for Google API credentials

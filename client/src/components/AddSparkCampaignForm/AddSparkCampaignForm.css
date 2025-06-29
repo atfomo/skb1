@@ -1,0 +1,472 @@
+/* client/src/components/AddSparkCampaign.css */
+
+/*
+   IMPORTANT: Ensure your global variables (from dashboard.css or a dedicated variables file)
+   are loaded before this CSS file. This file assumes those variables are accessible.
+   Do NOT redefine them here.
+*/
+
+/* --- General form container --- */
+.add-spark-campaign-container {
+    padding: 30px;
+    border-radius: var(--border-radius-large); /* Use consistent border-radius */
+    /* Adopt glass-panel styles for consistency */
+    background-color: rgba(17, 16, 15, 0.7); /* Matching glass-panel background */
+    backdrop-filter: blur(15px); /* Stronger blur for glass effect, matching glass-panel */
+    -webkit-backdrop-filter: blur(15px);
+    border: var(--glass-border); /* Consistent glass border */
+    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
+
+    max-width: 900px;
+    margin: 40px auto;
+    color: var(--color-text-primary); /* Use primary text color */
+}
+
+.form-title {
+    font-size: 2.2em;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 15px;
+    /* Use your defined accent colors for the gradient */
+    background-image: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for browsers that don't support background-clip: text */
+    /* Use dashboard's title shadow for consistency */
+    text-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-title .form-icon {
+    font-size: 1em;
+    color: #E64A19; /* Icon matches primary accent color */
+}
+
+.form-description {
+    text-align: center;
+    color: var(--color-text-secondary); /* Use secondary text color for description */
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+/* Form sections */
+.form-section {
+    background-color: #141414; /* Use a background color from your palette */
+    border-radius: var(--border-radius-medium); /* Consistent border-radius */
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid #363636; /* Subtle border for sections */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Keep subtle inner shadow */
+}
+
+.form-section h3 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #e1e1e1; /* Primary orange color for section titles */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-section .section-icon {
+    font-size: 0.9em;
+    color: #E64A19; /* Icon matches primary accent color */
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--color-text-primary); /* Label text in primary color */
+}
+
+/* Input fields */
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--color-text-dark); /* Consistent border for inputs */
+    border-radius: var(--border-radius-small); /* Consistent border-radius */
+    background-color: var(--color-bg-light); /* Use light background for inputs */
+    color: var(--color-text-primary); /* Input text color */
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--color-text-dark); /* Placeholder color from palette */
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary); /* Primary accent orange focus */
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.3); /* Consistent focus glow */
+}
+
+/* --- NEW: File Input Styling --- */
+.form-input-file {
+    padding: 10px;
+    border: 1px solid var(--color-text-dark);
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-bg-light);
+    color: var(--color-text-primary);
+    font-size: 0.95em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.form-input-file::-webkit-file-upload-button {
+    /* Match primary button gradient */
+    background: linear-gradient(90deg, #E64A19, #ff3c00);
+    color: var(--color-bg-dark); /* Dark text on bright button */
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px; /* Slightly smaller radius for internal button */
+    cursor: pointer;
+    font-weight: 700;
+    margin-right: 15px;
+    transition: background 0.3s ease;
+}
+
+.form-input-file::-webkit-file-upload-button:hover {
+    /* Consistent hover effect */
+    background: linear-gradient(90deg, #E64A19, #ff3c00);
+}
+
+/* --- Image Preview --- */
+.banner-preview {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid var(--color-text-dark); /* Consistent border */
+    border-radius: var(--border-radius-small); /* Consistent border-radius */
+    background-color: var(--color-bg-medium); /* Medium background for preview box */
+    text-align: center;
+}
+
+.banner-preview p {
+    font-size: 0.9em;
+    color: var(--color-text-secondary); /* Secondary text color */
+    margin-bottom: 10px;
+}
+
+.uploaded-banner-preview {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+    border-radius: var(--border-radius-small);
+    border: 2px solid var(--color-accent-primary); /* Primary orange border for preview */
+    box-shadow: 0 0 15px rgba(255, 72, 0, 0.4); /* Keep this specific glow */
+    object-fit: cover;
+}
+/* --- END NEW: File Input Styling --- */
+
+.input-hint {
+    font-size: 0.85em;
+    color: var(--color-text-dark); /* Dark text for hints */
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.input-hint .icon-small, .input-hint svg {
+    color: #E64A19; /* Hint icons in secondary orange */
+    font-size: 0.9em;
+}
+
+/* Estimated engagement box */
+.estimated-engagement-box {
+    /* Similar to a glass panel or form section */
+    background-color: var(--color-bg-medium); /* Use a background color from your palette */
+    backdrop-filter: blur(10px); /* Maintain a slight blur if desired, though less strong than main container */
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-medium); /* Consistent border-radius */
+    padding: 15px;
+    margin-top: 15px;
+    border: 1px solid var(--color-text-dark);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    width: 520px;
+}
+
+.estimated-engagement-box h4 {
+    color: #E64A19; /* Primary orange for heading */
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.estimated-engagement-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.estimated-engagement-box ul li {
+    font-size: 0.95em;
+    color: var(--color-text-secondary); /* Secondary text for list items */
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.estimated-engagement-box ul li strong {
+    color: var(--color-text-primary); /* Primary text for strong emphasis */
+    font-weight: 800;
+}
+
+.estimated-engagement-box .icon-small {
+    color: var(--color-accent-green); /* Green for success/estimates */
+    font-size: 0.9em;
+}
+
+.estimated-engagement-box .note {
+    font-size: 0.8em;
+    color: var(--color-text-dark); /* Dark text for notes */
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Checkbox grid */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.custom-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--color-text-primary); /* Primary text for label */
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-small);
+    background-color:  #181818; /* Light background for checkboxes */
+    border: 1px solid  #ff511c;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-checkbox-label:hover {
+    background: rgba(255, 110, 0, 0.1); /* Subtle orange on hover */
+    border-color: rgba(255, 110, 0, 0.3);
+}
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E64A19; /* Primary orange border for custom checkbox */
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-custom::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 8px;
+    height: 14px;
+    border: solid var(--color-text-primary); /* White checkmark */
+    border-width: 0 3px 3px 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+    /* Orange gradient when checked */
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    border-color: #E64A19;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+}
+
+/* Textarea */
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Buttons */
+.form-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: var(--border-radius-medium); /* Consistent button border-radius */
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    gap: 10px;
+}
+
+.form-button.primary-button {
+    /* Directly use the action-button-primary styling from dashboard.css */
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    color: #fff; /* White text for primary buttons */
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.form-button.primary-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #ff511c, #d83200); /* Consistent hover gradient */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6); /* Consistent hover shadow */
+}
+
+.form-button:disabled {
+    background-color: var(--color-bg-light); /* Disabled background from dashboard buttons */
+    color: var(--color-text-dark); /* Disabled text color */
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Alerts */
+.alert {
+    padding: 15px 20px;
+    border-radius: var(--border-radius-small); /* Consistent border-radius */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.alert-icon {
+    font-size: 1.2em;
+}
+
+.error-alert {
+    background-color: rgba(231, 76, 60, 0.1); /* Based on --color-accent-red with transparency */
+    color: var(--color-accent-red);
+    border: 1px solid var(--color-accent-red);
+}
+
+.success-alert {
+    background-color: rgba(46, 204, 113, 0.1); /* Based on --color-accent-green with transparency */
+    color: var(--color-accent-green);
+    border: 1px solid var(--color-accent-green);
+}
+
+/* Loading/Access Denied States */
+.spark-campaign-form-loading,
+.spark-campaign-form-access-denied {
+    text-align: center;
+    padding: 50px 20px;
+    border-radius: var(--border-radius-large);
+    /* Adopt glass-panel styles for consistency */
+    background-color: rgba(17, 16, 15, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    max-width: 600px;
+    margin: 40px auto;
+    color: var(--color-text-primary);
+}
+
+.spark-campaign-form-loading .loading-spinner {
+    border: 4px solid var(--color-text-dark); /* Consistent lighter border */
+    border-top: 4px solid var(--color-accent-primary); /* Primary orange spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spark-campaign-form-access-denied h2 {
+    font-size: 2em;
+    color: var(--color-accent-red); /* Red for access denied */
+    margin-bottom: 15px;
+}
+
+.spark-campaign-form-access-denied p {
+    font-size: 1.1em;
+    color: var(--color-text-secondary); /* Secondary text for paragraphs */
+    margin-bottom: 25px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .add-spark-campaign-container {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    .form-title {
+        font-size: 1.8em;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+        grid-column: auto;
+    }
+    .estimated-engagement-box {
+        padding: 10px;
+    }
+    .estimated-engagement-box h4,
+    .estimated-engagement-box ul li,
+    .estimated-engagement-box .note {
+        font-size: 0.9em;
+    }
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-button {
+        font-size: 1em;
+        padding: 12px;
+    }
+    .form-input-file::-webkit-file-upload-button {
+        padding: 6px 12px;
+    }
+    .uploaded-banner-preview {
+        max-height: 150px;
+    }
+}
