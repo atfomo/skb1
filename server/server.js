@@ -155,7 +155,10 @@ const normalizePath = (p) => p.endsWith('/') ? p.slice(0, -1) : p;
 
 // Define paths that do *not* require JWT authentication
 const noJwtPaths = [
-    '/spark-campaigns/public-active' // Public path
+    '/spark-campaigns/public-active', // Public path for Spark Campaigns
+    '/tasks/available',               // Public path for available tasks
+    '/campaigns',                     // Public path for campaigns (assuming this is also intended to be public)
+    '/public/banners'                 // This should also be explicitly listed if it's public
 ].map(normalizePath);
 
 // Define paths that require ONLY the bot secret (and thus no JWT)
