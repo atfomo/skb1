@@ -173,33 +173,45 @@ const botSecretOnlyPaths = [
 ].map(normalizePath);
 
 // This middleware will run for ALL requests that enter /api
+// This middleware will run for ALL requests that enter /api
 apiRouter.use((req, res, next) => {
-    const currentPath = normalizePath(req.path); // Normalize the incoming request path
-    console.log(`--- API Router Middleware (Primary Auth Check): Original Path: ${req.path}`);
-    console.log(`--- API Router Middleware (Primary Auth Check): Normalized Path: ${currentPath}`);
+    const fullRequestPath = req.originalUrl; // Use originalUrl to see the full path including /api
+    const currentPath = normalizePath(req.path); // Path relative to /api mount point
+    
+    console.log(`\n--- Incoming Request to API Router ---`);
+    console.log(`Original URL: ${fullRequestPath}`);
+    console.log(`Path (relative to /api): ${currentPath}`);
+    console.log(`Method: ${req.method}`);
+    console.log(`Headers: x-bot-secret: ${req.header('x-bot-secret') ? 'Present' : 'Absent'}`);
 
     const botSecret = req.header('x-bot-secret');
     const expectedSecret = process.env.SECRET_BOT_API_KEY;
 
+    console.log(`Expected Bot Secret (from ENV): ${expectedSecret ? 'Present' : 'Absent'}`);
+    console.log(`Received Bot Secret: ${botSecret}`);
+    console.log(`Is received secret equal to expected? ${botSecret === expectedSecret}`);
+
+
     // Scenario 1: Path requires no authentication (e.g., public data)
     if (noJwtPaths.includes(currentPath)) {
-        console.log(`Auth Check: Skipping all authentication for public path: ${currentPath}`);
+        console.log(`Auth Check Decision: Skipping all authentication for public path: ${currentPath}`);
         return next(); // Skip all further auth checks for this path
     }
 
     // Scenario 2: Path requires *only* the bot secret
     if (botSecretOnlyPaths.includes(currentPath)) {
-        console.log(`Auth Check: Bot-secret-only path detected: ${currentPath}`);
+        console.log(`Auth Check Decision: Bot-secret-only path detected: ${currentPath}`);
         if (!botSecret || botSecret !== expectedSecret) {
-            console.warn('Auth Check: Invalid or missing x-bot-secret for bot-only route. Denying.');
+            console.warn('Auth Check Result: Invalid or missing x-bot-secret for bot-only route. Denying with 403.');
             return res.status(403).json({ msg: 'Forbidden: Invalid or missing bot secret.' });
         }
-        console.log('Auth Check: Valid x-bot-secret for bot-only route. Proceeding.');
+        console.log('Auth Check Result: Valid x-bot-secret for bot-only route. Proceeding to controller.');
         return next(); // Valid bot secret, skip JWT and proceed to route handler
     }
 
     // Scenario 3: All other paths (default to requiring JWT)
-    console.log(`Auth Check: Applying JWT authentication for protected path: ${currentPath}`);
+    console.log(`Auth Check Decision: Applying JWT authentication for protected path: ${currentPath}`);
+    // console.log(`Auth Check: JWT token: ${req.header('Authorization') ? 'Present' : 'Absent'}`); // This might log sensitive info
     authenticateJWT(req, res, next); // Apply JWT authentication
 });
 
