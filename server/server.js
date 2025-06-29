@@ -1,13 +1,12 @@
 // backend/server.js
-console.log('--- SERVER.JS INITIALIZING - VERSION: 2025-06-29T14:27:00Z (PRODUCTION READY) ---', new Date().toISOString()); // Update version
-require('dotenv').config(); // Keep this for local development
+console.log('--- SERVER.JS INITIALIZING - VERSION: 2025-06-29T22:48:15Z (Consolidated API Routing) ---', new Date().toISOString());
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
-const fs = require('fs'); // Keep fs for static file checks if needed, but not for SSL certs
-// const https = require('https'); // REMOVE: Render handles HTTPS
+const fs = require('fs');
 const passport = require('passport');
 
 // --- VERIFY IMPORTANT ENV VARIABLES AT STARTUP ---
@@ -42,25 +41,7 @@ const creatorRoutes = require('./routes/creatorRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Render doesn't need HOST explicitly set in code, it routes to the service's internal IP.
-// The `HOST` env variable will be used for your API_URLs in your config on Render.
-// For logging, you can still use it, but it won't bind the server to a specific external IP.
-const HOST = process.env.HOST || 'localhost'; 
-
-// --- REMOVE SSL Certificate Checks and Paths ---
-// These files are for local HTTPS development only. Render manages SSL.
-// const keyPath = path.join(__dirname, 'api.dev.atfomo.local+2-key.pem');
-// const certPath = path.join(__dirname, 'api.dev.atfomo.local+2.pem');
-// if (!fs.existsSync(keyPath)) {
-//     console.error(`SSL Private Key file not found at: ${keyPath}`);
-//     console.error('Please ensure "api.dev.atfomo.local+2-key.pem" is in the backend server directory.');
-//     process.exit(1);
-// }
-// if (!fs.existsSync(certPath)) {
-//     console.error(`SSL Certificate file not found at: ${certPath}`);
-//     console.error('Please ensure "api.dev.atfomo.local+2.pem" is in the backend server directory.');
-//     process.exit(1);
-// }
+const HOST = process.env.HOST || 'localhost';
 
 // --- Connect to MongoDB ---
 mongoose.connect(process.env.MONGODB_URI, {})
@@ -75,33 +56,24 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS Configuration - IMPORTANT CHANGES HERE
+// CORS Configuration
 app.use(cors({
     origin: function (origin, callback) {
-        // PRODUCTION: Update with your Vercel frontend domain and Render backend domain
-        // Add your Vercel project's preview domains if you want to test those too.
-        // E.g., 'https://your-vercel-project-name.vercel.app'
         const allowedOrigins = [
-            'https://atfomo.com',      // Your main frontend domain
-            'https://www.atfomo.com', // Your www frontend domain
-            // 'https://your-vercel-preview-url.vercel.app', // Vercel preview deployments (optional)
-            // 'https://atfomo-backend-xxxxxxxx.onrender.com', // Render's default URL (optional, mainly for internal calls or direct testing)
-            // 'https://api.atfomo.com', // Your backend's custom domain (if it makes calls to itself for some reason)
-            undefined // Allows requests from same-origin (e.g., Postman without an Origin header)
+            'https://atfomo.com',
+            'https://www.atfomo.com',
+            undefined // Allows requests with no origin (like Postman, curl, server-to-server)
         ];
-
-        // FOR LOCAL DEVELOPMENT: uncomment the following lines if you test locally with the deployed backend
-        // if (process.env.NODE_ENV !== 'production') {
-        //     allowedOrigins.push('http://localhost:3000');
-        //     allowedOrigins.push('https://localhost:3000');
-        //     allowedOrigins.push('http://dev.atfomo.local:3000');
-        //     allowedOrigins.push('https://dev.atfomo.local:3000');
-        //     allowedOrigins.push('http://localhost:5000'); // Your backend's local port
-        // }
-
+        if (process.env.NODE_ENV !== 'production') {
+            allowedOrigins.push('http://localhost:3000');
+            allowedOrigins.push('https://localhost:3000');
+            allowedOrigins.push('http://dev.atfomo.local:3000');
+            allowedOrigins.push('https://dev.atfomo.local:3000');
+            allowedOrigins.push('http://localhost:5000');
+        }
 
         console.log(`CORS check: Request origin is "${origin}"`);
-        if (!origin || allowedOrigins.includes(origin)) { // Use .includes for array
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             console.error(`CORS Error: Origin "${origin}" not allowed.`);
@@ -125,59 +97,40 @@ if (!fs.existsSync(bannerUploadsDir)) {
 }
 app.use('/uploads', express.static(uploadsBaseDir));
 
-// --- ROUTER MOUNTING ORDER (CRITICAL) ---
-
-// 1. Mount Authentication-related Routes (e.g., /auth/login, /auth/register)
+// 1. Mount non-API routes (like /auth)
 app.use('/auth', authRoutes);
-app.use('/api/creators', creatorRoutes);
 
-app.use('/api/public', bannerRoutes);
-console.log('--- SERVER.JS: Mounted /api/public using bannerRoutes (no auth middleware here) ---');
-
-// --- Integrate userRoutes properly, outside the temporary diagnostic block ---
-// This handles '/api/users/earnings' and other '/api/users' routes
-// and ensures JWT or bot secret is applied as per your logic.
-// Re-enable this line and ensure the logic within the `apiRouter.use` correctly
-// handles '/users/earnings' for bot secret and other `/users` routes for JWT.
-// The temporary diagnostic logic should be removed or re-integrated into the main `apiRouter.use`
-// or into the `userRoutes` itself.
-
-// The previous block was a specific diagnostic.
-// Let's re-integrate `userRoutes` into the `apiRouter` and ensure the bot secret logic
-// for `/users/earnings` is handled correctly within the `apiRouter.use` middleware
-// or the `userRoutes` module itself.
-
-// --- Create a dedicated API router for general API endpoints ---
+// Create a dedicated API router for general API endpoints
 const apiRouter = express.Router();
 
-// Normalize path function (still useful for internal apiRouter checks)
+// Normalize path function (useful for internal apiRouter checks)
 const normalizePath = (p) => p.endsWith('/') ? p.slice(0, -1) : p;
 
-// Define paths that do *not* require JWT authentication
+// Define paths that do *not* require JWT authentication (relative to /api)
 const noJwtPaths = [
-    '/spark-campaigns/public-active', // Public path for Spark Campaigns
-    '/tasks/available',               // Public path for available tasks
-    '/campaigns',                     // Public path for campaigns (assuming this is also intended to be public)
-    '/public/banners'                 // This should also be explicitly listed if it's public
+    '/spark-campaigns/public-active',
+    '/tasks/available',
+    '/campaigns',
+    '/public/banners' // This path is now relative to /api (e.g., /api/public/banners)
 ].map(normalizePath);
 
-// Define paths that require ONLY the bot secret (and thus no JWT)
-// IMPORTANT: '/users/earnings' should be in this list now for production setup
-// if the bot is the *only* entity calling it with x-bot-secret.
+// Define paths that require ONLY the bot secret (and thus no JWT) (relative to /api)
 const botSecretOnlyPaths = [
     '/telegram/complete-verification',
     '/spark-campaigns/track-message',
     '/telegram/link-campaign-group',
     '/spark-campaigns/track-reaction',
-    '/users/earnings' // Re-added for bot access
+    '/users/earnings'
 ].map(normalizePath);
 
-// This middleware will run for ALL requests that enter /api
-// This middleware will run for ALL requests that enter /api
+// This middleware will run for ALL requests that enter apiRouter
 apiRouter.use((req, res, next) => {
-    const fullRequestPath = req.originalUrl; // Use originalUrl to see the full path including /api
-    const currentPath = normalizePath(req.path); // Path relative to /api mount point
-    
+    const fullRequestPath = req.originalUrl;
+    // req.path inside a sub-router is relative to the sub-router's mount point.
+    // If apiRouter is mounted at /api, and request is /api/spark-campaigns/track-message
+    // then req.path INSIDE apiRouter.use is /spark-campaigns/track-message
+    const currentPath = normalizePath(req.path);
+
     console.log(`\n--- Incoming Request to API Router ---`);
     console.log(`Original URL: ${fullRequestPath}`);
     console.log(`Path (relative to /api): ${currentPath}`);
@@ -191,11 +144,10 @@ apiRouter.use((req, res, next) => {
     console.log(`Received Bot Secret: ${botSecret}`);
     console.log(`Is received secret equal to expected? ${botSecret === expectedSecret}`);
 
-
     // Scenario 1: Path requires no authentication (e.g., public data)
     if (noJwtPaths.includes(currentPath)) {
         console.log(`Auth Check Decision: Skipping all authentication for public path: ${currentPath}`);
-        return next(); // Skip all further auth checks for this path
+        return next();
     }
 
     // Scenario 2: Path requires *only* the bot secret
@@ -206,20 +158,21 @@ apiRouter.use((req, res, next) => {
             return res.status(403).json({ msg: 'Forbidden: Invalid or missing bot secret.' });
         }
         console.log('Auth Check Result: Valid x-bot-secret for bot-only route. Proceeding to controller.');
-        return next(); // Valid bot secret, skip JWT and proceed to route handler
+        return next();
     }
 
     // Scenario 3: All other paths (default to requiring JWT)
     console.log(`Auth Check Decision: Applying JWT authentication for protected path: ${currentPath}`);
-    // console.log(`Auth Check: JWT token: ${req.header('Authorization') ? 'Present' : 'Absent'}`); // This might log sensitive info
-    authenticateJWT(req, res, next); // Apply JWT authentication
+    authenticateJWT(req, res, next);
 });
 
-// Now, mount your specific routers to apiRouter.
-apiRouter.use('/users', userRoutes); // RE-ENABLE: Mount userRoutes here as intended
+// Now, mount all your API routers to the apiRouter.
+// This ensures they all pass through the apiRouter.use authentication logic.
+apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
+apiRouter.use('/users', userRoutes);
 apiRouter.use('/spark-campaigns', sparkCampaignRoutes);
 apiRouter.use('/upload', uploadRoutes);
-apiRouter.use('/banner', bannerRoutes);
+apiRouter.use('/public/banners', bannerRoutes); // Mounted under apiRouter, path is /api/public/banners
 apiRouter.use('/campaigns', campaignsRouter);
 apiRouter.use('/telegram', telegramRoutes);
 apiRouter.use('/drip-campaigns', dripCampaignsRoutes);
@@ -230,10 +183,9 @@ apiRouter.use('/project', projectRoutes);
 apiRouter.use('/tasks', tasksRoutes);
 
 
-// Finally, mount the apiRouter at the /api path
+// Finally, mount the consolidated apiRouter at the /api path
 app.use('/api', apiRouter);
 
-// --- Global Error Handler ---
 app.use((err, req, res, next) => {
     console.error("----- GLOBAL ERROR HANDLER -----");
     console.error("Error Message:", err.message);
@@ -249,15 +201,12 @@ app.use((err, req, res, next) => {
 
     res.status(statusCode).json({
         message: message,
-        // error: process.env.NODE_ENV === 'development' ? err : {} // Only send error stack in dev
     });
     console.error("----- END GLOBAL ERROR HANDLER -----");
 });
 
-// --- Server Start (HTTP for Render) --- IMPORTANT CHANGES HERE
-// Remove the https.createServer block entirely.
-// Listen directly on HTTP. Render will handle the HTTPS termination.
-app.listen(PORT, () => { // Removed HOST from listen as Render handles internal routing
+
+app.listen(PORT, () => {
     console.log(`HTTP Server running on port ${PORT}`);
-    console.log(`Backend API will be accessible at: https://api.atfomo.com`); // Informative message
+    console.log(`Backend API will be accessible at: https://api.atfomo.com`);
 });
