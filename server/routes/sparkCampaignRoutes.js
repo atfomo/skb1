@@ -1,9 +1,10 @@
 // backend/routes/sparkCampaignRoutes.js
-console.log('--- SPARK CAMPAIGN ROUTES FILE LOADED - VERSION: 2025-06-27T10:43:37Z (FINAL w/ Multer + Creator Campaigns) ---'); // Updated log for clarity and current time
+console.log('--- SPARK CAMPAIGN ROUTES FILE LOADED - VERSION: 2025-06-29T22:40:28Z (Bot Auth Fix) ---'); // Updated log for clarity and current time
 const express = require('express');
 const router = express.Router();
 const sparkCampaignController = require('../controllers/sparkCampaignController');
-const authenticateJWT = require('../middleware/authenticateJWT'); // IMPORTANT: Uncomment this line!
+// No need to import authenticateJWT here if server.js handles its conditional application
+// const authenticateJWT = require('../middleware/authenticateJWT'); // IMPORTANT: Uncomment this line! (Only if other routes *directly* use it here)
 const telegramController = require('../controllers/telegramController'); // Unused in this file, consider removing if not needed elsewhere
 
 // --- Multer and Cloudinary Setup for File Uploads ---
@@ -36,29 +37,28 @@ const upload = multer({
 
 
 // --- Public Route (Define specific static paths first!) ---
-// Replace the temporary test response with the actual controller method
 router.get('/public-active', sparkCampaignController.getPublicActiveSparkCampaigns);
 
 // --- Authenticated Routes (Order from most specific to most general where parameters are involved) ---
 
-// Example of a specific route that needs auth, but placed after public-active
-// Ensure these routes are protected if only logged-in users track actions
-router.post('/track-message', authenticateJWT, sparkCampaignController.trackMessage); // Added authenticateJWT
-router.post('/track-reaction', authenticateJWT, sparkCampaignController.trackReaction); // Added authenticateJWT
+// These routes are specifically handled by the `apiRouter.use` middleware in `server.js`
+// for bot secret authentication. They should NOT have `authenticateJWT` here directly.
+router.post('/track-message', sparkCampaignController.trackMessage); // ⭐ REMOVED authenticateJWT ⭐
+router.post('/track-reaction', sparkCampaignController.trackReaction); // ⭐ REMOVED authenticateJWT ⭐
+
+// All other routes that require JWT authentication will automatically get it
+// because the `apiRouter.use` middleware in `server.js` applies `authenticateJWT` by default
+// for any path not explicitly listed in `noJwtPaths` or `botSecretOnlyPaths`.
 
 // New route to get Spark Campaigns by Creator ID
-// It's good to place static-segment routes like '/creator/:id' before general '/:id' routes
-router.get('/creator/:creatorId', authenticateJWT, sparkCampaignController.getSparkCampaignsByCreatorId); // <--- ADDED THIS ROUTE!
+router.get('/creator/:creatorId', authenticateJWT, sparkCampaignController.getSparkCampaignsByCreatorId);
 
 // General management routes
-// Apply `upload.single('bannerImage')` middleware here for the create route.
-// 'bannerImage' should match the name attribute of the file input in your frontend FormData.
 router.post('/', authenticateJWT, upload.single('bannerImage'), sparkCampaignController.createSparkCampaign);
 router.get('/', authenticateJWT, sparkCampaignController.getAllSparkCampaigns);
 
 // ⭐ IMPORTANT: Place parameterized routes AFTER static routes ⭐
-// If banner can be updated, add upload.single('bannerImage') here too
-router.put('/:id', authenticateJWT, upload.single('bannerImage'), sparkCampaignController.updateSparkCampaign); // <--- Potentially add upload middleware here if banner can be updated
+router.put('/:id', authenticateJWT, upload.single('bannerImage'), sparkCampaignController.updateSparkCampaign); // If banner can be updated, keep upload middleware
 router.delete('/:id', authenticateJWT, sparkCampaignController.deleteSparkCampaign);
 router.get('/:id', authenticateJWT, sparkCampaignController.getSparkCampaignById); // THIS ROUTE MUST BE LAST FOR /:id!
 
