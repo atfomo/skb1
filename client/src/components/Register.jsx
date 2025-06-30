@@ -1,9 +1,10 @@
+// client/src/pages/Auth/Register.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios'; // Or axiosInstance, if consistent. See note below.
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../UserContext';
-import { useDialog } from '../context/DialogContext';
-import '../pages/AuthForms.css'; // You might want to rename this to Register.css for clarity
+import { useDialog } from '../context/DialogContext'; // Correct path
+import '../pages/AuthForms.css';
 import { API_BASE_URL } from '../config';
 
 const Register = () => {
@@ -19,9 +20,7 @@ const Register = () => {
 
     // Effect for dynamic background elements (if using JS for some animations)
     useEffect(() => {
-        // You can add JS-driven animations here if needed,
-        // but for a minimalistic approach, pure CSS is often sufficient and performant.
-        // For example, if you wanted to dynamically create particles.
+        // You can add JS-driven animations here if needed.
     }, []);
 
     const handleSubmit = async (e) => {
@@ -34,19 +33,28 @@ const Register = () => {
         }
 
         try {
+            // Recommendation: Use axiosInstance here for consistency with other authenticated calls
+            // import axiosInstance from '../../utils/axiosInstance';
+            // const res = await axiosInstance.post(`/auth/register`, { username, email, password });
             const res = await axios.post(`${API_BASE_URL}/auth/register`, { username, email, password });
             const { token, user } = res.data;
 
-            login(token, user);
+            // Call login and wait for it to complete the user context update
+            await login(token, user);
 
-            showAlertDialog('Success!', 'Registration successful!', () => {
-                navigate('/');
-            });
+            // --- REDIRECT HERE, IMMEDIATELY AFTER SUCCESSFUL LOGIN ---
+            navigate('/');
+
+            // Optionally: If you still want to show a brief success message,
+            // but not block navigation, consider using a different notification system (e.g., a toast).
+            // If you *must* use showAlertDialog for this, make sure its onOkCallback is null
+            // or handles the fact that navigation already happened.
+            // showAlertDialog('Success!', 'Registration successful!'); // No navigation callback needed here
 
         } catch (err) {
             console.error('Registration error:', err.response?.data || err.message);
             const errorMessage = err.response?.data?.message || 'Registration failed.';
-            showAlertDialog('Registration Failed', errorMessage);
+            showAlertDialog('Registration Failed', errorMessage); // Use dialog for errors
         }
     };
 
@@ -58,7 +66,6 @@ const Register = () => {
             <div className="animated-background-sphere sphere-3"></div>
 
             <div className="graphic-left">
-                {/* This is where your abstract graphic will reside */}
                 <div className="graphic-shape shape-1"></div>
                 <div className="graphic-shape shape-2"></div>
                 <div className="graphic-shape shape-3"></div>
