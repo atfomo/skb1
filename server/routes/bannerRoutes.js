@@ -1,8 +1,7 @@
-// backend/routes/bannerRoutes.js
 const express = require('express');
 const router = express.Router();
 const Banner = require('../models/Banner');
-const authenticateJWT = require('../middleware/authenticateJWT');
+const authenticateJWT = require('../middleware/authenticateJWT'); // Keep this for admin routes
 const multer = require('multer');
 const cloudinary = require('../utils/cloudinaryConfig');
 
@@ -26,8 +25,9 @@ const uploadBanner = multer({
 
 // --- Public Route: Get all active banners (for frontend display) ---
 // This route does NOT require authentication.
-// *** CHANGE THIS LINE: Remove '/public' from the path here ***
-router.get('/banners', async (req, res) => { // CHANGED FROM '/public/banners' to '/banners'
+// I am keeping '/public/banners' as per your original frontend request.
+// The key fix here is REMOVING authenticateJWT.
+router.get('/public/banners', async (req, res) => { // <-- FIXED: Removed 'authenticateJWT'
     try {
         console.log('Attempting to fetch public banners...'); // Add diagnostic log
         const banners = await Banner.find({ isActive: true }).sort({ order: 1, createdAt: 1 });
@@ -40,9 +40,7 @@ router.get('/banners', async (req, res) => { // CHANGED FROM '/public/banners' t
 });
 
 // --- Admin Routes (require authentication) ---
-// No change to these, as they are meant to be under /api/banner/admin/banners
-// and will be handled by the general apiRouter middleware after the public one.
-// The `server.js` change will make sure '/api/public' is handled first.
+// These routes correctly retain 'authenticateJWT'
 
 // Get all banners (including inactive, for admin panel)
 router.get('/admin/banners', authenticateJWT, async (req, res) => {
