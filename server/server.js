@@ -115,7 +115,8 @@ const noJwtPaths = [
     '/spark-campaigns/public-active',
     '/tasks/available',
     '/campaigns',
-    '/public/banners' // <--- Now included here as it's mounted within apiRouter
+    '/public/banners', // <--- Now included here as it's mounted within apiRouter
+    '/banners/public/banners'
 ].map(normalizePath);
 
 // Define paths that require ONLY the bot secret (and thus no JWT) (relative to /api)
@@ -176,7 +177,7 @@ apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/spark-campaigns', sparkCampaignRoutes);
 apiRouter.use('/upload', uploadRoutes);
-app.use('/api', bannerRoutes);
+apiRouter.use('/banners', bannerRoutes);
 apiRouter.use('/campaigns', campaignsRouter);
 apiRouter.use('/telegram', telegramRoutes);
 apiRouter.use('/drip-campaigns', dripCampaignsRoutes);
