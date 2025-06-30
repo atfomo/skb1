@@ -5,21 +5,21 @@ import { useUser } from "../../UserContext";
 import { useDialog } from '../../context/DialogContext';
 import './Dashboard.css';
 import RulesModal from '../../components/RulesModal';
-// import TelegramLoginButton from '../../components/TelegramLoginButton'; // REMOVE THIS IMPORT
+// import TelegramLoginButton from '../../components/TelegramLoginButton'; // REMOVE THIS IMPORT (already commented out)
 
 // --- Icon Imports ---
 import { FaTwitter, FaTelegramPlane } from 'react-icons/fa';
 import {
     IoWalletOutline,
     IoCashOutline,
-    IoPersonCircleOutline,
+    IoPersonCircleOutline, // Unused import, consider removing if not used elsewhere
     IoSaveOutline,
     IoInformationCircleOutline,
     IoHammerOutline,
     IoReloadOutline,
     IoArrowForwardOutline,
     IoCheckmarkCircle,
-    IoCloseCircle,
+    IoCloseCircle, // Unused import, consider removing if not used elsewhere
     IoClose,
     IoWarningOutline,
     IoLinkOutline
@@ -36,7 +36,7 @@ const Dashboard = () => {
     const [showPayout, setShowPayout] = useState(false);
     const [payoutAmount, setPayoutAmount] = useState("");
     const [showRulesModal, setShowRulesModal] = useState(false);
-    
+
     // NEW STATE: For the Telegram username input
     const [telegramUsernameInput, setTelegramUsernameInput] = useState("");
     const [isVerifyingTelegram, setIsVerifyingTelegram] = useState(false); // New state for verification loading
@@ -48,18 +48,17 @@ const Dashboard = () => {
         if (user) {
             console.log("Dashboard: user.telegramUserId:", user.telegramUserId);
             console.log("Dashboard: user.telegramUsername:", user.telegramUsername);
-            // console.log("Dashboard: isTelegramLinking state:", isTelegramLinking); // REMOVE THIS LOG
         } else {
             console.log("Dashboard: User object is null. Displaying loading or login message.");
         }
-    }, [user, loadingUser]); // Removed isTelegramLinking from dependency array
+    }, [user, loadingUser]);
 
     useEffect(() => {
         if (user) {
             setLocalWalletAddress(user.walletAddress || "");
             setLocalXUsername(user.xUsername || "");
             // Initialize Telegram username input with user's linked username if available
-            setTelegramUsernameInput(user.telegramUsername || ""); 
+            setTelegramUsernameInput(user.telegramUsername || "");
         }
     }, [user]);
 
@@ -71,9 +70,6 @@ const Dashboard = () => {
             return () => clearTimeout(timer);
         }
     }, [message]);
-
-    // REMOVED: The handleTelegramAuth CALLBACK is no longer needed for this flow
-    // const handleTelegramAuth = useCallback(async (telegramUser) => { ... });
 
     // NEW FUNCTION: Handle the Telegram username submission and redirection
     const handleTelegramVerify = async () => {
@@ -104,11 +100,10 @@ const Dashboard = () => {
             }
 
             const { verificationCode, botUsername } = data;
-            // Removed: const encodedUsername = encodeURIComponent(cleanUsername); // No longer strictly needed for this link format
 
             // STEP 2: Redirect the user to the Telegram bot with the verification code
             const telegramBotLink = `https://t.me/${botUsername}?start=verify_${verificationCode}`;
-            
+
             showConfirmDialog(
                 "Verify Telegram Account",
                 `Please click 'Go to Bot' to open your Telegram app and send the verification message to @${botUsername}.`,
@@ -208,8 +203,11 @@ const Dashboard = () => {
     };
 
     const handlePayoutRequest = async () => {
-        if (!user.walletAddress || user.walletAddress.trim() === '') {
-            showAlertDialog("Error", "Please save your wallet address before requesting a payout.");
+        // Ensure user.walletAddress is available and trimmed
+        const walletAddressToSend = user.walletAddress ? user.walletAddress.trim() : '';
+
+        if (!walletAddressToSend) {
+            showAlertDialog("Error", "Your wallet address is not set. Please save it in your profile before requesting a payout.");
             return;
         }
 
@@ -226,7 +224,7 @@ const Dashboard = () => {
 
         showConfirmDialog(
             "Confirm Payout Request",
-            `Are you sure you want to request a payout of $${amount.toFixed(2)}? This amount will be deducted from your available earnings.`,
+            `Are you sure you want to request a payout of $${amount.toFixed(2)} to wallet ${walletAddressToSend}? This amount will be deducted from your available earnings.`,
             async () => {
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/users/request-payout`, {
@@ -235,18 +233,27 @@ const Dashboard = () => {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${token}`,
                         },
-                        body: JSON.stringify({ amount: amount }),
+                        body: JSON.stringify({
+                            amount: amount,
+                            paymentMethod: 'crypto', // <--- ADDED: Explicitly state payment method
+                            paymentDetails: {
+                                address: walletAddressToSend // <--- ADDED: Pass the user's saved wallet address
+                            }
+                        }),
                     });
 
                     const data = await res.json();
-                    if (!res.ok) throw new Error(data.message || "Failed to request payout");
+                    if (!res.ok) {
+                        throw new Error(data.message || "Failed to request payout");
+                    }
 
                     showAlertDialog("Success!", data.message);
                     setPayoutAmount("");
                     setShowPayout(false);
-                    await refetchUserData(token);
+                    await refetchUserData(token); // Refetch user data to update earnings
 
                 } catch (err) {
+                    console.error("Frontend payout request error:", err);
                     showAlertDialog("Error!", err.message || "An unexpected error occurred during payout request.");
                 }
             },
@@ -281,7 +288,7 @@ const Dashboard = () => {
                             <h2 className="user-name">{user.name}</h2>
                             <p className="user-username">@{user.username}</p>
                             {user.xUsername && (
-                                <p className="user-x-handle"><FaTwitter className="x-icon" /> @{user.xUsername}</p>
+                                <p className="user-x-handle"><FaTwitter className="x-icon" /> {user.xUsername}</p>
                             )}
                             {user.telegramUsername && (
                                 <p className="user-telegram-handle"><FaTelegramPlane className="telegram-icon" /> @{user.telegramUsername}</p>
@@ -375,7 +382,7 @@ const Dashboard = () => {
 
                     <div className="metric-box telegram-account-management glass-panel">
                         <h3 className="metric-box-title"><FaTelegramPlane className="icon-title" /> Link your Telegram Account</h3>
-                        
+
                         {user.telegramUserId ? (
                             <div className="linked-account-info">
                                 <p className="linked-status">
@@ -385,7 +392,7 @@ const Dashboard = () => {
                                     @{user.telegramUsername || user.telegramFirstName || 'Telegram User'}
                                 </p>
                                 <p className="info-text">
-                                    <IoInformationCircleOutline className="info-icon" /> {user.telegramUserId ? "Your Telegram account is linked and ready for campaigns." : "Enter your Telegram username to link your account. You will then be redirected to our bot for verification."}
+                                    <IoInformationCircleOutline className="info-icon" /> Your Telegram account is linked and ready for campaigns.
                                 </p>
                             </div>
                         ) : (
