@@ -1,12 +1,25 @@
 /* client/src/index.css */
 
+/* Global CSS Reset - IMPORTANT for removing default browser margins/padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* This is crucial for consistent layout calculations */
+}
+
+/* Optional: Apply box-sizing to all elements for a consistent model */
+/* * {
+    box-sizing: border-box;
+} */
+
+
 /* Hide horizontal scrollbar */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;    /* Firefox */
 }
 
 /* Keyframes for banner scroller */
@@ -24,4 +37,10 @@
 /* Apply the animation */
 .animate-scroll-banner {
   animation: scroll-left 20s linear infinite; /* Adjust duration and timing as needed */
+}
+
+/* Add any other global styles you need below this */
+/* For example: */
+body {
+    line-height: 1.6;
 }
