@@ -1,76 +1,44 @@
 // src/api/adminApi.js
-import { API_BASE_URL } from '../config'; // <--- IMPORT API_BASE_URL
+import axiosInstance from '../utils/axiosInstance'; // <-- IMPORT YOUR CUSTOM AXIOS INSTANCE
+import { API_BASE_URL } from '../config'; 
 
-// Change this line to use the imported API_BASE_URL
-const ADMIN_API_BASE_URL = `${API_BASE_URL}/api/admin`; // Your backend admin API base URL
+// The base URL is already set in axiosInstance, so you can often use relative paths.
+// If your backend structure means /api/admin is separate from the default axiosInstance.baseURL,
+// then keep the full path. Given your config, axiosInstance.baseURL is `${API_BASE_URL}`,
+// so you can use relative paths like '/api/admin/boost-volume/campaigns'.
+// I'll leave them explicit for clarity based on your original file.
 
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('token'); // Assuming JWT token is stored here
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
-};
+// No need for this, axiosInstance handles headers via interceptor now
+// const getAuthHeaders = () => {
+//     const token = localStorage.getItem('token'); // Assuming JWT token is stored here
+//     return {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`
+//     };
+// };
 
 export const fetchAdminCampaigns = async () => {
-    const response = await fetch(`${ADMIN_API_BASE_URL}/boost-volume/campaigns`, { // Use ADMIN_API_BASE_URL
-        headers: getAuthHeaders()
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch admin campaigns');
-    }
-    return response.json();
+    // axiosInstance handles Authorization header automatically
+    const response = await axiosInstance.get(`/api/admin/boost-volume/campaigns`); 
+    return response.data; // Axios returns data directly in .data
 };
 
 export const fetchAdminCampaignParticipations = async (campaignId) => {
-    const response = await fetch(`${ADMIN_API_BASE_URL}/boost-volume/campaigns/${campaignId}/participations`, { // Use ADMIN_API_BASE_URL
-        headers: getAuthHeaders()
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch admin participations');
-    }
-    return response.json();
+    const response = await axiosInstance.get(`/api/admin/boost-volume/campaigns/${campaignId}/participations`); 
+    return response.data;
 };
 
 export const verifyUserLoop = async (participationId, signature) => {
-    const response = await fetch(`${ADMIN_API_BASE_URL}/boost-volume/participations/${participationId}/verify-loop`, { // Use ADMIN_API_BASE_URL
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ signature })
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        // If the errorData doesn't exist or doesn't have a message, provide a generic one
-        throw new Error(errorData.message || 'Failed to verify loop');
-    }
-    return response.json();
+    const response = await axiosInstance.post(`/api/admin/boost-volume/participations/${participationId}/verify-loop`, { signature });
+    return response.data;
 };
 
 export const markUserPaid = async (participationId, transactionId) => {
-    const response = await fetch(`${ADMIN_API_BASE_URL}/boost-volume/participations/${participationId}/mark-paid`, { // Use ADMIN_API_BASE_URL
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ transactionId })
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to mark as paid');
-    }
-    return response.json();
+    const response = await axiosInstance.post(`/api/admin/boost-volume/participations/${participationId}/mark-paid`, { transactionId });
+    return response.data;
 };
 
-// NEW: Function to reject a user's loop
 export const rejectUserLoop = async (participationId, reason) => {
-    const response = await fetch(`${ADMIN_API_BASE_URL}/boost-volume/participations/${participationId}/reject-loop`, { // Use ADMIN_API_BASE_URL
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ reason })
-    });
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to reject loop');
-    }
-    return response.json();
+    const response = await axiosInstance.post(`/api/admin/boost-volume/participations/${participationId}/reject-loop`, { reason });
+    return response.data;
 };

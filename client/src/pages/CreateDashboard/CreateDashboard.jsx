@@ -1,13 +1,10 @@
 // client/src/pages/CreateDashboard/CreateDashboard.jsx
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaCamera, FaSpinner, FaExclamationCircle } from "react-icons/fa"; // Added icons for better feedback
 import './CreateDashboard.css'; // New CSS file for this page
 import { useUser } from '../../UserContext'; // Path to your UserContext
-import { API_BASE_URL } from '../../config';
-
-// const API_BASE_URL = "http://localhost:5000"; // Ensure this matches your backend URL
+import axiosInstance from '../../utils/axiosInstance'; // Import your custom Axios instance
 
 const CreateDashboard = () => {
     // Correctly deconstruct refetchUserData from useUser hook
@@ -87,8 +84,8 @@ const CreateDashboard = () => {
         setIsSubmitting(true); // Set submitting state to true
 
         // --- AUTHENTICATION CHECK ---
-        // Ensure user is logged in, has a user ID, and a token
-        if (!user || !user._id || !token) {
+        // Ensure user is logged in and has a user ID. Token check is implicitly handled by axiosInstance.
+        if (!user || !user._id) {
             const authError = "Authentication error. Please log in to proceed.";
             setSubmitError(authError);
             setIsSubmitting(false);
@@ -114,14 +111,17 @@ const CreateDashboard = () => {
         data.append("ownerId", user._id);
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/project/creator-dashboard`, data, {
+            // Use axiosInstance instead of global axios.
+            // The Authorization header is now handled by the axiosInstance's request interceptor.
+            const response = await axiosInstance.post(`/api/project/creator-dashboard`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Essential for FormData
-                    'Authorization': `Bearer ${token}` // Essential for authentication
                 },
             });
 
-            // Accept both 200 OK and 201 Created as success statuses
+            // Axios typically throws an error for non-2xx status codes,
+            // so this check might be redundant if the interceptor handles 401/403.
+            // However, for other success codes (like 200, 201), this remains valid.
             if (response.status === 200 || response.status === 201) {
                 alert("Creator Dashboard created successfully!"); // Consider custom modal
                 // Re-fetch user data to update hasDashboard status in context
@@ -130,11 +130,15 @@ const CreateDashboard = () => {
                 navigate(`/creator-dashboard`); // Navigate to specific user dashboard
             } else {
                 // This 'else' block will now only be hit for actual errors (e.g., 400, 401, 403, 500)
+                // If axiosInstance's response interceptor handles 401/403 by logging out,
+                // this block will typically handle other non-2xx statuses that aren't 401/403.
                 setSubmitError(response.data.message || `Failed to create dashboard with status: ${response.status}.`);
             }
         } catch (err) {
             // Enhanced error handling for different Axios error types
             if (err.response) {
+                // The interceptor might have already handled 401/403 and logged out.
+                // This branch would catch other server errors like 400, 500.
                 setSubmitError(err.response.data.message || `Server error (Status: ${err.response.status})`);
             } else if (err.request) {
                 setSubmitError("No response from server. Is the backend running? Check network connection.");
@@ -279,7 +283,7 @@ const CreateDashboard = () => {
 
                     {/* Social Links Section */}
                     <div className="form-section-heading">Social Links (Optional)</div>
-                    <div className="className form-grid-socials"> {/* Reusing form-grid-socials from CreatorDashboard */}
+                    <div className="form-grid-socials"> {/* Reusing form-grid-socials from CreatorDashboard */}
                         <div className="form-group">
                             <label htmlFor="twitter">Twitter URL:</label>
                             <input
