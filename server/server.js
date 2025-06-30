@@ -177,7 +177,6 @@ apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/spark-campaigns', sparkCampaignRoutes);
 apiRouter.use('/upload', uploadRoutes);
-apiRouter.use('/banners', bannerRoutes);
 apiRouter.use('/campaigns', campaignsRouter);
 apiRouter.use('/telegram', telegramRoutes);
 apiRouter.use('/drip-campaigns', dripCampaignsRoutes);
@@ -190,7 +189,7 @@ apiRouter.use('/tasks', tasksRoutes);
 
 // Finally, mount the consolidated apiRouter at the /api path
 app.use('/api', apiRouter);
-
+apiRouter.use('/', bannerRoutes);
 app.use((err, req, res, next) => {
     console.error("----- GLOBAL ERROR HANDLER -----");
     console.error("Error Message:", err.message);
