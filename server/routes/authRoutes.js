@@ -1,7 +1,7 @@
 // backend/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs'); // Using bcryptjs as per your code, previously I might have used bcrypt
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authenticateJWT = require('../middleware/authenticateJWT');
@@ -16,6 +16,15 @@ router.post('/register', async (req, res) => {
     }
 
     try {
+        // --- NEW AND IMPROVED LOGGING (Add these lines) ---
+        console.log("-----------------------------------------");
+        console.log("REGISTRATION ATTEMPT - INCOMING REQ.BODY:");
+        console.log("Username:", username);
+        console.log("Email:", email);
+        console.log("Password (pre-hash):", password ? '[PRESENT]' : '[NOT PRESENT]'); // Don't log actual password
+        console.log("-----------------------------------------");
+        // ---------------------------------
+
         let existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             return res.status(400).json({ message: 'User with that username or email already exists' });
@@ -24,19 +33,41 @@ router.post('/register', async (req, res) => {
         const newUser = new User({
             username,
             email,
-            passwordHash: password,
-            name: username,
+            passwordHash: password, // Mongoose pre-save hook handles hashing
+            name: username, // Default 'name' to 'username' if not provided by frontend
+            // Explicitly setting these to null to ensure consistency,
+            // even though 'default: null' in schema would achieve similar for missing fields.
+            walletAddress: null,
+            xUsername: null,
+            telegramUserId: null, // Critical: Ensure this is null for web registrations
+            telegramUsername: null,
+            telegramFirstName: null,
+            telegramLastName: null,
+            telegramPhotoUrl: null,
             // role: 'user' // Default is already set in schema, no need to explicitly set here unless you want to override
         });
 
+        // --- LOGGING BEFORE SAVE (Add these lines) ---
+        console.log("New User object BEFORE save():");
+        console.log(newUser.toObject()); // Log the plain JavaScript object representation
+        console.log("Value of newUser.telegramUserId before save:", newUser.telegramUserId);
+        console.log("-----------------------------------------");
+        // -----------------------------
+
         await newUser.save();
+
+        // --- LOGGING AFTER SAVE (Add these lines) ---
+        console.log("User successfully saved:");
+        console.log("Saved User ID:", newUser._id);
+        console.log("Saved telegramUserId:", newUser.telegramUserId);
+        console.log("-----------------------------------------");
+        // --------------------------
 
         const payload = {
             user: {
                 userId: newUser._id,
                 username: newUser.username,
                 name: newUser.name,
-                // --- ADDED THIS LINE FOR ROLE IN JWT ---
                 role: newUser.role, // Include the role from the saved user
             },
         };
@@ -62,7 +93,6 @@ router.post('/register', async (req, res) => {
                         pendingEarnings: newUser.pendingEarnings,
                         reputationScore: newUser.reputationScore,
                         walletAddress: newUser.walletAddress || null,
-                        // --- ADDED THIS LINE FOR ROLE IN USER OBJECT ---
                         role: newUser.role, // Send role in the user object for frontend context
                     },
                 });
@@ -70,7 +100,17 @@ router.post('/register', async (req, res) => {
         );
 
     } catch (err) {
-        console.error('Registration error:', err);
+        // --- IMPROVED ERROR LOGGING (Modify this line) ---
+        console.error('SERVER-SIDE REGISTRATION ERROR (CAUGHT):', err);
+        // --------------------------------------------------
+
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyValue)[0];
+            const value = err.keyValue[field];
+            const errorMessage = `A user with that ${field} '${value}' already exists.`;
+            console.error(`Duplicate key error: ${errorMessage}`); // Log duplicate key specifics
+            return res.status(409).json({ message: errorMessage });
+        }
         res.status(500).json({ message: 'Server error during registration' });
     }
 });
@@ -107,7 +147,6 @@ router.post('/login', async (req, res) => {
                 userId: user._id,
                 username: user.username,
                 name: user.name,
-                // --- ADDED THIS LINE FOR ROLE IN JWT ---
                 role: user.role, // Include the user's role here
             },
         };
@@ -134,9 +173,7 @@ router.post('/login', async (req, res) => {
                         pendingEarnings: user.pendingEarnings,
                         reputationScore: user.reputationScore,
                         walletAddress: user.walletAddress || null,
-                        // --- ADDED THIS LINE FOR XUSERNAME IN USER OBJECT ---
                         xUsername: user.xUsername || null, // Ensure xUsername is returned here
-                        // --- ADDED THIS LINE FOR ROLE IN USER OBJECT ---
                         role: user.role, // Send role in the user object for frontend context
                     },
                 });
