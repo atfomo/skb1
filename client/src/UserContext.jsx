@@ -1,7 +1,8 @@
 // src/UserContext.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import axiosInstance, { setupAxiosInterceptors } from './utils/axiosInstance'; // Correct path to your new file
+import axiosInstance, { setupAxiosInterceptors } from './utils/axiosInstance';
+import { FaSpinner } from 'react-icons/fa'; // <--- ADD THIS IMPORT
 
 
 const UserContext = createContext(null);
@@ -16,18 +17,16 @@ export const UserProvider = ({ children }) => {
 
     const logout = useCallback(() => {
         console.log('UserContext: Initiating logout...');
-        setToken(null); // Clear token from state
+        setToken(null);
         setUser(null);
         setHasDashboard(false);
-        localStorage.removeItem('jwtToken'); // Clear token from localStorage
+        localStorage.removeItem('jwtToken');
         console.log('UserContext: Logout complete. Token and user state cleared.');
     }, []);
 
-    // fetchUserData now uses the 'token' from state if no authToken is provided
     const fetchUserData = useCallback(async (explicitAuthToken) => {
         setLoadingUser(true);
-        // Use explicitAuthToken if provided, otherwise fall back to the token from state
-        const currentToken = explicitAuthToken || token; 
+        const currentToken = explicitAuthToken || token;
 
         console.log('UserContext: fetchUserData called. AuthToken:', currentToken ? 'Present' : 'Absent');
 
@@ -53,9 +52,8 @@ export const UserProvider = ({ children }) => {
         }
 
         try {
-            // axiosInstance already handles Authorization header, so no need to pass it here manually
             console.log('UserContext: Attempting to fetch user data from /auth/me...');
-            const userRes = await axiosInstance.get('/auth/me'); 
+            const userRes = await axiosInstance.get('/auth/me');
             console.log('UserContext: User data fetched successfully from /auth/me:', userRes.data);
 
             setUser(userRes.data);
@@ -67,42 +65,38 @@ export const UserProvider = ({ children }) => {
 
         } catch (error) {
             console.error('UserContext: Failed to fetch user data or dashboard status:', error.response?.data?.message || error.message);
-            // The axios interceptor configured via setupAxiosInterceptors will handle 401/403 errors.
-            // If the error is not 401/403 (e.g., network error, 500), you might still want to log out.
             if (!error.response || (error.response.status !== 401 && error.response.status !== 403)) {
                  console.log('UserContext: Non-authentication error during fetch. Clearing user/token states locally.');
-                 logout(); // Still log out for other severe fetch errors
+                 logout();
             }
         } finally {
             setLoadingUser(false);
             console.log('UserContext: fetchUserData finished.');
         }
-    }, [logout, token]); // Add 'token' as a dependency for fetchUserData
+    }, [logout, token]);
 
-    // This useEffect will run once when the provider mounts to set up the interceptors
     useEffect(() => {
         console.log('UserContext: Setting up Axios interceptors.');
-        setupAxiosInterceptors(logout); // Pass the logout function
-    }, [logout]); 
+        setupAxiosInterceptors(logout);
+    }, [logout]);
 
     useEffect(() => {
         console.log('UserContext: Main useEffect (token/initial load) triggered. Current token state:', token ? 'PRESENT' : 'ABSENT');
         if (token) {
-            // On initial load or token state change, fetch user data using the token from state
-            fetchUserData(token); 
+            fetchUserData(token);
         } else {
             setUser(null);
             setHasDashboard(false);
             setLoadingUser(false);
         }
-    }, [token, fetchUserData]); // Depend on token and fetchUserData
+    }, [token, fetchUserData]);
 
     const login = useCallback((jwtToken) => {
         console.log('UserContext: login called from external component. Setting token...');
         localStorage.setItem('jwtToken', jwtToken);
         console.log('UserContext: Token SET in localStorage. Verification:', localStorage.getItem('jwtToken') ? 'SUCCESS' : 'FAILED');
-        setToken(jwtToken); // Update the state, which triggers the main useEffect
-        setLoadingUser(true); // Set loading to true while new data is fetched
+        setToken(jwtToken);
+        setLoadingUser(true);
     }, []);
 
     useEffect(() => {
@@ -128,7 +122,7 @@ export const UserProvider = ({ children }) => {
         hasDashboard,
         logout,
         login,
-        refetchUserData: () => fetchUserData(token), // Ensure refetchUserData explicitly passes the current token
+        refetchUserData: () => fetchUserData(token),
     };
 
     return (
