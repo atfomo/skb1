@@ -89,13 +89,13 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
                             <p><strong>Incomplete profile setups will prevent you from verifying tasks and delayed payouts.</strong></p>
 
                             <h4>2. Trust Score: Your Reputation on @FOMO</h4>
-                            <p>Your **Trust Score** is a vital metric that reflects your reliability and quality as an earner on our platform.</p>
+                            <p>Your Trust Score is a vital metric that reflects your reliability and quality as an earner on our platform.</p>
                             <ul>
                                 <li>
-                                    <strong>Increase Your Score:</strong> Your Trust Score will **increase with every successful payout** you receive, indicating consistent and high-quality task completion.
+                                    <strong>Increase Your Score:</strong> Your Trust Score will increase with every successful payout you receive, indicating consistent and high-quality task completion.
                                 </li>
                                 <li>
-                                    <strong>Violations and Suspension:</strong> Any violations of our rules, detected through our verification processes, will **negatively impact your Trust Score**. Severe or repeated violations may lead to **account suspension or a permanent ban** from the platform.
+                                    <strong>Violations and Suspension:</strong> Any violations of our rules, detected through our verification processes, will negatively impact your Trust Score. Severe or repeated violations may lead to account suspension or a permanent ban from the platform.
                                 </li>
                             </ul>
 

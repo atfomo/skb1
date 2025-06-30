@@ -127,7 +127,7 @@ const CreateDashboard = () => {
                 // Re-fetch user data to update hasDashboard status in context
                 await refetchUserData();
                 // Navigate to the dashboard view page after successful creation
-                navigate(`/creator-dashboard/${user._id}`); // Navigate to specific user dashboard
+                navigate(`/creator-dashboard`); // Navigate to specific user dashboard
             } else {
                 // This 'else' block will now only be hit for actual errors (e.g., 400, 401, 403, 500)
                 setSubmitError(response.data.message || `Failed to create dashboard with status: ${response.status}.`);

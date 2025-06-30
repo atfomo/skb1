@@ -205,7 +205,7 @@
 .drip-action-done {
     background: linear-gradient(45deg, #E64A19, #ff3c00); /* Orange gradient for done actions */
     border-color: var(--brand-red-orange);
-    color: var(--text-dark-on-orange); /* Dark text on bright orange */
+    color: #4c4c4c; /* Dark text on bright orange */
     box-shadow: 0 4px 10px var(--shadow-orange-glow-medium);
 }
 
