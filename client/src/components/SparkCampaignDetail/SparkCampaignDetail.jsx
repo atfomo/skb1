@@ -146,7 +146,7 @@ const SparkCampaignDetail = () => {
             <div className={`${styles.statusScreen} ${styles.loadingScreen}`}>
                 <FaSpinner className={styles.spinner} />
                 <h2 className={styles.statusTitle}>Loading Campaign...</h2>
-                <p className={styles.statusText}>Fetching exciting details for Spark Campaign ID: **{campaignId}**</p>
+                <p className={styles.statusText}>Fetching details for Spark Campaign ID: {campaignId}</p>
             </div>
         );
     }
@@ -352,7 +352,7 @@ const SparkCampaignDetail = () => {
                         <div className={styles.campaignMeta}>
                             <div className={styles.metaItem}>
                                 {isEnded ? <FaTimesCircle className={styles.iconEnded} /> : <FaHourglassHalf />}
-                                <span>Status:</span> <strong>{timeRemainingDisplay}</strong>
+                                <span> Status:</span> <strong>{timeRemainingDisplay}</strong>
                             </div>
                             {campaign.uniqueUsersEngagedCount > 0 && (
                                 <div className={styles.metaItem}>
