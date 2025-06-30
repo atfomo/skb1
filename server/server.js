@@ -176,7 +176,7 @@ apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/spark-campaigns', sparkCampaignRoutes);
 apiRouter.use('/upload', uploadRoutes);
-apiRouter.use('/public/banners', bannerRoutes); // <--- Mounted under apiRouter, path is /api/public/banners
+app.use('/api', bannerRoutes);
 apiRouter.use('/campaigns', campaignsRouter);
 apiRouter.use('/telegram', telegramRoutes);
 apiRouter.use('/drip-campaigns', dripCampaignsRoutes);
