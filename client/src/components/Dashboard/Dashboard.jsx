@@ -157,7 +157,7 @@ const Dashboard = () => {
         setSaving(true);
         setMessage(null);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/save-wallet`, {
+            const res = await fetch(`${API_BASE_URL}/api/users/save-wallet`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -184,7 +184,7 @@ const Dashboard = () => {
         setSaving(true);
         setMessage(null);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/save-x-account`, {
+            const res = await fetch(`${API_BASE_URL}/api/users/save-x-account`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -229,7 +229,7 @@ const Dashboard = () => {
             `Are you sure you want to request a payout of $${amount.toFixed(2)}? This amount will be deducted from your available earnings.`,
             async () => {
                 try {
-                    const res = await fetch(`${API_BASE_URL}/api/request-payout`, {
+                    const res = await fetch(`${API_BASE_URL}/api/users/request-payout`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
