@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -36,67 +37,33 @@ const SparkCampaignDetail = () => {
 
             setLoading(true);
             setError(null);
-            setCreatorProject(null); // Reset creator project on new fetch
+            setCreatorProject(null);
 
             try {
                 const campaignResponse = await axios.get(`/api/spark-campaigns/${campaignId}`);
                 const fetchedCampaign = campaignResponse.data.campaign;
-
-                // --- FIX: Add a null/undefined check for fetchedCampaign immediately after fetching ---
-                if (!fetchedCampaign) {
-                    setError("Campaign data not found or is malformed in the API response.");
-                    setLoading(false);
-                    return;
-                }
-                // --- END FIX ---
-
                 setCampaign(fetchedCampaign);
 
-                let projectToSet = null;
-
-                // Priority 1: If projectId is already a populated object
-                // Line 47 in your original snippet points here, so ensuring fetchedCampaign exists is crucial.
-                if (fetchedCampaign.projectId && typeof fetchedCampaign.projectId === 'object' && fetchedCampaign.projectId._id) {
-                    projectToSet = fetchedCampaign.projectId;
-                }
-                // Priority 2: If projectId is just an ID string, fetch the project details
-                else if (fetchedCampaign.projectId && typeof fetchedCampaign.projectId === 'string') {
-                    try {
-                        const projectResponse = await axios.get(`/api/projects/${fetchedCampaign.projectId}`);
-                        projectToSet = projectResponse.data; // Adjust based on your actual project API response structure
-                    } catch (projectErr) {
-                        console.warn("Could not fetch project details using projectId (string):", projectErr.message);
-                    }
-                }
-                // Priority 3: Fallback to creatorId if projectId isn't available or fetchable
-                // Also adding a type check for creatorId before accessing _id
-                else if (fetchedCampaign.creatorId && typeof fetchedCampaign.creatorId === 'object' && fetchedCampaign.creatorId._id) {
+                if (fetchedCampaign.projectId && fetchedCampaign.projectId._id) {
+                    setCreatorProject(fetchedCampaign.projectId);
+                } else if (fetchedCampaign.creatorId && fetchedCampaign.creatorId._id) {
                     try {
                         const projectResponse = await axios.get(`/api/projects/by-creator/${fetchedCampaign.creatorId._id}`);
-                        projectToSet = projectResponse.data;
+                        setCreatorProject(projectResponse.data);
                     } catch (projectErr) {
                         console.warn("Could not fetch creator's project details:", projectErr.message);
+                        setCreatorProject(null);
                     }
                 }
-
-                setCreatorProject(projectToSet);
 
             } catch (err) {
                 console.error("Error fetching campaign details:", err);
-                if (axios.isAxiosError(err)) { // Check if it's an Axios error
-                    if (err.response) {
-                        // The request was made and the server responded with a status code
-                        // that falls out of the range of 2xx
-                        setError(`Failed to load campaign: ${err.response.data?.msg || err.response.statusText || err.message}`);
-                    } else if (err.request) {
-                        // The request was made but no response was received
-                        setError("No response from server. Please check your network connection or server status.");
-                    } else {
-                        // Something happened in setting up the request that triggered an Error
-                        setError(`Error setting up the request: ${err.message}`);
-                    }
+                if (err.response) {
+                    setError(`Failed to load campaign: ${err.response.data.msg || err.message}`);
+                } else if (err.request) {
+                    setError("No response from server. Please check your network connection or server status.");
                 } else {
-                    setError(`An unexpected error occurred: ${err.message}`);
+                    setError(`Error: ${err.message}`);
                 }
             } finally {
                 setLoading(false);
@@ -104,10 +71,8 @@ const SparkCampaignDetail = () => {
         };
 
         fetchCampaignAndCreatorDetails();
-    }, [campaignId]); // Dependency array to re-run effect if campaignId changes
+    }, [campaignId]);
 
-    // Helper functions (getRemainingHours, formatTimeRemaining, calculateEarnPotential, formatRewardPoolBalance)
-    // These functions are correctly implemented and do not need changes based on the error.
     const getRemainingHours = (createdAt, durationHours) => {
         if (!createdAt || !durationHours) return 0;
         const createdDate = new Date(createdAt);
@@ -176,7 +141,6 @@ const SparkCampaignDetail = () => {
         setTimeout(() => setParticipateLoading(false), 1000);
     };
 
-    // --- Render Logic (no changes needed based on the reported error) ---
     if (loading) {
         return (
             <div className={`${styles.statusScreen} ${styles.loadingScreen}`}>
@@ -236,7 +200,6 @@ const SparkCampaignDetail = () => {
                         onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/120/FF6F00/FFFFFF?text=LOGO'; }}
                     />
 
-                    <h1 className={styles.campaignTitle}>{creatorProject?.name || campaign.name || 'Untitled Campaign'}</h1>
                     {creatorProject?.description && <p className={styles.campaignBrief}>{creatorProject.description}</p>}
 
                     {creatorProject?.socials && (
@@ -324,12 +287,12 @@ const SparkCampaignDetail = () => {
                             </li>
                             {campaign.requiredActions?.like && (
                                 <li>
-                                    Remember to Like, Retweet, and Comment on the designated Tweet.
+                                   Remember to Like, Retweet, and Comment on the designated Tweet.
                                 </li>
                             )}
                             {campaign.requiredActions?.joinTelegram && (
                                 <li>
-                                    Ensure you've joined the official Telegram group.
+                                   Ensure you've joined the official Telegram group.
                                 </li>
                             )}
                         </ul>

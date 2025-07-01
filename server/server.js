@@ -1,6 +1,3 @@
-
-
-
 require('dotenv').config();
 
 const express = require('express');
@@ -10,20 +7,16 @@ const path = require('path');
 const fs = require('fs');
 const passport = require('passport');
 
-
-
-
-
-
+// ... (your model imports)
 const User = require('./models/User');
 const PayoutRequest = require('./models/PayoutRequest');
 const Campaign = require('./models/Campaign');
 const SparkCampaign = require('./models/SparkCampaign');
 const Action = require('./models/Action');
 
-
 const authenticateJWT = require('./middleware/authenticateJWT'); // Your JWT authentication middleware
 
+// ... (your route imports)
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -58,23 +51,36 @@ app.use(passport.initialize());
 app.use(express.urlencoded({ extended: true }));
 
 
+const allowedOrigins = [
+    'https://atfomo.com',        // Your primary production domain
+    'https://www.atfomo.com',    // Your primary production domain (with www)
+    'https://atfomo-beta.vercel.app', // Your Vercel production alias domain
+    // Add the specific Vercel preview domain that caused the error (good for quick fix)
+    'https://atfomo-beta-q5gmcjgr8-atfomos-projects.vercel.app',
+    undefined // Allows requests with no origin (like Postman, curl, server-to-server)
+];
+
+// This is the most crucial part for Vercel preview deployments
+// It will match any preview domain that follows the pattern:
+// https://PROJECT_NAME-RANDOM_HASH-YOUR_VERCEL_ORG.vercel.app
+// Make sure 'atfomos-projects' matches your Vercel organization/project name if it's consistent.
+const vercelPreviewRegex = /^https:\/\/atfomo-beta-([a-z0-9]+)-atfomos-projects\.vercel\.app$/;
+
+// For development environments (local and dev aliases)
+if (process.env.NODE_ENV !== 'production') {
+    allowedOrigins.push('http://localhost:3000');
+    allowedOrigins.push('https://localhost:3000');
+    allowedOrigins.push('http://dev.atfomo.local:3000');
+    allowedOrigins.push('https://dev.atfomo.local:3000');
+    allowedOrigins.push('http://localhost:5000'); // If your backend runs on 5000
+}
+
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = [
-            'https://atfomo.com',
-            'https://www.atfomo.com',
-            undefined // Allows requests with no origin (like Postman, curl, server-to-server)
-        ];
-        if (process.env.NODE_ENV !== 'production') {
-            allowedOrigins.push('http://localhost:3000');
-            allowedOrigins.push('https://localhost:3000');
-            allowedOrigins.push('http://dev.atfomo.local:3000');
-            allowedOrigins.push('https://dev.atfomo.local:3000');
-            allowedOrigins.push('http://localhost:5000');
-        }
+        if (!origin) return callback(null, true); // Allow requests with no origin
 
-        
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Check if the origin is in our allowed list OR matches the Vercel preview regex
+        if (allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
             callback(null, true);
         } else {
             console.error(`CORS Error: Origin "${origin}" not allowed.`);
@@ -89,12 +95,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const uploadsBaseDir = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(uploadsBaseDir)) {
     fs.mkdirSync(uploadsBaseDir, { recursive: true });
-    
 }
 const bannerUploadsDir = path.join(uploadsBaseDir, 'banners');
 if (!fs.existsSync(bannerUploadsDir)) {
     fs.mkdirSync(bannerUploadsDir, { recursive: true });
-    
 }
 app.use('/uploads', express.static(uploadsBaseDir));
 
@@ -102,23 +106,19 @@ app.use('/uploads', express.static(uploadsBaseDir));
 app.use('/auth', authRoutes);
 
 
-
-
 const apiRouter = express.Router();
 
 
 const normalizePath = (p) => p.endsWith('/') ? p.slice(0, -1) : p;
 
-
-
+// Adjusted noJwtPaths - ensure /spark-campaigns/:id (for detail page) is also public if needed
 const noJwtPaths = [
     '/spark-campaigns/public-active',
     '/tasks/available',
     '/campaigns',
-    '/public/banners', // <--- Now included here as it's mounted within apiRouter
+    '/public/banners',
     '/banners/public/banners'
 ].map(normalizePath);
-
 
 const botSecretOnlyPaths = [
     '/telegram/complete-verification',
@@ -131,46 +131,36 @@ const botSecretOnlyPaths = [
 
 apiRouter.use((req, res, next) => {
     const fullRequestPath = req.originalUrl;
+    const currentPath = normalizePath(req.path); // Use req.path here for comparison with normalized paths
 
+    // Special handling for spark-campaigns/:campaignId
+    // If you want individual spark campaign details to be public (no JWT needed)
+    // you need to add a specific check for it here since it's a dynamic path.
+    // Example: Check if the path starts with '/spark-campaigns/' and is not a bot-only path
+    if (currentPath.startsWith('/spark-campaigns/') && !botSecretOnlyPaths.includes(currentPath)) {
+        // This means it's likely a detail page request like /spark-campaigns/someId
+        // You might want to make this public
+        return next(); // Allow without JWT or bot secret
+    }
 
-
-    const currentPath = normalizePath(req.path);
-
-    
-    
-    
-    
-    
 
     const botSecret = req.header('x-bot-secret');
     const expectedSecret = process.env.SECRET_BOT_API_KEY;
 
-    
-    
-    
-
-
     if (noJwtPaths.includes(currentPath)) {
-        
         return next();
     }
 
-
     if (botSecretOnlyPaths.includes(currentPath)) {
-        
         if (!botSecret || botSecret !== expectedSecret) {
             console.warn('Auth Check Result: Invalid or missing x-bot-secret for bot-only route. Denying with 403.');
             return res.status(403).json({ msg: 'Forbidden: Invalid or missing bot secret.' });
         }
-        
         return next();
     }
 
-
-    
     authenticateJWT(req, res, next);
 });
-
 
 
 apiRouter.use('/creators', creatorRoutes); // Moved under apiRouter
@@ -189,7 +179,8 @@ apiRouter.use('/tasks', tasksRoutes);
 
 
 app.use('/api', apiRouter);
-apiRouter.use('/', bannerRoutes);
+apiRouter.use('/', bannerRoutes); // This mounts bannerRoutes directly under /api
+
 app.use((err, req, res, next) => {
     console.error("----- GLOBAL ERROR HANDLER -----");
     console.error("Error Message:", err.message);
@@ -211,6 +202,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(PORT, () => {
-    
-    
+    console.log(`Server running on http://${HOST}:${PORT}`);
 });
