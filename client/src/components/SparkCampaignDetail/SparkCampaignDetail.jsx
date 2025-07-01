@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
 
 import {
     FaCoins, FaDollarSign, FaTelegramPlane, FaTwitter, FaClock, FaCalendarAlt,
@@ -40,7 +40,7 @@ const SparkCampaignDetail = () => {
             setCreatorProject(null);
 
             try {
-                const campaignResponse = await axios.get(`/api/spark-campaigns/${campaignId}`);
+                const campaignResponse = await axiosInstance.get(`/api/spark-campaigns/${campaignId}`);
                 const fetchedCampaign = campaignResponse.data.campaign;
                 setCampaign(fetchedCampaign);
 
@@ -48,7 +48,7 @@ const SparkCampaignDetail = () => {
                     setCreatorProject(fetchedCampaign.projectId);
                 } else if (fetchedCampaign.creatorId && fetchedCampaign.creatorId._id) {
                     try {
-                        const projectResponse = await axios.get(`/api/projects/by-creator/${fetchedCampaign.creatorId._id}`);
+                        const projectResponse = await axiosInstance.get(`/api/projects/by-creator/${fetchedCampaign.creatorId._id}`);
                         setCreatorProject(projectResponse.data);
                     } catch (projectErr) {
                         console.warn("Could not fetch creator's project details:", projectErr.message);
