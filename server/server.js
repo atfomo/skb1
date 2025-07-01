@@ -37,6 +37,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || 'localhost';
 
+const ENV_ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS ?
+    process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim()) :
+    [];
+
 
 mongoose.connect(process.env.MONGODB_URI, {})
 .then(() => console.log('MongoDB connected successfully'))
@@ -51,36 +55,30 @@ app.use(passport.initialize());
 app.use(express.urlencoded({ extended: true }));
 
 
-const allowedOrigins = [
-    'https://atfomo.com',        // Your primary production domain
-    'https://www.atfomo.com',    // Your primary production domain (with www)
-    'https://atfomo-beta.vercel.app', // Your Vercel production alias domain
-    // Add the specific Vercel preview domain that caused the error (good for quick fix)
-    'https://atfomo-beta-q5gmcjgr8-atfomos-projects.vercel.app',
-    undefined // Allows requests with no origin (like Postman, curl, server-to-server)
-];
-
-// This is the most crucial part for Vercel preview deployments
-// It will match any preview domain that follows the pattern:
-// https://PROJECT_NAME-RANDOM_HASH-YOUR_VERCEL_ORG.vercel.app
-// Make sure 'atfomos-projects' matches your Vercel organization/project name if it's consistent.
-const vercelPreviewRegex = /^https:\/\/atfomo-beta-([a-z0-9]+)-atfomos-projects\.vercel\.app$/;
-
-// For development environments (local and dev aliases)
-if (process.env.NODE_ENV !== 'production') {
-    allowedOrigins.push('http://localhost:3000');
-    allowedOrigins.push('https://localhost:3000');
-    allowedOrigins.push('http://dev.atfomo.local:3000');
-    allowedOrigins.push('https://dev.atfomo.local:3000');
-    allowedOrigins.push('http://localhost:5000'); // If your backend runs on 5000
-}
-
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin) return callback(null, true); // Allow requests with no origin
+        // These are the core origins you always want to allow, regardless of ENV
+        let fixedAllowedOrigins = [
+            'https://atfomo.com',        // Your primary production domain
+            'https://www.atfomo.com',    // Your primary production domain (with www)
+            'https://atfomo-beta.vercel.app', // Your Vercel production alias domain (stable)
+            undefined // Allows requests with no origin (like Postman, curl, server-to-server)
+        ];
+
+        // Combine fixed origins with those from environment variables
+        const allAllowedOrigins = [...fixedAllowedOrigins, ...ENV_ALLOWED_ORIGINS];
+
+        // This regex handles the changing Vercel preview domains.
+        // It looks for "https://atfomo-beta-ANY_ALPHANUMERIC_STRING-atfomos-projects.vercel.app"
+        const vercelPreviewRegex = /^https:\/\/atfomo-beta-([a-z0-9]+)-atfomos-projects\.vercel\.app$/;
+
+        if (!origin) {
+            // Allow requests with no origin (e.g., Postman, curl, direct server requests)
+            return callback(null, true);
+        }
 
         // Check if the origin is in our allowed list OR matches the Vercel preview regex
-        if (allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
+        if (allAllowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
             callback(null, true);
         } else {
             console.error(`CORS Error: Origin "${origin}" not allowed.`);
