@@ -1,24 +1,24 @@
-// backend/routes/dripCampaigns.js
+
 const express = require('express');
 const router = express.Router();
 const authorize = require('../middleware/authenticateJWT');
 const db = require('../services/db'); // Your database service
 const { DripCampaign, Task, User } = require('../services/db'); // Destructure models from db service
 
-// Define the Drip Packages (as you already have)
+
 const DRIP_PACKAGES = [
     { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 1199, description: '...' },
     { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1999, description: '...' },
     { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 3499, description: '...' },
 ];
 
-// Helper function to extract tweet ID from link
+
 const getTweetIdFromLink = (link) => {
     const match = link.match(/\/status\/(\d+)/);
     return match ? match[1] : null;
 };
 
-// --- POST /api/drip-campaigns/create-drip ---
+
 router.post('/create-drip', authorize, async (req, res) => {
     const { packageId, initialTweetLink } = req.body;
     const creatorId = req.user.id;
@@ -56,7 +56,7 @@ router.post('/create-drip', authorize, async (req, res) => {
 
         const createdCampaign = await db.createDripCampaign(newDripCampaignData);
 
-        // --- Trigger Task Generation for Initial Tweet ---
+
         await generateTasksForTweet(createdCampaign._id, initialTweetLink, creator);
 
         res.status(201).json({
@@ -78,7 +78,7 @@ router.post('/create-drip', authorize, async (req, res) => {
     }
 });
 
-// --- POST /api/drip-campaigns/:campaignId/add-tweet ---
+
 router.post('/:campaignId/add-tweet', authorize, async (req, res) => {
     const { campaignId } = req.params;
     const { tweetLink } = req.body;
@@ -108,7 +108,7 @@ router.post('/:campaignId/add-tweet', authorize, async (req, res) => {
         if (!creator) {
             console.error("Creator not found for adding tweet tasks.");
         } else {
-            // --- Trigger Task Generation for NEW Tweet ---
+
             await generateTasksForTweet(campaignId, tweetLink, creator);
         }
 
@@ -127,7 +127,7 @@ router.post('/:campaignId/add-tweet', authorize, async (req, res) => {
     }
 });
 
-// --- GET /api/drip-campaigns/:campaignId/status --- (remains mostly the same)
+
 router.get('/:campaignId/status', authorize, async (req, res) => {
     const { campaignId } = req.params;
 
@@ -165,7 +165,7 @@ router.get('/:campaignId/status', authorize, async (req, res) => {
     }
 });
 
-// --- GET /api/drip-campaigns/creator/:creatorId --- (remains mostly the same)
+
 router.get('/creator/:creatorId', authorize, async (req, res) => {
     const { creatorId } = req.params;
 
@@ -206,9 +206,9 @@ router.get('/creator/:creatorId', authorize, async (req, res) => {
     }
 });
 
-// --- Actual Task Generation Function ---
+
 const generateTasksForTweet = async (dripCampaignId, tweetLink, creator) => {
-    console.log(`[TaskGen] Generating COMBINED task for campaign ${dripCampaignId} and tweet ${tweetLink}...`);
+    
 
     const tweetId = getTweetIdFromLink(tweetLink);
     if (!tweetId) {
@@ -219,7 +219,7 @@ const generateTasksForTweet = async (dripCampaignId, tweetLink, creator) => {
     const fixedEarningAmount = 0.069; // The total earning for completing all actions for this task
 
     try {
-        // Find if a combined task for this tweet in this campaign already exists
+
         let existingTask = await Task.findOne({
             dripCampaign: dripCampaignId,
             tweetId: tweetId,
@@ -231,7 +231,7 @@ const generateTasksForTweet = async (dripCampaignId, tweetLink, creator) => {
             return existingTask; // Return the existing task if found
         }
 
-        // Create a single combined task
+
         const newTask = new Task({
             dripCampaign: dripCampaignId,
             creatorId: creator._id,
@@ -246,12 +246,12 @@ const generateTasksForTweet = async (dripCampaignId, tweetLink, creator) => {
             completedBy: [] // Initialize with an empty array of completers
         });
         await newTask.save();
-        console.log(`[TaskGen] Created combined task for ${tweetLink} with total earning amount $${fixedEarningAmount}`);
+        
         return newTask; // Return the newly created task
     } catch (taskError) {
         console.error(`[TaskGen] Error creating combined task for ${tweetLink}:`, taskError);
-        // You might want to handle specific error codes (like 11000 for duplicate key)
-        // for more granular error messages if the unique index is strict.
+
+
         throw taskError; // Re-throw to indicate failure
     }
 };

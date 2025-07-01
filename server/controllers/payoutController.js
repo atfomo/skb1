@@ -1,8 +1,8 @@
-// backend/controllers/payoutController.js
+
 const PayoutRequest = require('../models/PayoutRequest');
 const User = require('../models/User');
 
-// --- Existing requestPayout function (keep as is) ---
+
 exports.requestPayout = async (req, res) => {
     const { amount, paymentMethod, paymentDetails } = req.body;
     const userId = req.user.id;
@@ -81,7 +81,7 @@ exports.requestPayout = async (req, res) => {
 };
 
 
-// ⭐ NEW: Admin function to get all payout requests ⭐
+
 exports.getAllPayoutRequests = async (req, res) => {
     try {
         const payoutRequests = await PayoutRequest.find()
@@ -98,7 +98,7 @@ exports.getAllPayoutRequests = async (req, res) => {
     }
 };
 
-// ⭐ NEW: Admin function to update payout request status ⭐
+
 exports.updatePayoutStatus = async (req, res) => {
     const { status, adminNotes } = req.body;
     const payoutRequestId = req.params.id;
@@ -129,7 +129,7 @@ exports.updatePayoutStatus = async (req, res) => {
             if (user) {
                 user.pendingEarnings = (user.pendingEarnings || 0) + payoutRequest.amount;
                 await user.save();
-                console.log(`[PayoutController] Rejected payout ${payoutRequestId}. Amount $${payoutRequest.amount} returned to user ${user._id}'s pending earnings.`);
+                
             } else {
                 console.warn(`[PayoutController] User ${payoutRequest.userId} not found for rejected payout ${payoutRequestId}. Amount not returned.`);
             }
@@ -137,7 +137,7 @@ exports.updatePayoutStatus = async (req, res) => {
 
         await payoutRequest.save();
 
-        console.log(`[PayoutController] Payout request ${payoutRequestId} status updated to: ${status} by admin ${adminUserId}.`);
+        
 
         res.status(200).json({
             message: `Payout request status updated to '${status}'.`,

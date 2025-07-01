@@ -1,4 +1,4 @@
-/* client/src/components/AddSparkCampaign.css */
+
 
 /*
    IMPORTANT: Ensure your global variables (from dashboard.css or a dedicated variables file)
@@ -6,20 +6,20 @@
    Do NOT redefine them here.
 */
 
-/* --- General form container --- */
+
 .add-spark-campaign-container {
     padding: 30px;
-    border-radius: var(--border-radius-large); /* Use consistent border-radius */
-    /* Adopt glass-panel styles for consistency */
-    background-color: rgba(17, 16, 15, 0.7); /* Matching glass-panel background */
-    backdrop-filter: blur(15px); /* Stronger blur for glass effect, matching glass-panel */
+    border-radius: var(--border-radius-large); 
+    
+    background-color: rgba(17, 16, 15, 0.7); 
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
-    border: var(--glass-border); /* Consistent glass border */
-    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
+    border: var(--glass-border); 
+    box-shadow: var(--glass-shadow); 
 
     max-width: 900px;
     margin: 40px auto;
-    color: var(--color-text-primary); /* Use primary text color */
+    color: var(--color-text-primary); 
 }
 
 .form-title {
@@ -27,13 +27,13 @@
     font-weight: 800;
     text-align: center;
     margin-bottom: 15px;
-    /* Use your defined accent colors for the gradient */
+    
     background-image: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for browsers that don't support background-clip: text */
-    /* Use dashboard's title shadow for consistency */
+    color: transparent; 
+    
     text-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
     display: flex;
     align-items: center;
@@ -43,30 +43,30 @@
 
 .form-title .form-icon {
     font-size: 1em;
-    color: #E64A19; /* Icon matches primary accent color */
+    color: #E64A19; 
 }
 
 .form-description {
     text-align: center;
-    color: var(--color-text-secondary); /* Use secondary text color for description */
+    color: var(--color-text-secondary); 
     font-size: 1.1em;
     margin-bottom: 30px;
 }
 
-/* Form sections */
+
 .form-section {
-    background-color: #141414; /* Use a background color from your palette */
-    border-radius: var(--border-radius-medium); /* Consistent border-radius */
+    background-color: #141414; 
+    border-radius: var(--border-radius-medium); 
     padding: 25px;
     margin-bottom: 25px;
-    border: 1px solid #363636; /* Subtle border for sections */
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Keep subtle inner shadow */
+    border: 1px solid #363636; 
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); 
 }
 
 .form-section h3 {
     font-size: 1.5em;
     font-weight: 700;
-    color: #e1e1e1; /* Primary orange color for section titles */
+    color: #e1e1e1; 
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -75,7 +75,7 @@
 
 .form-section .section-icon {
     font-size: 0.9em;
-    color: #E64A19; /* Icon matches primary accent color */
+    color: #E64A19; 
 }
 
 .form-grid {
@@ -98,35 +98,35 @@
     margin-bottom: 8px;
     font-size: 1em;
     font-weight: 600;
-    color: var(--color-text-primary); /* Label text in primary color */
+    color: var(--color-text-primary); 
 }
 
-/* Input fields */
+
 .form-input,
 .form-textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid var(--color-text-dark); /* Consistent border for inputs */
-    border-radius: var(--border-radius-small); /* Consistent border-radius */
-    background-color: var(--color-bg-light); /* Use light background for inputs */
-    color: var(--color-text-primary); /* Input text color */
+    border: 1px solid var(--color-text-dark); 
+    border-radius: var(--border-radius-small); 
+    background-color: var(--color-bg-light); 
+    color: var(--color-text-primary); 
     font-size: 1em;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-    color: var(--color-text-dark); /* Placeholder color from palette */
+    color: var(--color-text-dark); 
 }
 
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    border-color: var(--color-accent-primary); /* Primary accent orange focus */
-    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.3); /* Consistent focus glow */
+    border-color: var(--color-accent-primary); 
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.3); 
 }
 
-/* --- NEW: File Input Styling --- */
+
 .form-input-file {
     padding: 10px;
     border: 1px solid var(--color-text-dark);
@@ -139,12 +139,12 @@
 }
 
 .form-input-file::-webkit-file-upload-button {
-    /* Match primary button gradient */
+    
     background: linear-gradient(90deg, #E64A19, #ff3c00);
-    color: var(--color-bg-dark); /* Dark text on bright button */
+    color: var(--color-bg-dark); 
     padding: 8px 15px;
     border: none;
-    border-radius: 6px; /* Slightly smaller radius for internal button */
+    border-radius: 6px; 
     cursor: pointer;
     font-weight: 700;
     margin-right: 15px;
@@ -152,23 +152,23 @@
 }
 
 .form-input-file::-webkit-file-upload-button:hover {
-    /* Consistent hover effect */
+    
     background: linear-gradient(90deg, #E64A19, #ff3c00);
 }
 
-/* --- Image Preview --- */
+
 .banner-preview {
     margin-top: 15px;
     padding: 15px;
-    border: 1px solid var(--color-text-dark); /* Consistent border */
-    border-radius: var(--border-radius-small); /* Consistent border-radius */
-    background-color: var(--color-bg-medium); /* Medium background for preview box */
+    border: 1px solid var(--color-text-dark); 
+    border-radius: var(--border-radius-small); 
+    background-color: var(--color-bg-medium); 
     text-align: center;
 }
 
 .banner-preview p {
     font-size: 0.9em;
-    color: var(--color-text-secondary); /* Secondary text color */
+    color: var(--color-text-secondary); 
     margin-bottom: 10px;
 }
 
@@ -177,15 +177,15 @@
     height: auto;
     max-height: 200px;
     border-radius: var(--border-radius-small);
-    border: 2px solid var(--color-accent-primary); /* Primary orange border for preview */
-    box-shadow: 0 0 15px rgba(255, 72, 0, 0.4); /* Keep this specific glow */
+    border: 2px solid var(--color-accent-primary); 
+    box-shadow: 0 0 15px rgba(255, 72, 0, 0.4); 
     object-fit: cover;
 }
-/* --- END NEW: File Input Styling --- */
+
 
 .input-hint {
     font-size: 0.85em;
-    color: var(--color-text-dark); /* Dark text for hints */
+    color: var(--color-text-dark); 
     margin-top: 5px;
     display: flex;
     align-items: center;
@@ -193,17 +193,17 @@
 }
 
 .input-hint .icon-small, .input-hint svg {
-    color: #E64A19; /* Hint icons in secondary orange */
+    color: #E64A19; 
     font-size: 0.9em;
 }
 
-/* Estimated engagement box */
+
 .estimated-engagement-box {
-    /* Similar to a glass panel or form section */
-    background-color: var(--color-bg-medium); /* Use a background color from your palette */
-    backdrop-filter: blur(10px); /* Maintain a slight blur if desired, though less strong than main container */
+    
+    background-color: var(--color-bg-medium); 
+    backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px);
-    border-radius: var(--border-radius-medium); /* Consistent border-radius */
+    border-radius: var(--border-radius-medium); 
     padding: 15px;
     margin-top: 15px;
     border: 1px solid var(--color-text-dark);
@@ -212,7 +212,7 @@
 }
 
 .estimated-engagement-box h4 {
-    color: #E64A19; /* Primary orange for heading */
+    color: #E64A19; 
     font-size: 1.1em;
     margin-bottom: 10px;
     font-weight: 700;
@@ -226,7 +226,7 @@
 
 .estimated-engagement-box ul li {
     font-size: 0.95em;
-    color: var(--color-text-secondary); /* Secondary text for list items */
+    color: var(--color-text-secondary); 
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -234,25 +234,25 @@
 }
 
 .estimated-engagement-box ul li strong {
-    color: var(--color-text-primary); /* Primary text for strong emphasis */
+    color: var(--color-text-primary); 
     font-weight: 800;
 }
 
 .estimated-engagement-box .icon-small {
-    color: var(--color-accent-green); /* Green for success/estimates */
+    color: var(--color-accent-green); 
     font-size: 0.9em;
 }
 
 .estimated-engagement-box .note {
     font-size: 0.8em;
-    color: var(--color-text-dark); /* Dark text for notes */
+    color: var(--color-text-dark); 
     margin-top: 15px;
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-/* Checkbox grid */
+
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -264,17 +264,17 @@
     align-items: center;
     cursor: pointer;
     font-size: 1em;
-    color: var(--color-text-primary); /* Primary text for label */
+    color: var(--color-text-primary); 
     gap: 10px;
     padding: 8px 12px;
     border-radius: var(--border-radius-small);
-    background-color:  #181818; /* Light background for checkboxes */
+    background-color:  #181818; 
     border: 1px solid  #ff511c;
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .custom-checkbox-label:hover {
-    background: rgba(255, 110, 0, 0.1); /* Subtle orange on hover */
+    background: rgba(255, 110, 0, 0.1); 
     border-color: rgba(255, 110, 0, 0.3);
 }
 
@@ -285,7 +285,7 @@
 .checkbox-custom {
     width: 20px;
     height: 20px;
-    border: 2px solid #E64A19; /* Primary orange border for custom checkbox */
+    border: 2px solid #E64A19; 
     border-radius: 4px;
     position: relative;
     transition: all 0.2s ease;
@@ -299,7 +299,7 @@
     top: 50%;
     width: 8px;
     height: 14px;
-    border: solid var(--color-text-primary); /* White checkmark */
+    border: solid var(--color-text-primary); 
     border-width: 0 3px 3px 0;
     transform: translate(-50%, -50%) rotate(45deg) scale(0);
     opacity: 0;
@@ -307,7 +307,7 @@
 }
 
 .checkbox-input:checked + .checkbox-custom {
-    /* Orange gradient when checked */
+    
     background: linear-gradient(45deg, #E64A19, #ff3c00);
     border-color: #E64A19;
 }
@@ -317,13 +317,13 @@
     transform: translate(-50%, -50%) rotate(45deg) scale(1);
 }
 
-/* Textarea */
+
 .form-textarea {
     min-height: 100px;
     resize: vertical;
 }
 
-/* Buttons */
+
 .form-button {
     display: flex;
     align-items: center;
@@ -331,7 +331,7 @@
     width: 100%;
     padding: 15px;
     border: none;
-    border-radius: var(--border-radius-medium); /* Consistent button border-radius */
+    border-radius: var(--border-radius-medium); 
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 700;
@@ -340,32 +340,32 @@
 }
 
 .form-button.primary-button {
-    /* Directly use the action-button-primary styling from dashboard.css */
+    
     background: linear-gradient(45deg, #E64A19, #ff3c00);
-    color: #fff; /* White text for primary buttons */
-    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow */
+    color: #fff; 
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); 
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .form-button.primary-button:hover:not(:disabled) {
-    background: linear-gradient(45deg, #ff511c, #d83200); /* Consistent hover gradient */
+    background: linear-gradient(45deg, #ff511c, #d83200); 
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6); /* Consistent hover shadow */
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6); 
 }
 
 .form-button:disabled {
-    background-color: var(--color-bg-light); /* Disabled background from dashboard buttons */
-    color: var(--color-text-dark); /* Disabled text color */
+    background-color: var(--color-bg-light); 
+    color: var(--color-text-dark); 
     cursor: not-allowed;
     opacity: 0.6;
     box-shadow: none;
     transform: none;
 }
 
-/* Alerts */
+
 .alert {
     padding: 15px 20px;
-    border-radius: var(--border-radius-small); /* Consistent border-radius */
+    border-radius: var(--border-radius-small); 
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -378,24 +378,24 @@
 }
 
 .error-alert {
-    background-color: rgba(231, 76, 60, 0.1); /* Based on --color-accent-red with transparency */
+    background-color: rgba(231, 76, 60, 0.1); 
     color: var(--color-accent-red);
     border: 1px solid var(--color-accent-red);
 }
 
 .success-alert {
-    background-color: rgba(46, 204, 113, 0.1); /* Based on --color-accent-green with transparency */
+    background-color: rgba(46, 204, 113, 0.1); 
     color: var(--color-accent-green);
     border: 1px solid var(--color-accent-green);
 }
 
-/* Loading/Access Denied States */
+
 .spark-campaign-form-loading,
 .spark-campaign-form-access-denied {
     text-align: center;
     padding: 50px 20px;
     border-radius: var(--border-radius-large);
-    /* Adopt glass-panel styles for consistency */
+    
     background-color: rgba(17, 16, 15, 0.7);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -407,8 +407,8 @@
 }
 
 .spark-campaign-form-loading .loading-spinner {
-    border: 4px solid var(--color-text-dark); /* Consistent lighter border */
-    border-top: 4px solid var(--color-accent-primary); /* Primary orange spinner */
+    border: 4px solid var(--color-text-dark); 
+    border-top: 4px solid var(--color-accent-primary); 
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -423,17 +423,17 @@
 
 .spark-campaign-form-access-denied h2 {
     font-size: 2em;
-    color: var(--color-accent-red); /* Red for access denied */
+    color: var(--color-accent-red); 
     margin-bottom: 15px;
 }
 
 .spark-campaign-form-access-denied p {
     font-size: 1.1em;
-    color: var(--color-text-secondary); /* Secondary text for paragraphs */
+    color: var(--color-text-secondary); 
     margin-bottom: 25px;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
     .add-spark-campaign-container {
         padding: 20px;

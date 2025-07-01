@@ -1,30 +1,30 @@
-/* src/components/SparkCampaignDetail/SparkCampaignDetail.module.css - REVISED FOR CLEAN, MINIMALISTIC AESTHETICS */
 
-/* --- Base Variables & Global Styles --- */
+
+
 :root {
-    --color-bg-dark: #0A0A0A; /* Deeper, cleaner dark background */
-    --color-bg-medium: #1A1A1A; /* Slightly lighter for main panels */
-    --color-bg-light: #2A2A2A; /* For nested elements, subtle contrast */
+    --color-bg-dark: #0A0A0A; 
+    --color-bg-medium: #1A1A1A; 
+    --color-bg-light: #2A2A2A; 
 
-    --color-accent-primary: #FF6F00; /* PRIMARY ORANGE - main brand color */
-    --color-accent-secondary: #FFA343; /* Lighter shade of orange for highlights */
-    --color-accent-green: #2ECC71; /* Success */
-    --color-accent-red: #E74C3C; /* Error */
+    --color-accent-primary: #FF6F00; 
+    --color-accent-secondary: #FFA343; 
+    --color-accent-green: #2ECC71; 
+    --color-accent-red: #E74C3C; 
     --color-telegram-blue: #0088cc;
     --color-twitter-blue: #1DA1F2;
 
-    --color-text-primary: #F0F0F0; /* Clean white-ish for main text */
-    --color-text-secondary: #A9A9A9; /* Muted gray for descriptions/labels */
-    --color-text-dark: #6C6C6C; /* Very subtle gray for hints */
+    --color-text-primary: #F0F0F0; 
+    --color-text-secondary: #A9A9A9; 
+    --color-text-dark: #6C6C6C; 
 
     --border-radius-large: 16px;
     --border-radius-medium: 12px;
     --border-radius-small: 8px;
 
-    /* Subtler glass effect */
-    --glass-border: 1px solid rgba(255, 255, 255, 0.1); /* Very light, almost invisible border */
-    --glass-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Less intense shadow */
-    --glass-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 111, 0, 0.2); /* Subtler glow on hover */
+    
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1); 
+    --glass-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+    --glass-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 111, 0, 0.2); 
 
     --font-family-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -34,13 +34,13 @@
     background-color: var(--color-bg-dark);
     color: #c0c0c0;
     min-height: 100vh;
-    padding-bottom: 80px; /* Increased padding */
+    padding-bottom: 80px; 
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* --- Status Screens (Loading, Error, No Data) --- */
+
 .statusScreen {
     min-height: 100vh;
     display: flex;
@@ -54,7 +54,7 @@
 }
 
 .statusScreen .iconLarge {
-    font-size: 4.5rem; /* Slightly larger icons */
+    font-size: 4.5rem; 
     margin-bottom: 30px;
     color: var(--color-text-secondary);
 }
@@ -72,35 +72,35 @@
 }
 
 .noDataScreen .iconLarge {
-    color: var(--color-accent-secondary); /* Use secondary accent for no data, less alarming */
+    color: var(--color-accent-secondary); 
 }
 
 .statusTitle {
-    font-size: 2.8rem; /* Slightly larger */
+    font-size: 2.8rem; 
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--color-text-primary);
 }
 
 .statusText {
-    font-size: 1.15rem; /* Slightly larger */
+    font-size: 1.15rem; 
     color: var(--color-text-secondary);
     max-width: 600px;
-    line-height: 1.7; /* Increased line height for readability */
-    margin-bottom: 40px; /* More space */
+    line-height: 1.7; 
+    margin-bottom: 40px; 
 }
 
-/* --- Campaign Header Section --- */
+
 .campaignHeader {
     position: relative;
     width: 100%;
-    height: 400px; /* Taller header for more impact */
+    height: 400px; 
     overflow: hidden;
     background-color: var(--color-bg-medium);
     display: flex;
-    align-items: flex-end; /* Align content to bottom */
+    align-items: flex-end; 
     justify-content: center;
-    padding-bottom: 50px; /* More padding */
+    padding-bottom: 50px; 
 }
 
 .campaignBannerImage {
@@ -110,7 +110,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.3) grayscale(5%); /* More subtle darkening, less grayscale */
+    filter: brightness(0.3) grayscale(5%); 
     z-index: 1;
 }
 
@@ -122,74 +122,74 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 1000px; /* Wider content in header */
+    max-width: 1000px; 
     width: 100%;
-    padding: 0 40px; /* More horizontal padding */
+    padding: 0 40px; 
 }
 
 .campaignLogo {
-    width: 140px; /* Larger logo */
+    width: 140px; 
     height: 140px;
     border-radius: 50%;
-    border: 3px solid #E64A19; /* Slightly thinner border */
+    border: 3px solid #E64A19; 
     object-fit: cover;
     margin-bottom: 100px;
-    box-shadow: 0 0 15px rgba(255, 111, 0, 0.4); /* Subtler glow for logo */
+    box-shadow: 0 0 15px rgba(255, 111, 0, 0.4); 
     background-color: var(--color-bg-light);
 }
 
 .campaignTitle {
-    font-size: 3.5rem; /* Larger, more prominent title */
-    font-weight: 800; /* Bolder */
+    font-size: 3.5rem; 
+    font-weight: 800; 
     margin-top: 25px;
     margin-bottom: 15px;
-    letter-spacing: -0.05em; /* Tighter letter spacing */
+    letter-spacing: -0.05em; 
     background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 10px rgba(255, 140, 0, 0.3); /* Subtler glow */
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.3); 
 }
 
 .campaignBrief {
-    font-size: 1.25rem; /* Larger brief */
+    font-size: 1.25rem; 
     color: var(--color-text-secondary);
     max-width: 750px;
     line-height: 1.7;
     margin-bottom: 30px;
-    font-weight: 300; /* Lighter font weight */
+    font-weight: 300; 
 }
 
 .creatorSocialLinks {
     display: flex;
-    gap: 30px; /* More space between icons */
+    gap: 30px; 
     margin-top: 25px;
 }
 
 .socialIcon {
-    font-size: 2.5rem; /* Larger icons */
+    font-size: 2.5rem; 
     color: var(--color-text-secondary);
     transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .socialIcon:hover {
-    color: var(--color-accent-primary); /* Primary orange on hover */
-    transform: translateY(-7px) scale(1.1); /* More pronounced hover effect */
+    color: var(--color-accent-primary); 
+    transform: translateY(-7px) scale(1.1); 
 }
 
-/* Specific social icon colors - keep these for brand recognition */
+
 .socialIcon[data-icon="FaTwitter"] { color: var(--color-twitter-blue); }
 .socialIcon[data-icon="FaDiscord"] { color: #5865F2; }
 .socialIcon[data-icon="FaTelegramPlane"] { color: var(--color-telegram-blue); }
-.socialIcon[data-icon="FaGlobe"] { color: var(--color-text-secondary); /* Default for globe */ }
+.socialIcon[data-icon="FaGlobe"] { color: var(--color-text-secondary);  }
 
 
-/* --- Main Content Layout --- */
+
 .campaignContentWrapper {
     display: flex;
-    gap: 50px; /* Increased gap */
+    gap: 50px; 
     padding: 0 50px;
-    max-width: 1600px; /* Even wider content area */
-    margin-top: -40px; /* More overlap with header */
+    max-width: 1600px; 
+    margin-top: -40px; 
     position: relative;
     z-index: 3;
     align-items: flex-start;
@@ -200,44 +200,44 @@
     flex: 2;
     display: flex;
     flex-direction: column;
-    gap: 40px; /* More spacing between sections */
+    gap: 40px; 
 }
 
 .campaignSidebar {
     flex: 1;
-    min-width: 380px; /* Slightly wider sidebar */
+    min-width: 380px; 
     max-width: 450px;
     display: flex;
     flex-direction: column;
     gap: 40px;
 }
 
-/* --- Glass Panel Styling (Reused for cards) --- */
+
 .glassPanel {
-    background-color: rgba(17, 17, 17, 0.7); /* Lighter, cleaner transparency */
-    backdrop-filter: blur(12px); /* Slightly less blur, feels cleaner */
+    background-color: rgba(17, 17, 17, 0.7); 
+    backdrop-filter: blur(12px); 
     -webkit-backdrop-filter: blur(12px);
     border-radius: var(--border-radius-large);
     border: var(--glass-border);
     box-shadow: var(--glass-shadow);
-    padding: 40px; /* More internal padding */
+    padding: 40px; 
     transition: all 0.3s ease;
 }
 
 .glassPanel:hover {
-    transform: translateY(-7px); /* More movement on hover */
+    transform: translateY(-7px); 
     box-shadow: var(--glass-shadow-hover);
 }
 
 .sectionHeader {
-    font-size: 2rem; /* Larger section titles */
+    font-size: 2rem; 
     font-weight: 700;
-    color: #e1e1e1; /* Primary text for section headers for clarity */
+    color: #e1e1e1; 
     margin-bottom: 25px;
     display: flex;
     align-items: center;
     gap: 15px;
-    border-bottom: 1px solid rgba(var(--color-text-dark), 0.2); /* Subtler border */
+    border-bottom: 1px solid rgba(var(--color-text-dark), 0.2); 
     padding-bottom: 15px;
     letter-spacing: -0.03em;
 }
@@ -248,7 +248,7 @@
 }
 
 .subHeader {
-    font-size: 1.6rem; /* Larger sub-headers */
+    font-size: 1.6rem; 
     font-weight: 600;
     color: var(--color-text-primary);
     margin-top: 35px;
@@ -258,11 +258,11 @@
     gap: 12px;
 }
 
-/* --- Info Grid --- */
+
 .infoGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Larger min width for items */
-    gap: 25px; /* More space */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 25px; 
 }
 
 .infoItem {
@@ -272,31 +272,31 @@
     gap: 10px;
     font-size: 1.05rem;
     color: var(--color-text-secondary);
-    padding: 20px 25px; /* More padding */
+    padding: 20px 25px; 
     background-color: #141414;
     border-radius: var(--border-radius-medium);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Very subtle white border */
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Lighter shadow */
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); 
 }
 
 .infoItem span {
-    font-weight: 600; /* Bolder values */
+    font-weight: 600; 
     color: var(--color-text-primary);
     font-size: 1.15rem;
 }
 
 .infoItem svg {
-    color: #E64A19; /* Primary accent for icons */
-    font-size: 1.8rem; /* Larger icons */
+    color: #E64A19; 
+    font-size: 1.8rem; 
     margin-bottom: 5px;
 }
 
 .statusBadge {
-    padding: 8px 16px; /* More padding */
-    border-radius: 25px; /* More rounded */
+    padding: 8px 16px; 
+    border-radius: 25px; 
     font-weight: 700;
     font-size: 0.9rem;
-    text-transform: uppercase; /* Uppercase for a modern look */
+    text-transform: uppercase; 
     letter-spacing: 0.05em;
     display: inline-block;
     margin-left: 15px;
@@ -309,16 +309,16 @@
 }
 
 .statusPending {
-    background-color: var(--color-accent-secondary); /* Use secondary orange for pending */
+    background-color: var(--color-accent-secondary); 
     color: var(--color-bg-dark);
 }
 
 .statusEnded {
-    background-color: var(--color-text-dark); /* Muted gray for ended */
+    background-color: var(--color-text-dark); 
     color: var(--color-text-primary);
 }
 
-/* --- Required Actions --- */
+
 .actionList {
     list-style: none;
     padding: 0;
@@ -327,8 +327,8 @@
 
 .actionList li {
     display: flex;
-    align-items: flex-start; /* Align icon to top of text */
-    gap: 18px; /* More space */
+    align-items: flex-start; 
+    gap: 18px; 
     font-size: 1.1rem;
     margin-bottom: 15px;
     color: var(--color-text-primary);
@@ -338,8 +338,8 @@
 .actionList li svg {
     color: var(--color-accent-primary);
     font-size: 1.5rem;
-    flex-shrink: 0; /* Prevent icon from shrinking */
-    margin-top: 4px; /* Adjust alignment */
+    flex-shrink: 0; 
+    margin-top: 4px; 
 }
 
 .additionalInstructions p {
@@ -351,7 +351,7 @@
 .externalLinks {
     display: flex;
     flex-wrap: wrap;
-    gap: 25px; /* More space */
+    gap: 25px; 
     margin-top: 35px;
 }
 
@@ -363,7 +363,7 @@
     text-decoration: none;
     font-weight: 600;
     transition: all 0.2s ease-in-out;
-    padding: 12px 22px; /* More padding */
+    padding: 12px 22px; 
     border: 1px solid #E64A19;
     border-radius: var(--border-radius-small);
     background-color: rgba(255, 111, 0, 0.1);
@@ -371,7 +371,7 @@
 }
 
 .actionLink:hover {
-    color: #ffffff; /* White text on hover */
+    color: #ffffff; 
     background-color: #ff3c00;
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(255, 111, 0, 0.5);
@@ -388,33 +388,33 @@
 .hashtagsContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px; /* More space */
+    gap: 12px; 
 }
 
 .hashtagItem {
     background-color: var(--color-bg-light);
-    color: #E64A1f; /* Text secondary for hashtags */
-    padding: 10px 18px; /* More padding */
+    color: #E64A1f; 
+    padding: 10px 18px; 
     border-radius: 6px;
     font-size: 0.95rem;
     font-weight: 500;
-    border: 1px solid rgba(var(--color-text-dark), 0.2); /* Subtler border */
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    border: 1px solid rgba(var(--color-text-dark), 0.2); 
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); 
 }
 
-/* --- Earnings Potential Section (Sidebar) --- */
+
 .earningsSummary {
     display: flex;
     flex-direction: column;
-    gap: 25px; /* More space */
+    gap: 25px; 
     margin-bottom: 35px;
 }
 
 .earningBox {
     background-color: #141414;
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Consistent subtle border */
+    border: 1px solid rgba(255, 255, 255, 0.08); 
     border-radius: var(--border-radius-medium);
-    padding: 30px; /* More padding */
+    padding: 30px; 
     text-align: center;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
@@ -427,7 +427,7 @@
 }
 
 .earningBox .value {
-    font-size: 2.8rem; /* Larger values */
+    font-size: 2.8rem; 
     font-weight: 700;
     color: #E64A19;
     display: flex;
@@ -435,16 +435,16 @@
     justify-content: center;
     margin-bottom: 10px;
     letter-spacing: -0.04em;
-    text-shadow: 0 0 8px rgba(255, 111, 0, 0.3); /* Subtler glow */
+    text-shadow: 0 0 8px rgba(255, 111, 0, 0.3); 
 }
 
 .earningBox .value.noEarningPotential {
-    color: var(--color-text-dark); /* Muted gray for no earnings */
+    color: var(--color-text-dark); 
     text-shadow: none;
 }
 
 .earningBox .value svg {
-    font-size: 2.5rem; /* Larger icons */
+    font-size: 2.5rem; 
 }
 
 .earningBox .note {
@@ -460,9 +460,9 @@
 
 .progressBarContainer {
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.1); /* Lighter track */
-    border-radius: 8px; /* Slightly more rounded */
-    height: 14px; /* Taller bar */
+    background-color: rgba(255, 255, 255, 0.1); 
+    border-radius: 8px; 
+    height: 14px; 
     margin-top: 18px;
     overflow: hidden;
     position: relative;
@@ -473,16 +473,16 @@
     height: 100%;
     background: linear-gradient(90deg, #E64A19, #ff3c00);
     border-radius: 8px;
-    transition: width 0.6s ease-in-out; /* Slower transition */
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); /* More prominent glow */
+    transition: width 0.6s ease-in-out; 
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.6); 
 }
 
 .progressText {
     position: absolute;
     width: 100%;
     text-align: center;
-    font-size: 0.8rem; /* Slightly larger text */
-    color: #ffffff; /* White text for better contrast on gradient */
+    font-size: 0.8rem; 
+    color: #ffffff; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -494,7 +494,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.2rem; /* Larger detail text */
+    font-size: 1.2rem; 
     color: var(--color-text-primary);
     margin-bottom: 18px;
     font-weight: 500;
@@ -502,27 +502,27 @@
 
 .timeRemainingDetail svg,
 .participantsDetail svg {
-    color: var(--color-accent-primary); /* Primary accent for icons */
+    color: var(--color-accent-primary); 
     font-size: 1.6rem;
 }
 
 .timeRemainingDetail .iconEnded {
-    color: var(--color-text-dark); /* Muted gray for ended icon */
+    color: var(--color-text-dark); 
 }
 
-/* --- Action Button --- */
+
 .campaignActionCta {
-    margin-top: 50px; /* More space for CTA */
+    margin-top: 50px; 
     text-align: center;
 }
 
 .actionButton {
-    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Gradient button */
+    background: linear-gradient(45deg, #E64A19, #ff3c00); 
     color: #ffffff;
     border: none;
-    border-radius: var(--border-radius-medium); /* Consistent with other large radius */
-    padding: 18px 40px; /* More prominent button */
-    font-size: 1.35rem; /* Larger font */
+    border-radius: var(--border-radius-medium); 
+    padding: 18px 40px; 
+    font-size: 1.35rem; 
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -530,15 +530,15 @@
     align-items: center;
     gap: 15px;
     width: 100%;
-    max-width: 450px; /* Max width for button */
+    max-width: 450px; 
     justify-content: center;
-    box-shadow: 0 8px 25px rgba(255, 111, 0, 0.5); /* Stronger shadow/glow */
+    box-shadow: 0 8px 25px rgba(255, 111, 0, 0.5); 
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .actionButton:hover:not(:disabled) {
-    background: linear-gradient(45deg, #ff511c, #d83200); /* Invert gradient or slightly shift */
-    transform: translateY(-5px); /* More pronounced hover */
+    background: linear-gradient(45deg, #ff511c, #d83200); 
+    transform: translateY(-5px); 
     box-shadow: 0 12px 35px rgba(255, 111, 0, 0.7);
 }
 
@@ -548,19 +548,19 @@
 }
 
 .actionButton.disabled {
-    background: var(--color-bg-light); /* Muted background */
+    background: var(--color-bg-light); 
     color: var(--color-text-dark);
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
-    opacity: 0.5; /* More faded */
+    opacity: 0.5; 
 }
 
 .actionButton svg {
     font-size: 1.8rem;
 }
 
-/* Spinner for loading state */
+
 .spinner {
     animation: spin 1s linear infinite;
 }
@@ -570,20 +570,20 @@
     100% { transform: rotate(360deg); }
 }
 
-/* --- Responsive Design --- */
+
 @media (max-width: 1200px) {
     .campaignContentWrapper {
         flex-direction: column;
         align-items: center;
         padding: 0 30px;
-        margin-top: -100px; /* Adjust overlap */
+        margin-top: -100px; 
         gap: 35px;
     }
 
     .campaignMainContent,
     .campaignSidebar {
         width: 100%;
-        max-width: 900px; /* Wider for tablets */
+        max-width: 900px; 
     }
 
     .campaignSidebar {

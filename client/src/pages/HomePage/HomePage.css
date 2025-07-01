@@ -1,63 +1,63 @@
-/* client/src/pages/HomePage/HomePage.css */
 
-/* --- Global & Base Styles for the Page --- */
+
+
 body {
-    background-color: #0d111c; /* Very dark background for contrast */
-    color: #e0e0e0; /* Default light text color */
+    background-color: #0d111c; 
+    color: #e0e0e0; 
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.6;
     scroll-behavior: smooth;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden; 
 }
 
 .homepage-main {
-    max-width: 1400px; /* Wider main content area */
-    margin: 0 auto; /* Center the content */
+    max-width: 1400px; 
+    margin: 0 auto; 
     padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 50px; /* Generous space between sections */
+    gap: 50px; 
 }
 
-/* --- Reusable Glassmorphism Card Style --- */
+
 .glassmorphism-card {
-    background-color: var(--background-dark-glass); /* The desired main background color with transparency */
-    backdrop-filter: blur(15px); /* Stronger blur for prominent glass effect */
+    background-color: var(--background-dark-glass); 
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--border-subtle-light); /* Subtle white border */
-    border-radius: 20px; /* More rounded corners */
-    box-shadow: 0 15px 60px var(--shadow-deep); /* Deep, prominent shadow for depth */
+    border: 1px solid var(--border-subtle-light); 
+    border-radius: 20px; 
+    box-shadow: 0 15px 60px var(--shadow-deep); 
     padding: 40px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative; /* For inner elements positioning */
+    position: relative; 
 }
 
 .glassmorphism-card:hover {
-    transform: translateY(-5px); /* Subtle lift on hover */
-    box-shadow: 0 20px 70px var(--shadow-deep); /* Stronger shadow on hover */
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 70px var(--shadow-deep); 
 }
 
-/* --- Hero Section --- */
+
 .hero-section {
     text-align: center;
-    padding: 60px 40px; /* More vertical padding */
+    padding: 60px 40px; 
     margin-top: 30px;
-    animation: fadeIn 1s ease-out; /* Fade in animation */
+    animation: fadeIn 1s ease-out; 
 }
 
 .hero-title {
-    font-size: 2.6em; /* Large, impactful title */
-    font-weight: 900; /* Extra bold */
+    font-size: 2.6em; 
+    font-weight: 900; 
     margin-bottom: 20px;
-    background-image: linear-gradient(180deg, #f5f5f5); /* Vibrant orange gradient */
+    background-image: linear-gradient(180deg, #f5f5f5); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for non-webkit */
-    text-shadow: 0 0 10px rgba(255, 111, 0, 0.205); /* Stronger glow */
+    color: transparent; 
+    text-shadow: 0 0 10px rgba(255, 111, 0, 0.205); 
     line-height: 1.2;
 }
 
@@ -65,7 +65,7 @@ body {
     font-size: 1.4em;
     color: #c0c0c0;
     max-width: 800px;
-    margin: 0 auto 40px; /* Center and add space below */
+    margin: 0 auto 40px; 
     line-height: 1.5;
 }
 
@@ -73,7 +73,7 @@ body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px; /* Space between buttons */
+    gap: 20px; 
 }
 
 .hero-login-prompt {
@@ -90,21 +90,21 @@ body {
     font-weight: 500;
 }
 
-/* --- Reusable Button Styles (Primary, Secondary, Tertiary) --- */
+
 .action-button {
     padding: 15px 30px;
     border: none;
-    border-radius: 12px; /* More rounded buttons */
+    border-radius: 12px; 
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 600;
     transition: all 0.3s ease;
-    text-decoration: none; /* Ensure no underline on links */
+    text-decoration: none; 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Space for icons */
-    white-space: nowrap; /* Prevent text wrapping */
+    gap: 10px; 
+    white-space: nowrap; 
 }
 
 .action-button .btn-icon {
@@ -112,15 +112,15 @@ body {
 }
 
 .action-button .btn-icon-right {
-    margin-left: 8px; /* For icons on the right */
+    margin-left: 8px; 
     font-size: 1.2em;
 }
 
 
 .primary-btn {
-    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Main vibrant orange gradient */
+    background: linear-gradient(45deg, #E64A19, #ff3c00); 
     color: #fff;
-    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); /* Stronger shadow */
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4); 
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -144,7 +144,7 @@ body {
 
 .tertiary-btn {
     background: linear-gradient(45deg, #00BFFF, #1DA1F2);
-    color: #ffffff; /* Twitter blue */
+    color: #ffffff; 
     border: 1px solid #009dd1e3;
 }
 
@@ -155,7 +155,7 @@ body {
 }
 
 .connect-x-btn {
-    background: linear-gradient(45deg, #00BFFF, #1DA1F2); /* Twitter Blue gradient */
+    background: linear-gradient(45deg, #00BFFF, #1DA1F2); 
     color: #fff;
     box-shadow: 0 8px 25px rgba(0, 191, 255, 0.4);
 }
@@ -174,16 +174,16 @@ body {
     transform: none;
 }
 
-/* --- Section Headings & Descriptions --- */
+
 .homepage-section {
-    margin-bottom: 0; /* Handled by homepage-main gap */
-    padding: 0; /* Padding handled by glassmorphism-card */
+    margin-bottom: 0; 
+    padding: 0; 
 }
 
 .section-heading {
     font-size: 2.2em;
     font-weight: 700;
-    color: #E64A19; /* Orange for section headings */
+    color: #E64A19; 
     text-align: center;
     margin-bottom: 15px;
     text-shadow: 0 0 10px rgba(255, 110, 0, 0.3);
@@ -199,24 +199,24 @@ body {
     margin-right: auto;
 }
 
-/* --- Search Input Styling --- */
+
 .search-input-group {
     position: relative;
     max-width: 600px;
-    margin: 0px auto 40px auto; /* Center and add space */
+    margin: 0px auto 40px auto; 
 }
 
 .search-input-field {
     width: 100%;
-    padding: 15px 15px 15px 50px; /* Left padding for icon */
+    padding: 15px 15px 15px 50px; 
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.4); /* Darker input background */
+    background-color: rgba(0, 0, 0, 0.4); 
     color: #F0F0F0;
     font-size: 1.05em;
     outline: none;
     transition: all 0.3s ease;
-    box-sizing: border-box; /* Include padding in width */
+    box-sizing: border-box; 
 }
 
 .search-input-field:focus {
@@ -238,19 +238,19 @@ body {
     font-size: 1.2em;
 }
 
-/* --- DripGrid Specific Adjustments --- */
+
 .drip-grid-container {
-    /* Styles from DripGrid.css take over for the grid structure itself */
-    position: relative; /* For fade-out effect */
-    margin-top: 20px; /* Space below search */
-    /* REMOVED: max-height: 600px; directly from here */
-    overflow: hidden; /* Keep overflow hidden for the collapsed state */
-    transition: max-height 0.5s ease-out; /* Smooth expansion/collapse */
+    
+    position: relative; 
+    margin-top: 20px; 
+    
+    overflow: hidden; 
+    transition: max-height 0.5s ease-out; 
 }
 
-/* NEW CLASS: Applies max-height when in collapsed view */
+
 .drip-grid-container.collapsed-view {
-    max-height: 600px; /* Example: show limited tasks initially */
+    max-height: 600px; 
 }
 
 
@@ -260,25 +260,25 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 100px; /* Height of the fade effect */
+    height: 100px; 
     background: linear-gradient(to top, rgba(28, 32, 45, 0.8) 0%, rgba(28, 32, 45, 0) 100%);
-    pointer-events: none; /* Allow clicks through the overlay */
-    z-index: 5; /* Ensure it's above the grid content */
+    pointer-events: none; 
+    z-index: 5; 
 }
 
 .view-more-container {
     text-align: center;
-    margin-top: 30px; /* Space above button */
+    margin-top: 30px; 
 }
 
-/* Pagination Controls */
+
 .pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
     margin-top: 30px;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    flex-wrap: wrap; 
 }
 
 .pagination-btn {
@@ -310,7 +310,7 @@ body {
 }
 
 .view-less-btn {
-    margin-left: 20px; /* Separate it slightly */
+    margin-left: 20px; 
     background-color: rgba(255, 50, 50, 0.1);
     color: #FF7777;
     border-color: rgba(255, 50, 50, 0.2);
@@ -323,7 +323,7 @@ body {
 }
 
 
-/* --- Loading & Error Overlays (Page-level) --- */
+
 .homepage-loading-overlay,
 .homepage-error-message {
     position: fixed;
@@ -331,12 +331,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Almost opaque dark overlay */
+    background-color: rgba(0, 0, 0, 0.9); 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Very high z-index to cover everything */
+    z-index: 9999; 
     color: #E0E0E0;
     font-size: 1.4em;
     text-align: center;
@@ -344,7 +344,7 @@ body {
 
 .loading-spinner {
     border: 8px solid rgba(255, 255, 255, 0.2);
-    border-top: 8px solid #E64A19; /* Orange spinner */
+    border-top: 8px solid #E64A19; 
     border-radius: 50%;
     width: 70px;
     height: 70px;
@@ -397,15 +397,15 @@ body {
     transform: translateY(-2px);
 }
 
-/* --- Card-specific Loading State --- */
+
 .card-loading-state {
-    min-height: 200px; /* Ensure loading state has some height */
+    min-height: 200px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.3); /* Darker background for specific card loading */
-    border-radius: 15px; /* Match card border-radius */
+    background-color: rgba(0, 0, 0, 0.3); 
+    border-radius: 15px; 
     padding: 30px;
 }
 
@@ -419,7 +419,7 @@ body {
     font-size: 1.1em;
 }
 
-/* --- Responsive Design --- */
+
 @media (max-width: 1200px) {
     .homepage-main {
         padding: 15px;
@@ -469,11 +469,11 @@ body {
         font-size: 1em;
     }
     .hero-cta-buttons {
-        flex-direction: column; /* Stack buttons vertically */
+        flex-direction: column; 
         gap: 15px;
     }
     .action-button {
-        width: 100%; /* Full width buttons */
+        width: 100%; 
         box-sizing: border-box;
     }
     .glassmorphism-card {
@@ -498,7 +498,7 @@ body {
         box-sizing: border-box;
     }
     .view-less-btn {
-        margin-left: 0; /* Remove side margin when stacked */
+        margin-left: 0; 
     }
     .homepage-loading-overlay,
     .homepage-error-message {

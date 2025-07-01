@@ -1,4 +1,4 @@
-// server/utils/generateRandomCode.js
+
 const generateRandomCode = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

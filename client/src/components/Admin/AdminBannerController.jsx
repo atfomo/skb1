@@ -54,7 +54,7 @@ const AdminBannerController = () => {
         try {
             let response;
             if (currentBanner) {
-                // Update existing banner
+
                 response = await axios.put(`${API_BASE_URL}/api/admin/banners/${currentBanner._id}`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const AdminBannerController = () => {
                 });
                 alert('Banner updated successfully!');
             } else {
-                // Create new banner
+
                 response = await axios.post(`${API_BASE_URL}/api/admin/banners`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -162,7 +162,7 @@ const AdminBannerController = () => {
                 </div>
             )}
 
-            {/* Modal for Add/Edit Banner */}
+            {}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">

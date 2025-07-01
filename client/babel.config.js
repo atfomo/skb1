@@ -1,4 +1,4 @@
-// babel.config.js
+
 module.exports = {
   presets: [
     ['@babel/preset-env', {
@@ -9,6 +9,14 @@ module.exports = {
     }],
     '@babel/preset-react', // For JSX
   ],
-  // You generally don't need explicit plugins for optional chaining/nullish coalescing
-  // if you're using a recent @babel/preset-env version.
+
+  env: {
+    production: { // These plugins will only be active when NODE_ENV is 'production'
+      plugins: [
+        'transform-remove-console', // This removes console.* calls
+
+      ],
+    },
+
+  },
 };

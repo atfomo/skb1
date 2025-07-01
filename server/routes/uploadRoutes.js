@@ -1,11 +1,11 @@
-// routes/uploadRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const cloudinary = require('../utils/cloudinaryConfig'); // Your Cloudinary config
 const fs = require('fs'); // For file system operations if you temporarily store files
 
-// Example using express-fileupload (if you still want to handle files on server first)
-// npm install express-fileupload
+
+
 router.post('/upload-signed', async (req, res) => {
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -15,15 +15,15 @@ router.post('/upload-signed', async (req, res) => {
     const file = req.files.image; // Assuming 'image' is the name of your file input
     const tempFilePath = `./temp/${file.name}`; // Temporary storage on your server
 
-    // Move file to a temporary location
+
     await file.mv(tempFilePath);
 
-    // Upload to Cloudinary
+
     const result = await cloudinary.uploader.upload(tempFilePath, {
       folder: 'my-app-uploads', // Optional: folder in Cloudinary
     });
 
-    // Remove temporary file
+
     fs.unlinkSync(tempFilePath);
 
     res.status(200).json({
@@ -37,7 +37,7 @@ router.post('/upload-signed', async (req, res) => {
   }
 });
 
-// Example for deleting an asset from Cloudinary
+
 router.delete('/delete-image/:publicId', async (req, res) => {
   try {
     const { publicId } = req.params;

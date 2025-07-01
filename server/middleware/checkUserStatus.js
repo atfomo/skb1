@@ -1,11 +1,11 @@
-// backend/middleware/checkUserStatus.js
+
 const User = require('../models/User');
 
 const checkUserStatus = async (req, res, next) => {
-    // --- NEW DEBUG LOGS FOR CHECKUSERSTATUS ---
-    console.log('--- CHECK USER STATUS MIDDLEWARE HIT ---');
-    console.log('checkUserStatus: req.user (after authenticateJWT):', req.user);
-    // --- END NEW DEBUG LOGS ---
+
+    
+    
+
 
     if (!req.user || !req.user.id) {
         console.warn('checkUserStatus: User ID missing from req.user after authentication.');
@@ -13,9 +13,9 @@ const checkUserStatus = async (req, res, next) => {
     }
 
     try {
-        // --- NEW DEBUG LOGS FOR CHECKUSERSTATUS ---
-        console.log('checkUserStatus: Attempting to find user in DB with ID:', req.user.id);
-        // --- END NEW DEBUG LOGS ---
+
+        
+
         const user = await User.findById(req.user.id);
 
         if (!user) {
@@ -23,9 +23,9 @@ const checkUserStatus = async (req, res, next) => {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        // --- NEW DEBUG LOGS FOR CHECKUSERSTATUS ---
-        console.log(`checkUserStatus: User found: ${user.username}. Account status: ${user.accountStatus}`);
-        // --- END NEW DEBUG LOGS ---
+
+        
+
         if (user.accountStatus === 'banned') {
             console.warn(`User ${user._id} (${user.username}) attempted action but is banned.`);
             return res.status(403).json({
@@ -35,7 +35,7 @@ const checkUserStatus = async (req, res, next) => {
         }
 
         req.fullUser = user;
-        console.log('checkUserStatus: User status active. Proceeding to next middleware/route.');
+        
         next();
 
     } catch (error) {

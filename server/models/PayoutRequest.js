@@ -1,4 +1,4 @@
-// backend/models/PayoutRequest.js
+
 const mongoose = require('mongoose');
 
 const PayoutRequestSchema = new mongoose.Schema({

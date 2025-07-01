@@ -1,4 +1,4 @@
-// client/src/pages/AdminTaskVerificationPage.jsx
+
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useUser } from '../UserContext'; // To get the admin's token
@@ -10,14 +10,14 @@ function AdminTaskVerificationPage() {
     const [error, setError] = useState(null);
     const { token } = useUser(); // Get the admin's token from UserContext
 
-    // --- LOG 1: Check token immediately after getting it from context ---
-    console.log('AdminTaskVerificationPage: Token from useUser():', token);
+
+    
 
     const fetchTasksForVerification = async () => {
-        // --- LOG 2: Check URL and Authorization header for GET request ---
+
         const url = `${API_BASE_URL}/api/admin/tasks-for-verification`;
-        console.log('AdminTaskVerificationPage: Fetching tasks from URL:', url);
-        console.log('AdminTaskVerificationPage: Authorization Header for GET:', `Bearer ${token}`);
+        
+        
 
         try {
             setLoading(true);
@@ -25,10 +25,10 @@ function AdminTaskVerificationPage() {
             const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log('AdminTaskVerificationPage: Tasks fetched successfully:', response.data); // --- LOG 3: Success log ---
+
             setTasksToVerify(response.data.tasks);
         } catch (err) {
-            // --- LOG 4: Detailed error for GET request ---
+
             console.error('AdminTaskVerificationPage: Failed to fetch tasks for verification:', err.response?.data || err.message);
             setError('Failed to fetch tasks for verification. Please check console.');
         } finally {
@@ -38,7 +38,7 @@ function AdminTaskVerificationPage() {
 
     useEffect(() => {
         if (token) { // Only fetch if admin token is available
-            console.log('AdminTaskVerificationPage: Token present, initiating fetch.'); // --- LOG 5: Token check in useEffect ---
+
             fetchTasksForVerification();
         } else {
             console.warn('AdminTaskVerificationPage: No token found. Admin tasks cannot be fetched.'); // --- LOG 6: No token warning ---
@@ -52,12 +52,12 @@ function AdminTaskVerificationPage() {
             return;
         }
 
-        // --- LOG 7: Check URL, payload, and Authorization header for POST request ---
+
         const verifyUrl = `${API_BASE_URL}/api/admin/${taskId}/mark-task-fully-complete`;
         const payload = { userId: userId };
-        console.log('AdminTaskVerificationPage: Verifying task - URL:', verifyUrl);
-        console.log('AdminTaskVerificationPage: Verifying task - Payload:', payload);
-        console.log('AdminTaskVerificationPage: Verifying task - Authorization Header:', `Bearer ${token}`);
+        
+        
+        
 
 
         try {
@@ -68,14 +68,14 @@ function AdminTaskVerificationPage() {
                     headers: { Authorization: `Bearer ${token}` }
                 }
             );
-            console.log('AdminTaskVerificationPage: Task verification successful:', response.data); // --- LOG 8: Success log ---
+
             if (response.data.message) {
                 alert(response.data.message);
-                // Re-fetch tasks to update the list
+
                 fetchTasksForVerification();
             }
         } catch (err) {
-            // --- LOG 9: Detailed error for POST request ---
+
             console.error('AdminTaskVerificationPage: Error verifying task:', err.response?.data || err.message);
             alert(`Error verifying task: ${err.response?.data?.message || err.message}`);
         }

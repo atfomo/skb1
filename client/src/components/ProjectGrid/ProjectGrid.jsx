@@ -1,4 +1,4 @@
-// client/src/components/ProjectGrid/ProjectGrid.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaTag } from 'react-icons/fa';
@@ -7,9 +7,9 @@ import './ProjectGrid.css'; // Import the CSS file
 const ProjectGrid = ({ projects }) => {
     if (!projects || projects.length === 0) {
         return (
-            <div className="project-grid-empty-state-message"> {/* Updated class name */}
-                <p className="project-grid-empty-state-title">No campaigns found.</p> {/* Updated class name */}
-                <p className="project-grid-empty-state-text">Try adjusting your search filters or create a new campaign!</p> {/* Updated class name */}
+            <div className="project-grid-empty-state-message"> {}
+                <p className="project-grid-empty-state-title">No campaigns found.</p> {}
+                <p className="project-grid-empty-state-text">Try adjusting your search filters or create a new campaign!</p> {}
             </div>
         );
     }
@@ -17,7 +17,7 @@ const ProjectGrid = ({ projects }) => {
     return (
         <div className="project-grid-container">
             {projects.map((campaign) => {
-                // Calculate progress bar percentage
+
                 const totalUsers = campaign.numberOfUsers || 0; // Ensure it's a number, default to 0
                 const completedUsers = campaign.completedUsersCount || 0; // Ensure it's a number, default to 0
 
@@ -27,13 +27,13 @@ const ProjectGrid = ({ projects }) => {
                 }
                 progressPercentage = progressPercentage.toFixed(1); // Format to one decimal place
 
-                // Determine banner image URL
+
                 let bannerImageUrl;
                 if (campaign.image) {
                     if (campaign.image.startsWith('http://') || campaign.image.startsWith('https://')) {
                         bannerImageUrl = campaign.image;
                     } else {
-                        // Assuming your backend serves images from /uploads
+
                         bannerImageUrl = `https://api.atfomo.com${campaign.image}`;
                     }
                 } else {
@@ -41,17 +41,17 @@ const ProjectGrid = ({ projects }) => {
                 }
 
                 return (
-                    // The entire card is now a clickable link
+
                     <Link
                         key={campaign._id}
                         to={`/campaign/${campaign._id}`}
                         className="project-card"
-                        // Apply background image style here. A pseudo-element will handle the overlay.
+
                     >
-                        {/* Overlay div for glass effect */}
+                        {}
                         <div className="project-card-background-overlay" style={{ backgroundImage: `url(${bannerImageUrl})` }}></div>
 
-                        {/* --- TOP SECTION: Logo, Name, Tags --- */}
+                        {}
                         <div className="project-header-top">
 <img
     src={campaign.logo || 'https://via.placeholder.com/60x60?text=Logo'}
@@ -83,9 +83,9 @@ const ProjectGrid = ({ projects }) => {
                             )}
                         </div>
 
-                        {/* --- BOTTOM SECTION: Frosted Glass Block (Stats & Progress) --- */}
+                        {}
                         <div className="project-details-frosted-block">
-                            {/* Stats Block (Earn Per User, Active Tasks) */}
+                            {}
                             <div className="project-stats-block">
                                 <div className="project-earnings">
                                     <p className="stats-label">Earn Per User</p>
@@ -98,7 +98,7 @@ const ProjectGrid = ({ projects }) => {
                                 </div>
                             </div>
 
-                            {/* Progress Bar Section */}
+                            {}
                             <div className="campaign-progress-bar-wrapper">
                                 <div className="progress-bar-info">
                                     <span>Progress:</span>

@@ -1,9 +1,9 @@
-// client/src/components/AddProjectForm/AddProjectForm.jsx
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import './AddProjectForm.css'; // Import standard CSS file
 
-// --- Constants (Keep these as they are, no UI change needed) ---
+
 const PLATFORM_FEE_PERCENTAGE = 15;
 const BASE_TASK_RATES = {
   like: 0.03,
@@ -14,7 +14,7 @@ const BASE_TASK_RATES = {
   followX: 0.05,
 };
 const CUSTOM_TASK_MIN_RATE = 0.20;
-// --- End Constants ---
+
 
 const AddProjectForm = () => {
   const navigate = useNavigate();
@@ -83,7 +83,7 @@ const AddProjectForm = () => {
 
     let totalHypotheticalCost = 0;
     activeTasks.forEach((task) => {
-      // Calculate cost based on allocated percentage of users
+
       const allocatedUsers = (task.allocation / 100) * formData.numberOfUsers;
       totalHypotheticalCost += (task.baseRate * task.instances * allocatedUsers);
     });
@@ -128,7 +128,7 @@ const AddProjectForm = () => {
   const handleBannerImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Basic file size validation (2MB)
+
       if (file.size > 2 * 1024 * 1024) {
         setErrors((prevErrors) => ({ ...prevErrors, bannerImage: "Image file size exceeds 2MB." }));
         setBannerImage(null);
@@ -293,7 +293,7 @@ const AddProjectForm = () => {
     let currentAllocations = { ...taskAllocations };
     const newValue = parseFloat(value);
 
-    // If the new value is 0, just set it to 0 and rebalance
+
     if (newValue === 0) {
       currentAllocations[taskKey] = 0;
     } else {
@@ -327,7 +327,7 @@ const AddProjectForm = () => {
         }
     }
 
-    // Final check to ensure sum is 100 and no negatives
+
     let finalSum = Object.values(currentAllocations).reduce((sum, val) => sum + val, 0);
     if (finalSum !== 100 && activeKeys.length > 0) {
         const lastActiveKey = activeKeys[activeKeys.length - 1]; // Adjust the last active one
@@ -344,14 +344,14 @@ const AddProjectForm = () => {
   }, [taskAllocations]);
 
 
-  // Effect to re-initialize/rebalance allocations when tasks are enabled/disabled or custom tasks added/removed
+
   useEffect(() => {
     let newAllocations = { ...taskAllocations };
     let currentlyActiveKeys = [];
 
-    // Process enabled tasks
+
     Object.entries(formData.enabledTasks).forEach(([key, taskData]) => {
-      // Task is active if enabled AND has at least one valid link
+
       const hasValidLinks = taskData.links.filter(link => link.trim() !== "").length > 0;
       if (taskData.enabled && hasValidLinks) {
         if (!(key in newAllocations)) {
@@ -365,9 +365,9 @@ const AddProjectForm = () => {
       }
     });
 
-    // Process custom tasks
+
     formData.customTasks.forEach(task => {
-      // Custom task is active if its rate is valid AND it has a name
+
       const isValidCustomTask = task.rate >= CUSTOM_TASK_MIN_RATE && task.name.trim() !== "";
       if (isValidCustomTask) {
         if (!(task.id in newAllocations)) {
@@ -381,40 +381,40 @@ const AddProjectForm = () => {
       }
     });
 
-    // If no tasks are active, clear all allocations
+
     if (currentlyActiveKeys.length === 0) {
         setTaskAllocations({});
         return;
     }
 
-    // Calculate current sum of allocations for active tasks
+
     const sumOfCurrentAllocations = currentlyActiveKeys.reduce((sum, key) => sum + (newAllocations[key] || 0), 0);
 
-    // If initial sum is 0 (or all are removed and re-added), distribute evenly
+
     if (sumOfCurrentAllocations === 0) {
       const defaultPercentage = parseFloat((100 / currentlyActiveKeys.length).toFixed(1));
       currentlyActiveKeys.forEach(key => {
         newAllocations[key] = defaultPercentage;
       });
-      // Adjust last one to make exactly 100 due totoFixed
+
       if (currentlyActiveKeys.length > 0) {
         const currentSum = currentlyActiveKeys.reduce((sum, key) => sum + newAllocations[key], 0);
         newAllocations[currentlyActiveKeys[currentlyActiveKeys.length - 1]] += (100 - currentSum);
       }
     } else {
-      // Rebalance existing allocations to sum to 100%
+
       const factor = 100 / sumOfCurrentAllocations;
       currentlyActiveKeys.forEach(key => {
         newAllocations[key] = parseFloat((newAllocations[key] * factor).toFixed(1));
       });
-      // Final adjustment for rounding errors
+
       const finalSum = currentlyActiveKeys.reduce((sum, key) => sum + newAllocations[key], 0);
       if (finalSum !== 100 && currentlyActiveKeys.length > 0) {
         newAllocations[currentlyActiveKeys[currentlyActiveKeys.length - 1]] = parseFloat((newAllocations[currentlyActiveKeys[currentlyActiveKeys.length - 1]] + (100 - finalSum)).toFixed(1));
       }
     }
 
-    // Ensure no negative allocations after rebalancing
+
     Object.keys(newAllocations).forEach(key => {
       if (newAllocations[key] < 0) newAllocations[key] = 0;
     });
@@ -452,7 +452,7 @@ const AddProjectForm = () => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      // If there are errors, move to the step where the first error occurs
+
       if (newErrors.projectName || newErrors.budget || newErrors.numberOfUsers || newErrors.bannerImage) {
         setCurrentStep(1);
       } else if (newErrors.noTasks) {
@@ -464,8 +464,8 @@ const AddProjectForm = () => {
     }
 
     const { activeTasks, totalEngagements, totalHypotheticalCost } = getCampaignSummary();
-    console.log("Form data before sending:", formData);
-    // Prepare FormData for submission
+    
+
     const campaignData = new FormData();
     campaignData.append('name', formData.projectName);
     campaignData.append('budget', parseFloat(formData.budget));
@@ -475,10 +475,10 @@ const AddProjectForm = () => {
     campaignData.append('totalEngagementsExpected', Math.round(totalEngagements)); // Ensure numbers are sent correctly
     campaignData.append('estimatedTotalCampaignCost', totalHypotheticalCost.toFixed(2)); // Use toFixed for currency
 
-    // Construct the campaignTasks array based on the schema
+
     const finalCampaignTasks = [];
 
-    // Add enabled tasks
+
     Object.entries(formData.enabledTasks).forEach(([taskKey, taskData]) => {
         const validLinks = taskData.links.filter(link => link.trim() !== "");
         if (taskData.enabled && validLinks.length > 0) {
@@ -490,7 +490,7 @@ const AddProjectForm = () => {
                     baseRate: BASE_TASK_RATES[taskKey],
                     instances: validLinks.length,
                     allocationPercentage: taskAllocations[taskKey] || 0,
-                    // Calculate targetParticipants based on allocated percentage and total users
+
                     targetParticipants: Math.round(((taskAllocations[taskKey] || 0) / 100) * formData.numberOfUsers),
                     currentParticipants: 0, // Always start at 0
                     links: validLinks.map((link, index) => ({
@@ -514,7 +514,7 @@ const AddProjectForm = () => {
         }
     });
 
-    // Add custom tasks
+
     formData.customTasks.forEach(customTask => {
         if (customTask.rate >= CUSTOM_TASK_MIN_RATE && customTask.name.trim() !== "") {
             const baseCustomTask = activeTasks.find(task => task.key === customTask.id);
@@ -576,7 +576,7 @@ const AddProjectForm = () => {
       }
 
       const createdCampaign = await response.json();
-      console.log("Campaign created successfully:", createdCampaign);
+      
       navigate("/creator-dashboard");
     } catch (error) {
       console.error("Error submitting campaign:", error.message);
@@ -585,7 +585,7 @@ const AddProjectForm = () => {
   };
 
 
-  // --- Render Functions (Using standard CSS classes) ---
+
 
   const renderStep1 = () => (
     <>
@@ -757,7 +757,7 @@ const AddProjectForm = () => {
               className="form-textarea custom-task-description-input"
               rows="2"
             ></textarea>
-            {/* Added input for a single link for custom tasks */}
+            {}
             <input
               type="url" // Use type="url"
               value={task.link || ''}
@@ -936,7 +936,7 @@ const AddProjectForm = () => {
           )}
         </div>
 
-        {errors.allocation && <p className="error-message">{errors.allocation}</p>} {/* Display allocation error if any */}
+        {errors.allocation && <p className="error-message">{errors.allocation}</p>} {}
 
 
         <div className="form-navigation-buttons">

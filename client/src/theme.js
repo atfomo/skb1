@@ -1,9 +1,9 @@
-// client/src/theme.js
+
 import { createTheme } from '@mui/material/styles';
 
 const customTheme = createTheme({
   palette: {
-    // --- Use STATIC HEX VALUES here ---
+
     primary: {
       main: '#FF8C00',   // --primary-orange
       light: '#FFA500', // --accent-orange-light

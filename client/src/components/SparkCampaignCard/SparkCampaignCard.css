@@ -1,91 +1,91 @@
-/* General Card Styling */
+
 .spark-campaign-card {
     position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: 16px; /* Slightly more rounded, consistent */
+    border-radius: 16px; 
     overflow: hidden;
     margin: 20px;
-    width: 360px; /* Consistent width */
-    min-height: 500px; /* Adjusted height for content density */
-    background-color: var(--background-dark-card); /* Using a softer dark background for card */
-    color: var(--text-primary-light); /* Light text for contrast */
-    box-shadow: 0 15px 40px var(--shadow-dark-deep); /* Stronger shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Added border-color transition */
-    text-decoration: none; /* Remove underline from Link */
-    border: 1px solid var(--border-dark-subtle); /* Subtle initial border */
+    width: 360px; 
+    min-height: 500px; 
+    background-color: var(--background-dark-card); 
+    color: var(--text-primary-light); 
+    box-shadow: 0 15px 40px var(--shadow-dark-deep); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; 
+    text-decoration: none; 
+    border: 1px solid var(--border-dark-subtle); 
 }
 
 .spark-campaign-card:hover {
-    transform: translateY(-8px); /* More pronounced lift */
-    box-shadow: 0 25px 60px var(--shadow-dark-deep); /* Even stronger shadow on hover */
-    border-color: #3a3a3a; /* Vibrant red-orange highlight border on hover */
+    transform: translateY(-8px); 
+    box-shadow: 0 25px 60px var(--shadow-dark-deep); 
+    border-color: #3a3a3a; 
 }
 
-/* NEW: Minimalistic Active Status at Top Right */
+
 .spark-campaign-top-status {
     position: absolute;
-    top: 10px; /* Adjusted to be slightly more spaced from the edge */
-    right: 10px; /* Adjusted to be slightly more spaced from the edge */
-    z-index: 3; /* Ensure it's above other background elements */
-    padding: 6px 12px; /* Smaller padding for a minimalistic look */
-    border-radius: 20px; /* Pill shape */
-    font-size: 0.75em; /* Smaller font size */
+    top: 10px; 
+    right: 10px; 
+    z-index: 3; 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    font-size: 0.75em; 
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
     align-items: center;
-    gap: 6px; /* Space between icon and text */
-    /* No shadow, no animation for a truly minimalistic style */
+    gap: 6px; 
+    
 }
 
-/* Specific styling for the 'active' state of the minimalistic status */
+
 .spark-campaign-top-status.status-active-minimal {
-    background-color: rgba(0, 230, 118, 0.1); /* Very subtle transparent green background */
-    color: var(--success-color); /* Green text */
-    border: 1px solid rgba(0, 230, 118, 0.3); /* Subtle green border */
+    background-color: rgba(0, 230, 118, 0.1); 
+    color: var(--success-color); 
+    border: 1px solid rgba(0, 230, 118, 0.3); 
 }
 
 .spark-campaign-top-status.status-active-minimal .status-indicator-icon {
-    color: var(--success-color); /* Green dot icon */
-    font-size: 0.7em; /* Small dot icon size */
+    color: var(--success-color); 
+    font-size: 0.7em; 
 }
 
 
-/* Background Overlay for banner image */
+
 .spark-card-background-overlay {
     position: absolute;
     top: 0;
     left: 0;
-    width: 360px; /* Ensure fixed width for overlay */
+    width: 360px; 
     height: 280px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: brightness(0.5) saturate(1.2); /* Darken and slightly desaturate for richer color */
+    filter: brightness(0.5) saturate(1.2); 
     z-index: 0;
-    border-radius: 16px 16px 0 0; /* Match card border radius */
+    border-radius: 16px 16px 0 0; 
 }
 
-/* Campaign Alert (e.g., "LIVE NOW!") - Top Right */
+
 .spark-campaign-alert {
     position: absolute;
-    top: 18px; /* Adjusted position */
+    top: 18px; 
     right: 18px;
     z-index: 3;
-    background-color: var(--brand-red-orange); /* Vibrant red-orange for alert */
-    color: var(--background-dark-deep); /* Dark text for contrast */
-    padding: 8px 15px; /* Larger padding */
-    border-radius: 25px; /* More pill-shaped */
+    background-color: var(--brand-red-orange); 
+    color: var(--background-dark-deep); 
+    padding: 8px 15px; 
+    border-radius: 25px; 
     font-size: 0.85em;
-    font-weight: 800; /* Bolder */
+    font-weight: 800; 
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(236, 23, 8, 0.4); /* Shadow from brand red-orange */
-    animation: pulse 1.5s infinite alternate ease-in-out; /* Subtle pulse animation */
+    box-shadow: 0 4px 15px rgba(236, 23, 8, 0.4); 
+    animation: pulse 1.5s infinite alternate ease-in-out; 
 }
 
 @keyframes pulse {
@@ -101,11 +101,11 @@
 
 .spark-campaign-alert .alert-icon {
     margin-right: 7px;
-    color: var(--background-dark-deep); /* Dark text color for icon to contrast with red-orange */
+    color: var(--background-dark-deep); 
     font-size: 1em;
 }
 
-/* Header Top Section (Logo, Name, Brief Hook, Status, Hashtags) */
+
 .spark-card-header-top {
     position: relative;
     padding-bottom: 210px;
@@ -113,16 +113,16 @@
     display: flex;
     align-items: flex-start;
     padding-left: 10px;
-    padding-top: 10px; /* Space for the banner above and pulled-up frosted block */
+    padding-top: 10px; 
 }
 
 .spark-card-logo {
-    width: 30px; /* Slightly larger logo */
+    width: 30px; 
     height: 30px;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.2);
     object-fit: cover;
-    margin-right: 9px; /* More spacing */
+    margin-right: 9px; 
     flex-shrink: 0;
 }
 
@@ -135,22 +135,22 @@
 .spark-card-name {
     font-size: 1.2em;
     font-weight: 700;
-    /* Using your brand gradient for the campaign name for a signature look */
+    
     background-image: linear-gradient(45deg, #eeeeee, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for browsers not supporting text clipping */
+    color: transparent; 
     margin: 0;
     text-align: left;
     width: 100%;
     padding-top: 2px;
 }
 
-/* Brief Hook */
+
 .spark-card-brief-hook {
     font-size: 0.95em;
-    color: var(--text-secondary-light); /* Using secondary light text for descriptions */
+    color: var(--text-secondary-light); 
     margin-bottom: 12px;
     line-height: 1.4;
     max-height: 4.2em;
@@ -161,7 +161,7 @@
     -webkit-box-orient: vertical;
 }
 
-/* Status Tag */
+
 .spark-campaign-status-tag {
     display: inline-flex;
     align-items: center;
@@ -178,32 +178,32 @@
     font-size: 0.9em;
 }
 
-/* Status colors - using the functional state colors for consistency */
+
 .status-active {
-    background-color: rgba(76, 175, 80, 0.25); /* Adjusted to success-color */
+    background-color: rgba(76, 175, 80, 0.25); 
     color: var(--success-color);
     border: 1px solid var(--success-color);
 }
 
 .status-pending, .status-upcoming {
-    background-color: rgba(255, 193, 7, 0.25); /* Adjusted to warning-color */
+    background-color: rgba(255, 193, 7, 0.25); 
     color: var(--warning-color);
     border: 1px solid var(--warning-color);
 }
 
 .status-completed {
-    background-color: rgba(169, 169, 169, 0.25); /* Adjusted to secondary text color or similar neutral */
+    background-color: rgba(169, 169, 169, 0.25); 
     color: var(--text-secondary-light);
     border: 1px solid var(--text-dimmed-light);
 }
 
 .status-unknown {
-    background-color: rgba(220, 53, 69, 0.25); /* Adjusted to error-color */
+    background-color: rgba(220, 53, 69, 0.25); 
     color: var(--error-color);
     border: 1px solid var(--error-color);
 }
 
-/* Hashtags */
+
 .spark-card-tags-top {
     display: flex;
     flex-wrap: wrap;
@@ -214,58 +214,58 @@
 .spark-card-tag {
     display: inline-flex;
     align-items: center;
-    background-color: var(--background-dark-glass); /* Using glass for tags */
-    backdrop-filter: blur(8px); /* Stronger blur */
+    background-color: var(--background-dark-glass); 
+    backdrop-filter: blur(8px); 
     -webkit-backdrop-filter: blur(8px);
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.7em;
     font-weight: 600;
-    color: var(--text-light-secondary); /* Using secondary text for tags */
-    border: 1px solid var(--border-dark-subtle); /* Subtle border */
-    box-shadow: 0 2px 10px var(--shadow-dark-light); /* Light shadow for depth */
+    color: var(--text-light-secondary); 
+    border: 1px solid var(--border-dark-subtle); 
+    box-shadow: 0 2px 10px var(--shadow-dark-light); 
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .spark-card-tag:hover {
-    background-color: rgba(236, 23, 8, 0.2); /* Red-orange tint on hover */
-    border-color: rgba(236, 23, 8, 0.4); /* Red-orange border on hover */
+    background-color: rgba(236, 23, 8, 0.2); 
+    border-color: rgba(236, 23, 8, 0.4); 
 }
 
 .spark-card-tag .tag-icon {
-    color: var(--brand-peach-orange); /* Peach-orange for tag icon */
+    color: var(--brand-peach-orange); 
     font-size: 0.85em;
 }
 
-/* Frosted Glass Details Block */
+
 .spark-card-details-frosted-block {
     position: relative;
     z-index: 2;
-    background: var(--background-dark-glass); /* Using glass effect variable */
-    backdrop-filter: blur(15px); /* Stronger blur */
+    background: var(--background-dark-glass); 
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid var(--border-dark-subtle); /* More defined border, using subtle border var */
-    border-radius: 30px 30px 16px 16px; /* More rounded top corners, match card bottom */
-    padding: 25px; /* Increased padding */
+    border-top: 1px solid var(--border-dark-subtle); 
+    border-radius: 30px 30px 16px 16px; 
+    padding: 25px; 
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), /* Inner shadow for depth */
-                0 -8px 25px var(--shadow-dark-medium); /* Outer shadow for lift */
+    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), 
+                0 -8px 25px var(--shadow-dark-medium); 
 }
 
-/* EARN POTENTIAL - HIGHLIGHTED */
+
 .spark-card-earn-potential-highlight {
-    /* Using your brand gradient for the earn potential highlight */
-    background: linear-gradient(6deg, #E64A19, #ff3c00); /* Vibrant orange gradient */
-    color: var(--background-dark-deep); /* Dark text on bright background */
-    padding: 20px 25px; /* Generous padding */
+    
+    background: linear-gradient(6deg, #E64A19, #ff3c00); 
+    color: var(--background-dark-deep); 
+    padding: 20px 25px; 
     border-radius: 12px;
     text-align: center;
     margin-bottom: 25px;
-    box-shadow: 0 8px 25px rgba(236, 23, 8, 0.5); /* Stronger red-orange glow effect */
-    animation: floatGlow 3s infinite ease-in-out; /* Subtle floating glow */
+    box-shadow: 0 8px 25px rgba(236, 23, 8, 0.5); 
+    animation: floatGlow 3s infinite ease-in-out; 
 }
 
 @keyframes floatGlow {
@@ -280,52 +280,52 @@
     margin-bottom: 5px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #e1e1e1; /* Dark text on bright background */
+    color: #e1e1e1; 
 }
 
 .earn-potential-value {
-    font-size: 2.8em; /* HUGE size for value */
-    font-weight: 900; /* Extra bold */
+    font-size: 2.8em; 
+    font-weight: 900; 
     line-height: 1;
     margin-bottom: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #e1e1e1; /* Darkest text for value */
+    color: #e1e1e1; 
 }
 
 .earn-potential-value .earn-potential-icon {
-    font-size: 0.8em; /* Slightly smaller icon relative to text */
-    color: #e1e1e1; /* Icon color to match text */
+    font-size: 0.8em; 
+    color: #e1e1e1; 
 }
 
 .earn-potential-value.no-earning-potential {
-    color: #e1e1e1; /* Grey out when no potential */
+    color: #e1e1e1; 
 }
 
 .typical-earnings-text {
     font-size: 0.85em;
-    color: #e1e1e1; /* Dark text on bright background */
+    color: #e1e1e1; 
     margin-top: 5px;
 }
 
 .typical-earnings-text.no-earning-potential-msg {
-    color: #e1e1e1; /* Consistent grey for info messages */
+    color: #e1e1e1; 
 }
 
 
-/* Key Stats (Reward Pool, Time, Participants) */
+
 .spark-card-key-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Flexible grid */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
     gap: 15px;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-dark-subtle); /* Subtle separator */
+    border-bottom: 1px solid var(--border-dark-subtle); 
 }
 
 .spark-card-stat-item {
-    background-color: var(--background-dark-secondary); /* Slightly lighter dark background for stat items */
+    background-color: var(--background-dark-secondary); 
     padding: 12px 15px;
     border-radius: 10px;
     border: 1px solid var(--border-dark-subtle);
@@ -334,17 +334,17 @@
 
 .stats-label {
     font-size: 0.75em;
-    color: var(--text-secondary-light); /* Secondary light text for labels */
+    color: var(--text-secondary-light); 
     margin-bottom: 6px;
     text-transform: uppercase;
-    font-weight: 600; /* Bolder label */
+    font-weight: 600; 
     letter-spacing: 0.3px;
 }
 
 .stats-value {
-    font-size: 1.2em; /* Larger values */
+    font-size: 1.2em; 
     font-weight: 700;
-    color: var(--text-primary-light); /* Primary light text for values */
+    color: var(--text-primary-light); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -352,20 +352,20 @@
 
 .stats-value svg {
     margin-right: 6px;
-    color: #E64A19; /* Peach-orange for general stats icons */
+    color: #E64A19; 
     font-size: 0.9em;
 }
 
 .stats-value-time svg {
-    color: #E64A19; /* Stronger red-orange for clock icon (implies urgency) */
+    color: #E64A19; 
 }
 
-/* Reward Pool Progress Bar */
+
 .reward-pool-progress-bar {
     width: 100%;
-    height: 10px; /* Kept the slightly thicker bar from the previous iteration */
-    background-color: var(--background-dark-secondary); /* Use secondary dark for empty bar */
-    border-radius: 5px; /* Match thickness */
+    height: 10px; 
+    background-color: var(--background-dark-secondary); 
+    border-radius: 5px; 
     margin-top: 10px;
     position: relative;
     overflow: hidden;
@@ -374,30 +374,30 @@
 
 .progress-fill {
     height: 100%;
-    /* Using your brand gradient for the progress fill */
+    
     background: linear-gradient(90deg, #E64A19, #ff3c00);
     border-radius: 5px;
     transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 0 10px rgba(236, 23, 8, 0.5); /* Shadow from brand red-orange */
+    box-shadow: 0 0 10px rgba(236, 23, 8, 0.5); 
 }
 
 .progress-text {
     position: absolute;
-    width: 100%; /* Ensure it spans the full width */
+    width: 100%; 
     text-align: center;
-    top: 50%; /* Position top edge at 50% of parent's height */
-    right: -35%; /* This might need adjustment depending on how it's used with `width` and its content */
-    transform: translateY(-50%); /* Move up by half of its own height to truly center */
+    top: 50%; 
+    right: -35%; 
+    transform: translateY(-50%); 
     font-size: 0.6em;
     font-weight: 200;
-    color: var(--text-primary-light); /* Light text for progress */
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Slightly darker shadow for text contrast */
+    color: var(--text-primary-light); 
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); 
     z-index: 1;
 }
-/* Join Campaign Button (Call to Action) */
+
 .spark-card-links-section {
     padding-top: 20px;
-    border-top: 1px solid var(--border-dark-subtle); /* Using subtle border */
+    border-top: 1px solid var(--border-dark-subtle); 
     margin-top: auto;
     display: flex;
     justify-content: center;
@@ -406,24 +406,24 @@
 .spark-card-join-button {
     display: inline-flex;
     align-items: center;
-    /* Using your brand gradient for the main call to action button */
-    background: linear-gradient(90deg, var(--brand-red-orange), var(--brand-peach-orange)); /* Red-orange gradient button */
-    color: var(--background-dark-deep); /* Dark text on bright background */
+    
+    background: linear-gradient(90deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--background-dark-deep); 
     padding: 15px 30px;
     border-radius: 35px;
     font-size: 1.2em;
     font-weight: 800;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(236, 23, 8, 0.4); /* Stronger red-orange shadow */
+    box-shadow: 0 8px 20px rgba(236, 23, 8, 0.4); 
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .spark-card-join-button:hover {
-    background: linear-gradient(90deg, var(--brand-peach-orange), var(--brand-red-orange)); /* Slightly shifted gradient on hover */
+    background: linear-gradient(90deg, var(--brand-peach-orange), var(--brand-red-orange)); 
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(255, 88, 88, 0.6); /* Shadow from peach-orange on hover */
+    box-shadow: 0 12px 25px rgba(255, 88, 88, 0.6); 
 }
 
 .spark-card-join-button .btn-icon-right {
@@ -432,17 +432,17 @@
 }
 
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
     .spark-campaign-card {
         width: 100%;
         max-width: 360px;
         margin: 15px auto;
-        min-height: auto; /* Allow height to adjust on mobile */
+        min-height: auto; 
     }
 
     .spark-card-background-overlay {
-        width: 100%; /* Adjust overlay to fill width on mobile */
+        width: 100%; 
     }
 
     .spark-card-header-top {
@@ -463,7 +463,7 @@
     }
 
     .spark-card-key-stats {
-        grid-template-columns: 1fr; /* Stack stats on smaller screens */
+        grid-template-columns: 1fr; 
     }
 
     .spark-card-join-button {

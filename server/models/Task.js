@@ -1,4 +1,4 @@
-// backend/models/Task.js
+
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
@@ -53,7 +53,7 @@ const TaskSchema = new mongoose.Schema({
     }],
 }, { _id: true }); // Ensure subdocuments get their own _id, important for distinguishing entries in completedBy
 
-// Update the unique index for combined tasks:
+
 TaskSchema.index({ dripCampaign: 1, tweetId: 1, actionType: 1 }, { unique: true });
 
 const Task = mongoose.model('Task', TaskSchema);

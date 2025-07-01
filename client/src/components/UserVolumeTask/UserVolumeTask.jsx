@@ -1,12 +1,12 @@
-// client/src/pages/UserVolumeTask/UserVolumeTask.jsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from '../../UserContext';
 import './UserVolumeTask.css'; // Link to the new CSS file
 import { API_BASE_URL } from '../../config';
-// --- Configuration Constants ---
-// const API_BASE_URL = "http://localhost:5000";
+
+
 
 const DEX_LINKS = {
     'Raydium': 'https://raydium.io/swap/',
@@ -31,22 +31,22 @@ const UserVolumeTask = () => {
     const [totalLoopsCompletedByAllUsers, setTotalLoopsCompletedByAllUsers] = useState(0);
     const [currentUsersParticipating, setCurrentUsersParticipating] = useState(0);
 
-    console.log("[UserVolumeTask] Component mounted.");
-    console.log("[UserVolumeTask] campaignId from URL params:", campaignId);
-    console.log("[UserVolumeTask] User from context (partial):", user ? { _id: user._id, email: user.email } : 'N/A');
-    console.log("[UserVolumeTask] Token from context (first 10 chars):", token ? token.substring(0, 10) + '...' : 'N/A');
-    console.log("[UserVolumeTask] UserContext loading status:", loadingUserContext);
+    
+    
+    
+    
+    
 
-    // Function to fetch campaign status including user-specific progress
+
     const fetchCampaignStatus = useCallback(async () => {
-        console.log("[fetchCampaignStatus] Called.");
+        
         if (!campaignId || !token) {
             console.warn("[fetchCampaignStatus] Skipping fetch: campaignId or token is missing. This should ideally be caught by useEffect.", { campaignId, tokenAvailable: !!token });
             return;
         }
 
         try {
-            console.log(`[fetchCampaignStatus] Attempting to fetch campaign status for ID: ${campaignId}`);
+            
             const response = await axios.get(`${API_BASE_URL}/api/boost-volume/campaigns/${campaignId}/status`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const UserVolumeTask = () => {
             });
 
             const { campaignDetails: backendCampaign, userProgress: backendUserProgress } = response.data;
-            console.log("[fetchCampaignStatus] Fetched campaign and user progress details:", response.data);
+            
 
             const mappedDetails = {
                 campaignName: backendCampaign.campaignName,
@@ -80,9 +80,9 @@ const UserVolumeTask = () => {
                 setUserWalletInput(backendUserProgress.associatedWallet || '');
                 setCompletedLoops(backendUserProgress.completedLoops); // Set VERIFIED loops
                 setPendingLoops(backendUserProgress.pendingLoops || 0); // Set PENDING loops
-                console.log("[fetchCampaignStatus] User progress updated:", backendUserProgress);
+                
             } else {
-                console.log("[fetchCampaignStatus] No user progress found for this campaign.");
+                
                 setCompletedLoops(0);
                 setPendingLoops(0);
             }
@@ -99,19 +99,19 @@ const UserVolumeTask = () => {
                 setMessage(`Error: ${err.response?.data?.message || err.message || 'Failed to load campaign data.'}`);
             }
         } finally {
-            console.log("[fetchCampaignStatus] Finished loading campaign details.");
+            
             setLoadingComponentData(false);
         }
     }, [campaignId, token]);
 
-    // --- useEffect for Initial Data Fetch ---
+
     useEffect(() => {
-        console.log("[useEffect] Running effect. campaignId:", campaignId, "user:", !!user, "token:", !!token, "loadingUserContext:", loadingUserContext);
+        
 
         if (loadingUserContext) {
             setLoadingComponentData(true);
             setMessage('Initializing user session...');
-            console.log("[useEffect] UserContext still loading, waiting...");
+            
             return;
         }
 
@@ -130,14 +130,14 @@ const UserVolumeTask = () => {
         }
     }, [campaignId, user, token, loadingUserContext, fetchCampaignStatus]);
 
-    // --- Helper for Solana Address Validation ---
+
     const isValidSolanaAddress = (address) => {
         return typeof address === 'string' && address.length >= 32 && address.length <= 44;
     };
 
-    // --- Handler for Saving Wallet Address ---
+
     const handleSaveWallet = async () => {
-        console.log("[handleSaveWallet] Called with input:", userWalletInput);
+        
         if (!userWalletInput.trim()) {
             setMessage('Please enter your Solana wallet address for this BoostVolume task.');
             return;
@@ -153,7 +153,7 @@ const UserVolumeTask = () => {
 
         setIsSubmitting(true);
         setMessage('Saving your wallet address...');
-        console.log("[handleSaveWallet] Sending participation request...");
+        
 
         try {
             const response = await axios.post(`${API_BASE_URL}/api/boost-volume/participate`,
@@ -166,11 +166,11 @@ const UserVolumeTask = () => {
                 }
             );
 
-            console.log("[handleSaveWallet] Participate response:", response.data);
+            
             setAssociatedWallet(userWalletInput);
             setMessage(response.data.message || 'Your wallet address has been saved successfully for this BoostVolume task!');
 
-            // Update user's loop counts from response, or re-fetch for comprehensive update
+
             setCompletedLoops(response.data.completedLoops || 0);
             setPendingLoops(response.data.pendingLoops || 0);
 
@@ -179,13 +179,13 @@ const UserVolumeTask = () => {
             setMessage(`Failed to save wallet: ${error.response?.data?.message || error.message || 'An error occurred.'}`);
         } finally {
             setIsSubmitting(false);
-            console.log("[handleSaveWallet] Finished saving wallet.");
+            
         }
     };
 
-    // --- Handler for Marking a Loop as Done ---
+
     const handleMarkAsDone = async () => {
-        console.log("[handleMarkAsDone] Called.");
+        
         if (!associatedWallet) {
             setMessage('Please save your wallet address first.');
             console.warn("[handleMarkAsDone] No associated wallet.");
@@ -211,7 +211,7 @@ const UserVolumeTask = () => {
 
         setIsSubmitting(true);
         setMessage('Marking loop as done. Your wallet activity will be monitored for verification...');
-        console.log("[handleMarkAsDone] Sending mark-done request...");
+        
 
         try {
             const response = await axios.post(`${API_BASE_URL}/api/boost-volume/mark-done`,
@@ -224,13 +224,13 @@ const UserVolumeTask = () => {
                 }
             );
 
-            console.log("[handleMarkAsDone] Mark loop done response:", response.data);
+            
             setMessage(response.data.message || 'Your BoostVolume activity is being verified. Please check back shortly for updates.');
 
-            // Optional: Add a 2-second delay for smoother UX before updating counts
+
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // Update frontend state with the *actual* verified and pending counts from the response
+
             setCompletedLoops(response.data.completedLoops || 0);
             setPendingLoops(response.data.pendingLoops || 0);
 
@@ -239,13 +239,13 @@ const UserVolumeTask = () => {
             setMessage(`Failed to mark BoostVolume loop as done: ${error.response?.data?.message || error.message || 'An error occurred.'}`);
         } finally {
             setIsSubmitting(false);
-            console.log("[handleMarkAsDone] Finished marking loop as done.");
+            
         }
     };
 
-    // --- Conditional Rendering for Loading and Errors ---
+
     if (loadingUserContext || loadingComponentData) {
-        console.log("[Render] Still loading (UserContext or Component Data).");
+        
         return (
             <div className="user-volume-loading-overlay">
                 <div className="loading-spinner"></div>
@@ -255,16 +255,16 @@ const UserVolumeTask = () => {
     }
 
     if (!campaignDetails) {
-        console.log("[Render] No campaign details. Displaying error message.");
+        
         return (
             <div className="user-volume-error-message">
                 BoostVolume campaign details could not be loaded. Please ensure the campaign ID is valid or you are logged in.
-                {message && <p>{message}</p>} {/* Display specific error message if available */}
+                {message && <p>{message}</p>} {}
             </div>
         );
     }
 
-    // --- Derived State for Rendering ---
+
     const totalUserSubmittedLoops = completedLoops + pendingLoops; // Sum of verified and pending
     const loopsRemainingForUser = campaignDetails.loopsPerUser - totalUserSubmittedLoops; // How many more the user can do
     const canMarkMoreDoneByUser = loopsRemainingForUser > 0;
@@ -285,10 +285,10 @@ const UserVolumeTask = () => {
         currentUsersParticipating
     });
 
-    // --- Main Component Render ---
+
     return (
-        <div className="user-volume-page-wrapper"> {/* Main wrapper for the page */}
-            <div className="user-task-container"> {/* Card-like container for the content */}
+        <div className="user-volume-page-wrapper"> {}
+            <div className="user-task-container"> {}
                 <h2 className="task-title">Participate in: {campaignDetails.campaignName}</h2>
                 <p className="task-subtitle">Help boost volume for {campaignDetails.tokenAddress.substring(0, 6)}...{campaignDetails.tokenAddress.slice(-4)} on Solana via <strong className="highlight-text">BoostVolume</strong>!</p>
 

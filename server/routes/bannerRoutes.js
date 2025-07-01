@@ -5,7 +5,7 @@ const authenticateJWT = require('../middleware/authenticateJWT'); // Keep this f
 const multer = require('multer');
 const cloudinary = require('../utils/cloudinaryConfig');
 
-// --- Multer Storage Configuration for Banners (Memory Storage for Cloudinary) ---
+
 const bannerStorage = multer.memoryStorage();
 const uploadBanner = multer({
     storage: bannerStorage,
@@ -23,15 +23,15 @@ const uploadBanner = multer({
 });
 
 
-// --- Public Route: Get all active banners (for frontend display) ---
-// This route does NOT require authentication.
-// I am keeping '/public/banners' as per your original frontend request.
-// The key fix here is REMOVING authenticateJWT.
+
+
+
+
 router.get('/public/banners', async (req, res) => { // <-- FIXED: Removed 'authenticateJWT'
     try {
-        console.log('Attempting to fetch public banners...'); // Add diagnostic log
+
         const banners = await Banner.find({ isActive: true }).sort({ order: 1, createdAt: 1 });
-        console.log(`Fetched ${banners.length} active banners.`); // Add diagnostic log
+
         res.status(200).json(banners);
     } catch (error) {
         console.error("Error fetching banners in public route:", error); // Specific log
@@ -39,10 +39,10 @@ router.get('/public/banners', async (req, res) => { // <-- FIXED: Removed 'authe
     }
 });
 
-// --- Admin Routes (require authentication) ---
-// These routes correctly retain 'authenticateJWT'
 
-// Get all banners (including inactive, for admin panel)
+
+
+
 router.get('/admin/banners', authenticateJWT, async (req, res) => {
     try {
         const banners = await Banner.find().sort({ order: 1, createdAt: 1 });
@@ -53,7 +53,7 @@ router.get('/admin/banners', authenticateJWT, async (req, res) => {
     }
 });
 
-// Create a new banner (MODIFIED FOR CLOUDINARY)
+
 router.post('/admin/banners', authenticateJWT, uploadBanner.single('bannerImage'), async (req, res) => {
     try {
         if (!req.file) {
@@ -101,7 +101,7 @@ router.post('/admin/banners', authenticateJWT, uploadBanner.single('bannerImage'
     }
 });
 
-// Update an existing banner (MODIFIED FOR CLOUDINARY)
+
 router.put('/admin/banners/:id', authenticateJWT, uploadBanner.single('bannerImage'), async (req, res) => {
     try {
         const { id } = req.params;
@@ -112,7 +112,7 @@ router.put('/admin/banners/:id', authenticateJWT, uploadBanner.single('bannerIma
             return res.status(404).json({ message: 'Banner not found' });
         }
 
-        // If a new file is uploaded, upload to Cloudinary and delete old one
+
         if (req.file) {
             if (banner.publicId) {
                 try {
@@ -143,7 +143,7 @@ router.put('/admin/banners/:id', authenticateJWT, uploadBanner.single('bannerIma
             banner.publicId = cloudinaryResult.public_id;
         }
 
-        // Update other fields
+
         if (title) banner.title = title;
         if (link) banner.link = link;
         if (order !== undefined) banner.order = parseInt(order);
@@ -157,7 +157,7 @@ router.put('/admin/banners/:id', authenticateJWT, uploadBanner.single('bannerIma
     }
 });
 
-// Delete a banner (MODIFIED FOR CLOUDINARY)
+
 router.delete('/admin/banners/:id', authenticateJWT, async (req, res) => {
     try {
         const { id } = req.params;

@@ -1,22 +1,22 @@
-// client/src/components/RulesModal.jsx
+
 
 import React, { useState, useEffect } from 'react';
 import './RulesModal.css';
 
-// Added onAcknowledge and isMandatory to props
+
 const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
     const [activeTab, setActiveTab] = useState('general');
 
     useEffect(() => {
         if (show) {
             setActiveTab('general');
-            // Disable body scrolling when modal is open
+
             document.body.style.overflow = 'hidden';
         } else {
-            // Re-enable body scrolling when modal is closed
+
             document.body.style.overflow = 'unset';
         }
-        // Cleanup function for useEffect
+
         return () => {
             document.body.style.overflow = 'unset';
         };
@@ -26,7 +26,7 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
         return null;
     }
 
-    // Function to handle overlay click, only close if not mandatory
+
     const handleOverlayClick = () => {
         if (!isMandatory) {
             onClose();
@@ -36,7 +36,7 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
     return (
         <div className={`modal-overlay ${show ? 'show' : ''}`} onClick={handleOverlayClick}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
-                {/* Conditionally render close button */}
+                {}
                 {!isMandatory && (
                     <button className="modal-close-button" onClick={onClose}>
                         &times;
@@ -44,7 +44,7 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
                 )}
                 <h2 className="modal-title">Rules by @FOMO</h2>
 
-                {/* Tab Navigation */}
+                {}
                 <div className="rules-tabs">
                     <button
                         className={`tab-button ${activeTab === 'general' ? 'active' : ''}`}
@@ -66,7 +66,7 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
                     </button>
                 </div>
 
-                {/* Tab Content */}
+                {}
                 <div className="modal-body">
                     {activeTab === 'general' && (
                         <div className="tab-pane">
@@ -185,7 +185,7 @@ const RulesModal = ({ show, onClose, onAcknowledge, isMandatory }) => {
                     )}
                 </div>
 
-                {/* New: Acknowledge Button - Only show if mandatory */}
+                {}
                 {isMandatory && (
                     <div className="modal-footer">
                         <button className="acknowledge-button" onClick={onAcknowledge}>

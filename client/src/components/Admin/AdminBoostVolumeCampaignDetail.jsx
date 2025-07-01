@@ -1,4 +1,4 @@
-// src/components/Admin/AdminBoostVolumeCampaignDetail.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchAdminCampaigns, fetchAdminCampaignParticipations, verifyUserLoop, markUserPaid } from '../../api/adminApi';
@@ -41,7 +41,7 @@ function AdminBoostVolumeCampaignDetail() {
         }
         try {
             const result = await verifyUserLoop(participationId, signature);
-            // Update the specific participation in state
+
             setParticipations(prev => prev.map(p =>
                 p._id === participationId ? { ...p, ...result.participation } : p
             ));
@@ -121,7 +121,7 @@ function AdminBoostVolumeCampaignDetail() {
                                     </ul>
                                 )}
                             </td>
-                            <td>${p.totalEarned?.toFixed(4)}</td> {/* Display total earned */}
+                            <td>${p.totalEarned?.toFixed(4)}</td> {}
                             <td>{p.status}</td>
                             <td>
                                 {p.pendingLoops > 0 && p.status === 'active' && (
@@ -148,7 +148,7 @@ function AdminBoostVolumeCampaignDetail() {
                                 {p.status === 'awaiting_payout' && (
                                     <button onClick={() => handleMarkPaid(p._id)}>Mark Paid</button>
                                 )}
-                                {/* Add reject loop button etc. if needed */}
+                                {}
                             </td>
                         </tr>
                     ))}

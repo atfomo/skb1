@@ -1,13 +1,13 @@
-// client/src/views/Dashboard/Dashboard.jsx
+
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useUser } from "../../UserContext";
 import { useDialog } from '../../context/DialogContext';
 import './Dashboard.css';
 import RulesModal from '../../components/RulesModal';
-// import TelegramLoginButton from '../../components/TelegramLoginButton'; // REMOVE THIS IMPORT (already commented out)
 
-// --- Icon Imports ---
+
+
 import { FaTwitter, FaTelegramPlane } from 'react-icons/fa';
 import {
     IoWalletOutline,
@@ -37,19 +37,19 @@ const Dashboard = () => {
     const [payoutAmount, setPayoutAmount] = useState("");
     const [showRulesModal, setShowRulesModal] = useState(false);
 
-    // NEW STATE: For the Telegram username input
+
     const [telegramUsernameInput, setTelegramUsernameInput] = useState("");
     const [isVerifyingTelegram, setIsVerifyingTelegram] = useState(false); // New state for verification loading
 
     useEffect(() => {
-        console.log("Dashboard: Component re-rendered.");
-        console.log("Dashboard: user object from UserContext:", user);
-        console.log("Dashboard: loadingUser from UserContext:", loadingUser);
+        
+        
+        
         if (user) {
-            console.log("Dashboard: user.telegramUserId:", user.telegramUserId);
-            console.log("Dashboard: user.telegramUsername:", user.telegramUsername);
+            
+            
         } else {
-            console.log("Dashboard: User object is null. Displaying loading or login message.");
+            
         }
     }, [user, loadingUser]);
 
@@ -57,7 +57,7 @@ const Dashboard = () => {
         if (user) {
             setLocalWalletAddress(user.walletAddress || "");
             setLocalXUsername(user.xUsername || "");
-            // Initialize Telegram username input with user's linked username if available
+
             setTelegramUsernameInput(user.telegramUsername || "");
         }
     }, [user]);
@@ -71,7 +71,7 @@ const Dashboard = () => {
         }
     }, [message]);
 
-    // NEW FUNCTION: Handle the Telegram username submission and redirection
+
     const handleTelegramVerify = async () => {
         const username = telegramUsernameInput.trim();
         if (!username) {
@@ -79,12 +79,12 @@ const Dashboard = () => {
             return;
         }
 
-        // Remove the '@' if the user entered it
+
         const cleanUsername = username.startsWith('@') ? username.substring(1) : username;
 
         setIsVerifyingTelegram(true);
         try {
-            // STEP 1: Send the username to your backend to generate a verification token
+
             const response = await fetch(`${API_BASE_URL}/api/telegram/initiate-verification`, {
                 method: "POST",
                 headers: {
@@ -101,7 +101,7 @@ const Dashboard = () => {
 
             const { verificationCode, botUsername } = data;
 
-            // STEP 2: Redirect the user to the Telegram bot with the verification code
+
             const telegramBotLink = `https://t.me/${botUsername}?start=verify_${verificationCode}`;
 
             showConfirmDialog(
@@ -125,7 +125,7 @@ const Dashboard = () => {
     };
 
     if (user?.accountStatus === 'banned') {
-        console.log("Dashboard: User is banned. Displaying banned message.");
+        
         return (
             <div className="dashboard-message-screen banned">
                 <IoHammerOutline className="message-icon" />
@@ -139,7 +139,7 @@ const Dashboard = () => {
     }
 
     if (!user) {
-        console.log("Dashboard: User object is null. Displaying loading/login fallback.");
+        
         return (
             <div className="dashboard-message-screen loading">
                 <IoReloadOutline className="message-icon loading-spinner" />
@@ -203,7 +203,7 @@ const Dashboard = () => {
     };
 
     const handlePayoutRequest = async () => {
-        // Ensure user.walletAddress is available and trimmed
+
         const walletAddressToSend = user.walletAddress ? user.walletAddress.trim() : '';
 
         if (!walletAddressToSend) {
@@ -272,7 +272,7 @@ const Dashboard = () => {
             <div className="dashboard-container">
                 <h1 className="dashboard-title">User Dashboard</h1>
 
-                {/* User Profile Header */}
+                {}
                 <div className="profile-card glass-panel">
                     <div className="profile-details">
                         <img
@@ -430,7 +430,7 @@ const Dashboard = () => {
                                         </button>
                                     )}
                                 </div>
-                                {/* Optional: Add a message for successful linking, which might fade out */}
+                                {}
                                 {user.telegramUserId && !isVerifyingTelegram && (
                                     <p className="success-message"><IoCheckmarkCircle /> Account successfully linked!</p>
                                 )}

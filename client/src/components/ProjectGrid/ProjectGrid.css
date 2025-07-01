@@ -1,8 +1,8 @@
-/* client/src/components/ProjectGrid/ProjectGrid.css */
+
 
 .project-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
     gap: 30px;
     padding: 30px;
     webkit-backdrop-filter: blur(10px);
@@ -12,15 +12,15 @@
 
 .project-card {
     position: relative;
-    height: 500px; /* Fixed height for consistent cards */
+    height: 500px; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Push header to top, frosted block to bottom */
+    justify-content: space-between; 
     overflow: hidden;
     border-radius: 15px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    text-decoration: none; /* Remove underline from Link */
-    color: #fff; /* Default text color for the card */
+    text-decoration: none; 
+    color: #fff; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -30,7 +30,7 @@
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Background image and overlay for the card */
+
 .project-card-background-overlay {
     position: absolute;
     top: 0;
@@ -40,10 +40,10 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    z-index: 1; /* Below content, above card base */
-    border-radius: 15px; /* Match card radius */
+    z-index: 1; 
+    border-radius: 15px; 
 
-    /* Subtle dark overlay for text readability */
+    
     &::before {
         content: '';
         position: absolute;
@@ -52,7 +52,7 @@
         width: 100%;
         height: 100%;
         background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
-        z-index: 2; /* Between background image and content */
+        z-index: 2; 
         transition: background 0.3s ease;
     }
 }
@@ -61,20 +61,20 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.3) 100%);
 }
 
-/* Ensure all content is above the background overlay */
+
 .project-header-top,
 .project-details-frosted-block {
     position: relative;
-    z-index: 3; /* Above the overlay */
+    z-index: 3; 
 }
 
-/* --- TOP SECTION: Logo, Name, Tags --- */
+
 .project-header-top {
     display: flex;
     align-items: flex-start;
     padding: 20px;
     gap: 15px;
-    justify-content: space-between; /* Space for new badge */
+    justify-content: space-between; 
 }
 
 .project-logo {
@@ -84,7 +84,7 @@
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    flex-shrink: 0; /* Prevent logo from shrinking */
+    flex-shrink: 0; 
 }
 
 .project-info-text-top {
@@ -95,17 +95,17 @@
 }
 
 .project-name-top {
-    font-size: 1.2em; /* Made smaller */
+    font-size: 1.2em; 
     font-weight: 700;
     background-image: linear-gradient(45deg, #FF6F00, #FFBB00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for non-webkit browsers */
+    color: transparent; 
     text-shadow: 0 0 8px rgba(255, 110, 0, 0.2);
-    margin: 0; /* Ensures no default margin */
-    text-align: left; /* Explicitly align to the left */
-    width: 100%; /* Ensure it takes full available width to justify text-align */
+    margin: 0; 
+    text-align: left; 
+    width: 100%; 
 }
 
 .project-tags-top {
@@ -115,7 +115,7 @@
 }
 
 .project-tag {
-    background-color: rgba(255, 255, 255, 0.15); /* Light glass background for tags */
+    background-color: rgba(255, 255, 255, 0.15); 
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     padding: 6px 12px;
@@ -131,31 +131,31 @@
 }
 
 .project-tag .tag-icon {
-    color: #00BFFF; /* Twitter blue for tag icon */
+    color: #00BFFF; 
     font-size: 0.9em;
 }
 
-/* Specific earning tags */
+
 .earning-tag-low {
-    background-color: rgba(255, 99, 71, 0.2); /* Tomato */
+    background-color: rgba(255, 99, 71, 0.2); 
     color: #FF6347;
     border-color: rgba(255, 99, 71, 0.1);
 }
 .earning-tag-medium {
-    background-color: rgba(255, 165, 0, 0.2); /* Orange */
+    background-color: rgba(255, 165, 0, 0.2); 
     color: #FFA500;
     border-color: rgba(255, 165, 0, 0.1);
 }
 .earning-tag-high {
-    background-color: rgba(60, 179, 113, 0.2); /* MediumSeaGreen */
+    background-color: rgba(60, 179, 113, 0.2); 
     color: #3CB371;
     border-color: rgba(60, 179, 113, 0.1);
 }
 
 .project-new-badge {
-    /* --- Applied Orange Gradient --- */
-    background: linear-gradient(45deg, #FF6F00, #FFBB00); /* Orange gradient */
-    /* --- End Orange Gradient --- */
+    
+    background: linear-gradient(45deg, #FF6F00, #FFBB00); 
+    
     color: #fff;
     font-size: 0.75em;
     font-weight: 700;
@@ -164,22 +164,22 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 2px 5px rgba(255, 110, 0, 0.3);
-    align-self: flex-start; /* Align to the top of the header */
+    align-self: flex-start; 
 }
 
-/* --- BOTTOM SECTION: Frosted Glass Block (Stats & Progress) --- */
+
 .project-details-frosted-block {
-    background-color: rgba(255, 255, 255, 0.1); /* Frosted glass effect */
+    background-color: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Highlight top border */
-    border-radius: 0 0 15px 15px; /* Only bottom corners rounded */
+    border-top: 1px solid rgba(255, 255, 255, 0.15); 
+    border-radius: 0 0 15px 15px; 
     padding: 20px;
     color: #fff;
-    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), /* Inner shadow for depth */
-                0 -4px 20px rgba(0, 0, 0, 0.2); /* Outer shadow for lift */
-    position: relative; /* Needed for z-index */
-    z-index: 3; /* Ensure it's above the background image overlay */
+    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), 
+                0 -4px 20px rgba(0, 0, 0, 0.2); 
+    position: relative; 
+    z-index: 3; 
 }
 
 .project-stats-block {
@@ -188,7 +188,7 @@
     align-items: center;
     margin-bottom: 20px;
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separator */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
     padding-bottom: 20px;
 }
 
@@ -211,18 +211,18 @@
 .tasks-count {
     font-size: 1.8em;
     font-weight: 700;
-    /* --- Applied Orange Gradient --- */
-    background-image: linear-gradient(45deg, #e1e1e1, #ffffff); /* Orange gradient */
+    
+    background-image: linear-gradient(45deg, #e1e1e1, #ffffff); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback */
-    /* --- End Orange Gradient --- */
-    text-shadow: 0 0 5px rgba(255, 110, 0, 0.2); /* Adjusted text shadow */
+    color: transparent; 
+    
+    text-shadow: 0 0 5px rgba(255, 110, 0, 0.2); 
     margin: 0;
 }
 
-/* Progress Bar Section */
+
 .campaign-progress-bar-wrapper {
     width: 100%;
 }
@@ -236,7 +236,7 @@
 }
 
 .progress-bar-container-sleek {
-    background-color: rgba(255, 255, 255, 0.1); /* Light glass for container */
+    background-color: rgba(255, 255, 255, 0.1); 
     border-radius: 10px;
     height: 12px;
     overflow: hidden;
@@ -247,8 +247,8 @@
 
 .progress-bar-fill-sleek {
     height: 100%;
-    width: 0; /* Will be set by JS */
-    background: linear-gradient(90deg, #E64A19, #ff3c00); /* Green gradient */
+    width: 0; 
+    background: linear-gradient(90deg, #E64A19, #ff3c00); 
     border-radius: 10px;
     transition: width 0.5s ease-in-out;
     position: absolute;
@@ -260,18 +260,18 @@
     position: absolute;
     width: 100%;
     text-align: center;
-    line-height: 12px; /* Center vertically */
+    line-height: 12px; 
     font-size: 0.75em;
     font-weight: 600;
-    color: #FFF; /* White text on progress bar */
+    color: #FFF; 
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-    z-index: 1; /* Ensure text is above fill */
+    z-index: 1; 
 }
 
 
-/* Empty state styling */
+
 .project-grid-empty-state-message {
-    background-color: rgba(28, 32, 45, 0.4); /* Consistent glass effect */
+    background-color: rgba(28, 32, 45, 0.4); 
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
@@ -285,7 +285,7 @@
 
 .project-grid-empty-state-title {
     font-size: 1.8em;
-    color: #FF6F00; /* Keeping this as solid orange for the title */
+    color: #FF6F00; 
     margin-bottom: 10px;
     font-weight: 700;
 }
@@ -295,7 +295,7 @@
     color: #B0B0B0;
 }
 
-/* --- Responsive Design --- */
+
 @media (max-width: 1200px) {
     .project-grid-container {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -315,15 +315,15 @@
 
 @media (max-width: 768px) {
     .project-grid-container {
-        grid-template-columns: 1fr; /* Single column layout on mobile */
+        grid-template-columns: 1fr; 
         padding: 20px;
         margin: 20px 10px;
     }
     .project-card {
-        height: 350px; /* Adjust height for mobile */
+        height: 350px; 
     }
     .project-header-top {
-        flex-direction: column; /* Stack logo and info */
+        flex-direction: column; 
         align-items: center;
         text-align: center;
     }
@@ -334,19 +334,19 @@
         align-items: center;
     }
     .project-tags-top {
-        justify-content: center; /* Center tags */
+        justify-content: center; 
     }
     .project-new-badge {
         position: absolute;
         top: 15px;
         right: 15px;
-        align-self: unset; /* Override flex-start */
+        align-self: unset; 
     }
     .project-details-frosted-block {
         padding: 15px;
     }
     .project-stats-block {
-        flex-direction: column; /* Stack earnings and tasks */
+        flex-direction: column; 
         gap: 15px;
         padding-bottom: 15px;
     }

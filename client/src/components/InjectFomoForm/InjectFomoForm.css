@@ -1,4 +1,4 @@
-/* client/src/components/InjectFomoForm/InjectFomoForm.css */
+
 
 
 :root {
@@ -23,48 +23,48 @@
     --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Form Container --- */
+
 .volume-generation-form {
     max-width: 800px;
     margin: 50px auto;
     padding: 40px;
-    /* Apply consistent glass panel styles */
-    background-color: rgba(17, 16, 15, 0.7); /* Matching glass-panel background */
-    backdrop-filter: blur(15px); /* Stronger blur for glass effect, matching glass-panel */
+    
+    background-color: rgba(17, 16, 15, 0.7); 
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
-    border: var(--glass-border); /* Consistent glass border */
-    border-radius: var(--border-radius-large); /* Use consistent border-radius */
-    box-shadow: var(--glass-shadow); /* Consistent glass shadow */
-    color: var(--color-text-primary); /* Use primary text color */
+    border: var(--glass-border); 
+    border-radius: var(--border-radius-large); 
+    box-shadow: var(--glass-shadow); 
+    color: var(--color-text-primary); 
     font-family: 'Inter', sans-serif;
     transition: all 0.3s ease;
     overflow: hidden;
 }
 
 .volume-generation-form:hover {
-    /* Enhance glow on hover using accent colors */
-    box-shadow: var(--glass-shadow), 0 0 30px rgba(var(--color-accent-primary-rgb), 0.15); /* rgb values for accent primary if available, else hardcode rgba */
+    
+    box-shadow: var(--glass-shadow), 0 0 30px rgba(var(--color-accent-primary-rgb), 0.15); 
     transform: translateY(-3px);
 }
 
-/* --- Titles and Subtitles --- */
+
 .form-title {
     font-size: 2.5em;
     font-weight: 700;
     text-align: center;
     margin-bottom: 10px;
-    /* Use your defined accent colors for the gradient */
+    
     background: linear-gradient(45deg, #e1e1e1, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback */
-    text-shadow: 0 2px 10px rgba(var(--color-accent-primary-rgb), 0.3); /* Orange text shadow using RGB for better control if defined */
+    color: transparent; 
+    text-shadow: 0 2px 10px rgba(var(--color-accent-primary-rgb), 0.3); 
 }
 
 .form-subtitle {
     text-align: center;
-    color: var(--color-text-secondary); /* Use secondary text color */
+    color: var(--color-text-secondary); 
     font-size: 1.1em;
     margin-bottom: 30px;
     line-height: 1.6;
@@ -72,19 +72,19 @@
 
 .form-section h3 {
     font-size: 1.6em;
-    color: var(--color-text-primary); /* Section titles in primary text color */
+    color: var(--color-text-primary); 
     margin-top: 30px;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-text-dark); /* Subtle separator using dark text color */
+    border-bottom: 1px solid var(--color-text-dark); 
 }
 
-/* --- Labels and Inputs --- */
+
 .form-label {
     display: block;
     margin-bottom: 20px;
     font-weight: 600;
-    color: var(--color-text-primary); /* Label text in primary color */
+    color: var(--color-text-primary); 
     font-size: 1em;
 }
 
@@ -114,12 +114,12 @@
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-    color: var(--color-text-dark); /* Darker placeholder text */
+    color: var(--color-text-dark); 
     opacity: 0.7;
 }
 
 .disabled-input {
-    background-color: var(--color-bg-dark); /* Even darker for disabled */
+    background-color: var(--color-bg-dark); 
     color: var(--color-text-dark);
     cursor: not-allowed;
     opacity: 0.8;
@@ -128,7 +128,7 @@
 .form-select {
     appearance: none;
     -webkit-appearance: none;
-    /* Use text-secondary for SVG fill to match overall aesthetic */
+    
     background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23A0AEC0"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>');
     background-repeat: no-repeat;
     background-position: right 15px center;
@@ -144,36 +144,36 @@
     display: block;
     margin-top: 5px;
     font-size: 0.85em;
-    color: var(--color-text-secondary); /* Hint text in secondary color */
+    color: var(--color-text-secondary); 
     line-height: 1.4;
 }
 
-/* --- Summary Box --- */
+
 .summary-box {
-    background-color: rgba(var(--color-accent-primary-rgb), 0.1); /* Light orange background using primary accent */
-    border: 1px solid var(--color-accent-primary); /* Primary Orange border */
+    background-color: rgba(var(--color-accent-primary-rgb), 0.1); 
+    border: 1px solid var(--color-accent-primary); 
     border-radius: var(--border-radius-medium);
     padding: 25px;
     margin-top: 30px;
-    box-shadow: 0 5px 20px rgba(var(--color-accent-primary-rgb), 0.2); /* Orange shadow */
+    box-shadow: 0 5px 20px rgba(var(--color-accent-primary-rgb), 0.2); 
 }
 
 .summary-box h3 {
     font-size: 1.8em;
-    color: var(--color-accent-primary); /* Primary Orange heading */
+    color: var(--color-accent-primary); 
     margin-top: 0;
     margin-bottom: 15px;
-    border-bottom: none; /* Already defined as section, no extra border */
+    border-bottom: none; 
 }
 
 .summary-box p {
     font-size: 1.1em;
-    color: var(--color-text-primary); /* Primary text for paragraphs */
+    color: var(--color-text-primary); 
     margin-bottom: 10px;
 }
 
 .summary-box p strong {
-    color: var(--color-text-primary); /* Strong text also primary */
+    color: var(--color-text-primary); 
 }
 
 .summary-box .total-cost {
@@ -181,27 +181,27 @@
     font-weight: 700;
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px dashed var(--color-text-dark); /* Dashed border using dark text color */
-    color: var(--color-accent-secondary); /* Secondary Orange for total cost */
+    border-top: 1px dashed var(--color-text-dark); 
+    color: var(--color-accent-secondary); 
 }
 
-/* --- Disclaimers --- */
+
 .disclaimers {
     margin-top: 40px;
     padding: 20px;
     padding-left: 35px;
-    background-color: var(--color-bg-medium); /* Medium background for disclaimers */
-    border: 1px solid var(--color-text-dark); /* Subtle border */
+    background-color: var(--color-bg-medium); 
+    border: 1px solid var(--color-text-dark); 
     border-radius: var(--border-radius-medium);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .disclaimers h3 {
     font-size: 1.5em;
-    color: var(--color-accent-primary); /* Primary Orange heading */
+    color: var(--color-accent-primary); 
     margin-top: 0;
     margin-bottom: 15px;
-    border-bottom: none; /* Already defined as section, no extra border */
+    border-bottom: none; 
 }
 
 .disclaimers ul {
@@ -212,7 +212,7 @@
 
 .disclaimers li {
     font-size: 0.95em;
-    color: var(--color-text-secondary); /* Secondary text for list items */
+    color: var(--color-text-secondary); 
     margin-bottom: 10px;
     line-height: 1.5;
     position: relative;
@@ -221,7 +221,7 @@
 
 .disclaimers li::before {
     content: '•';
-    color: var(--color-accent-secondary); /* Orange bullet */
+    color: var(--color-accent-secondary); 
     font-weight: bold;
     display: inline-block;
     width: 1em;
@@ -234,7 +234,7 @@
     display: flex;
     align-items: center;
     font-size: 1em;
-    color: var(--color-text-primary); /* Primary text for label */
+    color: var(--color-text-primary); 
     cursor: pointer;
     margin-top: 20px;
 }
@@ -243,48 +243,48 @@
     width: 20px;
     height: 20px;
     margin-right: 10px;
-    accent-color: var(--color-accent-primary); /* Orange checkbox */
-    border: 1px solid var(--color-accent-secondary); /* Secondary Orange border for checkbox */
+    accent-color: var(--color-accent-primary); 
+    border: 1px solid var(--color-accent-secondary); 
     border-radius: 4px;
     cursor: pointer;
 }
 
-/* --- Submit Button --- */
+
 .submit-button {
     width: 100%;
     padding: 16px 25px;
     margin-top: 30px;
     border: none;
-    border-radius: var(--border-radius-medium); /* Consistent button border-radius */
-    /* Match primary action button gradient from dashboard */
+    border-radius: var(--border-radius-medium); 
+    
     background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary));
-    color: #fff; /* White text for primary buttons */
+    color: #fff; 
     font-size: 1.2em;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    /* Match primary action button shadow from dashboard */
+    
     box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .submit-button:hover:not(:disabled) {
-    /* Match primary action button hover gradient from dashboard */
+    
     background: linear-gradient(45deg, #ff511c, #d83200);
     box-shadow: 0 12px 35px rgba(255, 0, 0, 0.6);
     transform: translateY(-4px);
 }
 
 .submit-button:disabled {
-    background-color: var(--color-bg-light); /* Disabled background from dashboard buttons */
-    color: var(--color-text-dark); /* Disabled text color */
+    background-color: var(--color-bg-light); 
+    color: var(--color-text-dark); 
     cursor: not-allowed;
     opacity: 0.6;
     box-shadow: none;
     transform: none;
 }
 
-/* --- Responsive Adjustments --- */
+
 @media (max-width: 768px) {
     .volume-generation-form {
         padding: 25px;

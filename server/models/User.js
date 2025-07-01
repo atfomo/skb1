@@ -1,4 +1,4 @@
-// backend/models/User.js
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null,
     },
-    // --- Telegram Fields ---
+
     telegramUserId: {
         type: String, // Telegram user IDs are typically large integers, store as string
         unique: true, // A Telegram ID should be unique across all users on your platform
@@ -69,7 +69,7 @@ const UserSchema = new mongoose.Schema({
         default: 0,
         min: 0 // Cannot be negative
     },
-    // Reputational / Trust Score fields:
+
     reputationScore: {
         type: Number,
         default: 500,
@@ -111,7 +111,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    // ⭐ NEW: Reference to Projects ⭐
+
     projects: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project' // Assumes you have a 'Project' model defined elsewhere
@@ -120,7 +120,7 @@ const UserSchema = new mongoose.Schema({
     timestamps: true // Automatically adds createdAt and updatedAt fields
 });
 
-// Password hash before saving
+
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('passwordHash') || !this.passwordHash) {
         return next();
@@ -135,7 +135,7 @@ UserSchema.pre('save', async function(next) {
     }
 });
 
-// Method to compare password
+
 UserSchema.methods.comparePassword = async function(candidatePassword) {
     if (!this.passwordHash) {
         return false;

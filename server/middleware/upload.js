@@ -1,6 +1,6 @@
-// backend/middleware/upload.js
+
 const multer = require('multer');
-// No need for path or fs here if using memory storage and Cloudinary directly
+
 
 const storage = multer.memoryStorage(); // <--- CHANGE THIS TO memoryStorage() for Cloudinary
 

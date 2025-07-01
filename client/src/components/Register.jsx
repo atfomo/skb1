@@ -1,4 +1,4 @@
-// client/src/pages/Auth/Register.jsx
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Or axiosInstance, if consistent. See note below.
 import { useNavigate, Link } from 'react-router-dom';
@@ -18,9 +18,9 @@ const Register = () => {
     const { login } = useUser();
     const { showAlertDialog } = useDialog();
 
-    // Effect for dynamic background elements (if using JS for some animations)
+
     useEffect(() => {
-        // You can add JS-driven animations here if needed.
+
     }, []);
 
     const handleSubmit = async (e) => {
@@ -33,23 +33,23 @@ const Register = () => {
         }
 
         try {
-            // Recommendation: Use axiosInstance here for consistency with other authenticated calls
-            // import axiosInstance from '../../utils/axiosInstance';
-            // const res = await axiosInstance.post(`/auth/register`, { username, email, password });
+
+
+
             const res = await axios.post(`${API_BASE_URL}/auth/register`, { username, email, password });
             const { token, user } = res.data;
 
-            // Call login and wait for it to complete the user context update
+
             await login(token, user);
 
-            // --- REDIRECT HERE, IMMEDIATELY AFTER SUCCESSFUL LOGIN ---
+
             navigate('/');
 
-            // Optionally: If you still want to show a brief success message,
-            // but not block navigation, consider using a different notification system (e.g., a toast).
-            // If you *must* use showAlertDialog for this, make sure its onOkCallback is null
-            // or handles the fact that navigation already happened.
-            // showAlertDialog('Success!', 'Registration successful!'); // No navigation callback needed here
+
+
+
+
+
 
         } catch (err) {
             console.error('Registration error:', err.response?.data || err.message);
@@ -60,7 +60,7 @@ const Register = () => {
 
     return (
         <div className="register-page-wrapper">
-            {/* Animated background elements */}
+            {}
             <div className="animated-background-sphere sphere-1"></div>
             <div className="animated-background-sphere sphere-2"></div>
             <div className="animated-background-sphere sphere-3"></div>

@@ -1,4 +1,4 @@
-// client/src/pages/CreateFireDrip/CreateFireDrip.jsx
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,14 +6,14 @@ import { useUser } from '../../UserContext'; // Ensure this path is correct
 import './CreateFireDrip.css'; // For styling
 import { API_BASE_URL } from '../../config';
 
-// const API_BASE_URL = "http://localhost:5000";
 
-// Updated Drip Packages to match backend
+
+
 const DRIP_PACKAGES = [
     { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 1199 },
     { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1999 },
     { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 3499 },
-    // Removed Velocity and Apex as they are not in the new plans
+
 ];
 
 const CreateFireDrip = () => {
@@ -32,7 +32,7 @@ const CreateFireDrip = () => {
         }
     }, [user, token, loadingUser, navigate]);
 
-    // Helper function to check if a string is a valid Twitter tweet link
+
     const isValidTweetLink = (link) => {
         const twitterRegex = /^https?:\/\/(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+(\/)?(\?.*)?$/;
         return twitterRegex.test(link);
@@ -73,7 +73,7 @@ const CreateFireDrip = () => {
             const response = await axios.post(`${API_BASE_URL}/api/drip-campaigns/create-drip`, {
                 creatorId: user._id,
                 packageId: selectedPackage.id,
-                // Send only the single initial tweet link
+
                 initialTweetLink: initialTweetLink.trim(),
                 priceUSD: selectedPackage.priceUSD, // Sending price for backend validation/logging
             }, {
@@ -85,8 +85,8 @@ const CreateFireDrip = () => {
             setMessage(response.data.message || "Drip campaign created successfully!");
             setInitialTweetLink(''); // Clear input after successful creation
             setSelectedPackage(null); // Reset selected package
-            // Optionally redirect to a dashboard where they can see their active drip
-            // and add more tweets. You'll need to create this dashboard page.
+
+
             navigate(`/creator-dashboard`);
 
         } catch (err) {
@@ -158,7 +158,7 @@ const CreateFireDrip = () => {
                 </div>
             )}
 
-            {/* THIS IS THE "ACTIVATE DRIP CAMPAIGN" BUTTON */}
+            {}
             {selectedPackage && initialTweetLink.trim() && isValidTweetLink(initialTweetLink) && (
                 <div className="create-campaign-actions">
                     <button

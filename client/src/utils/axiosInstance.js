@@ -1,4 +1,4 @@
-// src/utils/axiosInstance.js
+
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-// Request interceptor (already good from your index.js)
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('jwtToken');
@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Response interceptor will be configured externally by UserProvider
+
 export const setupAxiosInterceptors = (logoutFunction) => {
     axiosInstance.interceptors.response.use(
         (response) => response,
@@ -33,9 +33,9 @@ export const setupAxiosInterceptors = (logoutFunction) => {
                 {
                     console.warn('[Axios Interceptor] Unauthorized or Forbidden response detected. Calling logout function.');
                     logoutFunction(); // <--- CALL THE LOGOUT FUNCTION HERE
-                    // You might want to navigate to login here too, or let the component
-                    // that caught the error handle redirection based on `isAuthenticated`
-                    // window.location.href = '/login'; // Or use React Router's navigate in a component
+
+
+
                 }
             }
             return Promise.reject(error);

@@ -1,4 +1,4 @@
-// backend/models/Action.js
+
 const mongoose = require('mongoose');
 
 const ActionSchema = new mongoose.Schema({
@@ -42,16 +42,16 @@ const ActionSchema = new mongoose.Schema({
         default: Date.now,
         required: true
     },
-    // Add fields relevant to the specific action
+
     messageContent: {
         type: String,
         trim: true,
         maxlength: 1000 // Limit message length to avoid excessively large documents
     },
-    // Could add more fields for anti-fraud (e.g., ipAddress, userAgent)
+
 }, { timestamps: true }); // Mongoose adds createdAt and updatedAt automatically
 
-// Add an index for faster lookup on userId and campaignId for cooldowns
+
 ActionSchema.index({ userId: 1, campaignId: 1, timestamp: -1 });
 
 module.exports = mongoose.model('Action', ActionSchema);

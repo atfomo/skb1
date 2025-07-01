@@ -1,4 +1,4 @@
-// backend/models/Project.js
+
 const mongoose = require('mongoose');
 
 const ProjectSchema = new mongoose.Schema({
@@ -35,17 +35,17 @@ const ProjectSchema = new mongoose.Schema({
         twitter: {
             type: String,
             trim: true,
-            // match: /^(https?:\/\/)?(www\.)?twitter\.com\/.+$/ // Removed for now to avoid validation issues if left blank
+
         },
         website: {
             type: String,
             trim: true,
-           // match: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/ // Basic URL validation
+
         },
         discord: {
             type: String,
             trim: true,
-           // match: /^(https?:\/\/)?(discord\.gg\/|discordapp\.com\/invite\/)([a-zA-Z0-9-]+)$/ // Basic Discord invite URL validation
+
         }
     },
     logo: {
@@ -60,7 +60,7 @@ const ProjectSchema = new mongoose.Schema({
     timestamps: true // Adds createdAt and updatedAt fields
 });
 
-// Pre-save hook to split tags string into an array
+
 ProjectSchema.pre('save', function(next) {
     if (this.isModified('tags') && typeof this.tags === 'string') {
         this.tags = this.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
@@ -68,7 +68,7 @@ ProjectSchema.pre('save', function(next) {
     next();
 });
 
-// Pre-findOneAndUpdate hook for updates
+
 ProjectSchema.pre('findOneAndUpdate', function(next) {
     const update = this.getUpdate();
     if (update.tags && typeof update.tags === 'string') {

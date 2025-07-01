@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import './InjectFomoForm.css'; // Custom styling for a more modern look
 
-// --- Configuration Constants ---
+
 const CHAIN_OPTIONS = [
     { label: 'Solana', value: 'solana' }, // Only Solana
 ];
@@ -10,7 +10,7 @@ const DEX_OPTIONS = {
     'solana': ['Raydium', 'Orca', 'Jupiter', 'Other'], // Solana-specific DEXs
 };
 
-// Pricing model constants (ADJUSTED)
+
 const USER_NET_PAYOUT_PER_100_VOLUME = 0.58;
 const PLATFORM_PROFIT_PERCENTAGE = 0.39;
 
@@ -28,7 +28,7 @@ const speedMultipliers = {
 };
 
 const InjectFomoForm = () => {
-    // Campaign details states
+
     const [campaignName, setCampaignName] = useState('');
     const [selectedChain] = useState(CHAIN_OPTIONS[0].value); // Fixed to Solana
     const [tokenAddress, setTokenAddress] = useState('');
@@ -41,7 +41,7 @@ const InjectFomoForm = () => {
     const [notes, setNotes] = useState('');
     const [agreedToDisclaimers, setAgreedToDisclaimers] = useState(false);
 
-    // Dynamic calculations (kept internal)
+
     const numberOfLoops = useMemo(() => {
         if (targetVolume <= 0 || volumePerLoop <= 0) return 0;
         return Math.ceil(targetVolume / volumePerLoop);
@@ -83,17 +83,17 @@ const InjectFomoForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('--- Form Submission Attempt ---');
-        console.log('Agreed to Disclaimers:', agreedToDisclaimers);
+        
+        
 
         if (!agreedToDisclaimers) {
             alert("Please read and agree to the disclaimers before submitting.");
             return;
         }
 
-        // FIX: Changed 'token' to 'jwtToken' to match UserContext
+
         const token = localStorage.getItem('jwtToken'); // Get the JWT token for authentication
-        console.log('Token retrieved from localStorage:', token ? 'Present' : 'Missing', token);
+        
 
         if (!token) {
             alert("You must be logged in to create a campaign.");
@@ -118,13 +118,13 @@ const InjectFomoForm = () => {
             usersNeeded: Number(usersNeeded),
         };
 
-        console.log('Request Data Payload:', requestData);
+        
 
         const authHeaderValue = `Bearer ${token}`;
-        console.log('Constructed Authorization Header:', authHeaderValue);
+        
 
         try {
-            console.log('Sending fetch request to:', 'https://api.atfomo.com/api/boost-volume/campaigns');
+            
             const response = await fetch('https://api.atfomo.com/api/boost-volume/campaigns', {
                 method: 'POST',
                 headers: {
@@ -134,11 +134,11 @@ const InjectFomoForm = () => {
                 body: JSON.stringify(requestData),
             });
 
-            console.log('Fetch Response Received. Status:', response.status, 'Status Text:', response.statusText);
-            console.log('Is response OK (2xx)?', response.ok);
+            
+            
 
             const responseData = await response.json();
-            console.log('Parsed Response Data:', responseData);
+            
 
             if (!response.ok) {
                 console.error('Failed to create campaign. Server responded with error:', responseData);
@@ -146,10 +146,10 @@ const InjectFomoForm = () => {
                 return;
             }
 
-            console.log('Campaign created successfully:', responseData);
+            
             alert(`Campaign "${campaignName}" created successfully! Campaign ID: ${responseData.campaignId}`);
 
-            // Optionally, reset the form after successful submission
+
             setCampaignName('');
             setTokenAddress('');
             setSelectedDEX(DEX_OPTIONS['solana'][0]);
@@ -165,7 +165,7 @@ const InjectFomoForm = () => {
             console.error('Network or other unexpected error during campaign creation:', error);
             alert(`Failed to send campaign request: ${error.message}`);
         }
-        console.log('--- Form Submission Attempt End ---');
+        
     };
 
     return (

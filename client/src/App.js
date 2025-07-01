@@ -1,13 +1,13 @@
-// client/src/App.js
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 import { DialogProvider } from './context/DialogContext';
 
-// Import your RulesModal
+
 import RulesModal from "./components/RulesModal"; // Ensure this path is correct
 
-// Import other components
+
 import HomePage from "./pages/HomePage/HomePage";
 import Header from "./components/Navbar/Header";
 import Login from "./components/Login";
@@ -31,7 +31,7 @@ import AdminTaskVerificationPage from './pages/AdminTaskVerificationPage';
 import AdminBannerController from './components/Admin/AdminBannerController';
 import SparkCampaignDetail from './components/SparkCampaignDetail/SparkCampaignDetail';
 
-// --- ADMIN ROUTE PROTECTION COMPONENT (No Change) ---
+
 const AdminRoute = ({ children }) => {
     const { user, loadingUser, isAuthenticated } = useUser();
 
@@ -50,7 +50,7 @@ const AdminRoute = ({ children }) => {
     }
 };
 
-// --- NEW: PRIVATE ROUTE FOR AUTHENTICATED USERS WHO HAVE ACKNOWLEDGED RULES ---
+
 const PrivateRoute = ({ children }) => {
     const { user, loadingUser, isAuthenticated } = useUser();
     const [userHasAcknowledgedRules, setUserHasAcknowledgedRules] = useState(
@@ -58,15 +58,15 @@ const PrivateRoute = ({ children }) => {
     );
 
     useEffect(() => {
-        // If user context changes (e.g., after login/logout), re-evaluate acknowledgment
+
         if (isAuthenticated) {
-            // In a real app, you might fetch this from user profile data in your backend
-            // For now, rely on local storage for simplicity.
+
+
             setUserHasAcknowledgedRules(
                 localStorage.getItem('fomo_rules_acknowledged') === 'true'
             );
         } else {
-            // User logged out, reset acknowledgment state
+
             setUserHasAcknowledgedRules(false);
             localStorage.removeItem('fomo_rules_acknowledged');
         }
@@ -82,16 +82,16 @@ const PrivateRoute = ({ children }) => {
     }
 
     if (!userHasAcknowledgedRules) {
-        // Redirect to a specific page or show a message if rules not acknowledged
-        // This is where you could redirect to a /complete-profile page
-        // For now, we'll let the App component's modal handle it.
+
+
+
         return <Navigate to="/acknowledge-rules" replace />;
     }
 
     return children;
 };
 
-// Keep initialProjects data as is (no change)
+
 const initialProjects = [
     {
         id: 1, name: "Account 001", logo: "https://via.placeholder.com/48?text=A1", tags: ["Web3", "Crypto", "Marketing"], activeTasks: 12, totalTasks: 50, estimatedEarnings: 15000, remainingSlots: 50, isNew: true, image: 'https://via.placeholder.com/600x400/F0F0F0/000000?text=Project+One', socials: { twitter: "", telegram: "" }, description: "", rules: "", creatorType: "Video Creator", uniqueId: "B1kQZT",
@@ -126,17 +126,17 @@ function App() {
     const handleImageUpload = ({ url, publicId }) => {
         setUploadedImageUrl(url);
         setUploadedImagePublicId(publicId);
-        console.log('Uploaded Image URL:', url);
-        console.log('Uploaded Image Public ID:', publicId);
+        
+        
     };
 
     const [projects, setProjects] = useState(initialProjects);
     const { token, user, logout, loadingUser, isAuthenticated } = useUser(); // Destructure isAuthenticated from useUser
 
-    // State for managing the Rules Modal
+
     const [showRulesModal, setShowRulesModal] = useState(false);
     const [userHasAcknowledgedRules, setUserHasAcknowledgedRules] = useState(
-        // Initialize from local storage, assumes true if found
+
         localStorage.getItem('fomo_rules_acknowledged') === 'true'
     );
 
@@ -144,10 +144,10 @@ function App() {
         setProjects((prev) => [...prev, { ...project, id: prev.length + 1 }]);
     };
 
-    // Effect to check and show rules modal after user is authenticated
+
     useEffect(() => {
         if (isAuthenticated && !loadingUser) {
-            // Check if user has acknowledged rules in localStorage (or from backend if available)
+
             const acknowledged = localStorage.getItem('fomo_rules_acknowledged') === 'true';
             setUserHasAcknowledgedRules(acknowledged);
 
@@ -155,7 +155,7 @@ function App() {
                 setShowRulesModal(true); // Force show the rules modal
             }
         } else if (!isAuthenticated && userHasAcknowledgedRules) {
-            // User logged out, reset acknowledgment state for next login
+
             setUserHasAcknowledgedRules(false);
             localStorage.removeItem('fomo_rules_acknowledged');
         }
@@ -167,9 +167,9 @@ function App() {
         setShowRulesModal(false); // Close the modal
     };
 
-    // This is for the modal's internal close button, which we'll hide if mandatory
+
     const handleCloseRulesModal = () => {
-        // If the modal is mandatory (i.e., !userHasAcknowledgedRules), this won't be called.
+
         setShowRulesModal(false);
     };
 
@@ -180,13 +180,13 @@ function App() {
                     <Header user={user} logout={logout} loadingUser={loadingUser} />
                     <Routes>
                         <Route path="/" element={<HomePage projects={projects} />} />
-                     {/*   <Route path="/campaign/:campaignId" element={<ProjectDetail projects={projects} />} /> */}
+                     {}
 
-                        {/* Public routes */}
+                        {}
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
 
-                        {/* Special route to show rules modal if not acknowledged */}
+                        {}
                         {isAuthenticated && !userHasAcknowledgedRules && (
                             <Route
                                 path="/acknowledge-rules"
@@ -194,14 +194,14 @@ function App() {
                                     <div style={{ padding: '20px', textAlign: 'center' }}>
                                         <h2>Please Review and Accept Our Rules</h2>
                                         <p>You must read and agree to the platform rules before accessing your dashboard or tasks.</p>
-                                        {/* The RulesModal itself will pop up due to useEffect */}
+                                        {}
                                     </div>
                                 }
                             />
                         )}
 
 
-                        {/* PROTECTED ROUTES: Wrap with PrivateRoute */}
+                        {}
                         <Route
                             path="/create-campaign"
                             element={<PrivateRoute><AddProjectForm /></PrivateRoute>}
@@ -247,7 +247,7 @@ function App() {
                             element={<PrivateRoute><SparkCampaignDetail /></PrivateRoute>}
                         />
 
-                        {/* Admin Routes (already protected with AdminRoute) */}
+                        {}
                         <Route
                             path="/admin/boost-volume/campaigns"
                             element={<AdminRoute><AdminBoostVolumeCampaignList /></AdminRoute>}
@@ -265,14 +265,14 @@ function App() {
                             element={<AdminRoute><AdminBannerController /></AdminRoute>}
                         />
 
-                        {/* Fallback for unknown routes */}
+                        {}
                         <Route path="*" element={<div>404 Not Found</div>} />
                     </Routes>
                     <footer className="bg-gray-100 text-gray-700 text-center py-6 mt-12 border-t border-gray-200">
                         <p>&copy; {new Date().getFullYear()} @FOMO. All rights reserved.</p>
                     </footer>
 
-                    {/* RULES MODAL - Conditionally rendered at the App level */}
+                    {}
                     {isAuthenticated && ( // Only show if a user is logged in
                         <RulesModal
                             show={showRulesModal}

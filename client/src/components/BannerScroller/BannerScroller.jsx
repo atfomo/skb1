@@ -32,20 +32,20 @@ const BannerScroller = () => {
         fetchBanners();
     }, []);
 
-    // Duplicate banners for seamless loop once data is loaded
-    // Ensure you have at least one banner to duplicate for the loop to make sense
+
+
     const infiniteBanners = banners.length > 0 ? [...banners, ...banners] : [];
 
-    // --- You might need to adjust the animation duration based on the number of banners
-    // And also for responsiveness. Let's make it dynamic based on banner count.
+
+
     const animationDuration = banners.length > 0 ? (banners.length * 10) : 30; // 10s per banner as a base speed
 
-    // --- Dynamic CSS variable for animation ---
-    // This allows you to pass the calculated animation duration to CSS
+
+
     useEffect(() => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.style.setProperty('--animation-duration', `${animationDuration}s`);
-            // You might also need to set --banner-count for the @keyframes calculation
+
             scrollContainerRef.current.style.setProperty('--banner-count', banners.length);
         }
     }, [banners, animationDuration]);
@@ -78,13 +78,13 @@ const BannerScroller = () => {
     return (
         <section className="banner-scroller-section">
             <div className="banner-scroller-wrapper">
-                {/* Add the missing banner-scroller-inner div */}
+                {}
                 <div
                     ref={scrollContainerRef} // Ref moves to the animated element
                     className="banner-scroller-inner"
                     style={{ animationDuration: `${animationDuration}s` }} // Apply dynamic duration directly
                 >
-                    {/* The banner-items-container is now inside banner-scroller-inner */}
+                    {}
                     <div className="banner-items-container">
                         {infiniteBanners.map((banner, index) => (
                             <a

@@ -9,7 +9,7 @@ const twitterClient = new TwitterApi({
   accessSecret: process.env.TWITTER_ACCESS_SECRET,
 });
 
-// Tweet verification
+
 router.post("/verify-tweet", async (req, res) => {
   const { username, expectedText } = req.body;
 

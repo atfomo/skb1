@@ -7,7 +7,7 @@ const WalletAddressForm = ({ token }) => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Optionally fetch existing wallet address on load
+
     const fetchWallet = async () => {
       try {
         const res = await axios.get('https://api.atfomo.com/api/me', {

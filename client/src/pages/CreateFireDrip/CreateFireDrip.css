@@ -1,52 +1,52 @@
-/* client/src/pages/CreateFireDrip/CreateFireDrip.css */
 
-/* --- Base Variables (Matching across components for consistency) --- */
+
+
 :root {
   --color-bg-dark: #0F141A;
   --color-bg-medium: #1A202C;
   --color-bg-light: #2A303C;
 
-  --color-accent-primary: #E64A19; /* Primary Orange */
-  --color-accent-secondary: #ff3c00; /* Slightly lighter Orange for emphasis */
-  --color-accent-green: #2ECC71; /* Success */
-  --color-accent-red: #E74C3C; /* Error */
+  --color-accent-primary: #E64A19; 
+  --color-accent-secondary: #ff3c00; 
+  --color-accent-green: #2ECC71; 
+  --color-accent-red: #E74C3C; 
 
-  --color-text-primary: #E2E8F0; /* Light text for main content */
-  --color-text-secondary: #A0AEC0; /* Slightly darker light text for hints/secondary info */
-  --color-text-dark: #5B6B7C; /* Darker text for disabled states/subtle elements */
+  --color-text-primary: #E2E8F0; 
+  --color-text-secondary: #A0AEC0; 
+  --color-text-dark: #5B6B7C; 
 
   --border-radius-large: 16px;
   --border-radius-medium: 12px;
   --border-radius-small: 8px;
 
-  --glass-border: 1px solid rgba(42, 48, 60, 0.4); /* Border for glass elements */
-  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); /* Shadow for glass elements */
+  --glass-border: 1px solid rgba(42, 48, 60, 0.4); 
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); 
 }
 
-/* --- General Page Container --- */
+
 .fire-drip-container {
   max-width: 900px;
   margin: 50px auto;
   padding: 40px;
-  background-color: rgba(17, 16, 15, 0.7); /* Darker glass base */
+  background-color: rgba(17, 16, 15, 0.7); 
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
+  border: 1px solid rgba(255, 255, 255, 0.1); 
   border-radius: var(--border-radius-large);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); 
   color: var(--color-text-primary);
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
   overflow: hidden;
-  position: relative; /* For error/success messages positioning */
+  position: relative; 
 }
 
 .fire-drip-container:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 111, 0, 0.1); /* Subtle orange glow on hover */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 111, 0, 0.1); 
   transform: translateY(-3px);
 }
 
-/* --- Headings & Descriptions --- */
+
 .fire-drip-container h2 {
   font-size: 2.5em;
   font-weight: 700;
@@ -56,7 +56,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent; /* Fallback */
+  color: transparent; 
 }
 
 .fire-drip-container h3 {
@@ -65,7 +65,7 @@
   margin-top: 30px;
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Subtle separator */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
 }
 
 .description {
@@ -76,7 +76,7 @@
   line-height: 1.6;
 }
 
-/* --- Messages (Error/Success) --- */
+
 .error-message,
 .success-message {
   padding: 15px 20px;
@@ -104,7 +104,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Loading Message --- */
+
 .loading-message {
   text-align: center;
   color: var(--color-text-secondary);
@@ -112,7 +112,7 @@
   padding: 50px 0;
 }
 
-/* --- Drip Packages Section --- */
+
 .drip-packages {
   margin-top: 40px;
 }
@@ -125,7 +125,7 @@
 }
 
 .package-card {
-  background-color: rgba(19, 19, 19, 0.7); /* Medium glass base */
+  background-color: rgba(19, 19, 19, 0.7); 
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius-medium);
   padding: 30px 25px;
@@ -139,15 +139,15 @@
 
 .package-card:hover {
   background-color: rgba(14, 14, 14, 0.8);
-  border-color:  #ff511c; /* Primary Orange border on hover */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 111, 0, 0.2); /* Orange glow on hover */
+  border-color:  #ff511c; 
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 111, 0, 0.2); 
   transform: translateY(-5px);
 }
 
 .package-card.selected {
-  background-color: rgba(206, 100, 19, 0.2); /* Light orange tint when selected */
-  border-color: var(--color-accent-primary); /* Solid Primary Orange border */
-  box-shadow: 0 8px 30px rgba(255, 111, 0, 0.4), inset 0 0 15px rgba(255, 111, 0, 0.2); /* Stronger orange shadow */
+  background-color: rgba(206, 100, 19, 0.2); 
+  border-color: var(--color-accent-primary); 
+  box-shadow: 0 8px 30px rgba(255, 111, 0, 0.4), inset 0 0 15px rgba(255, 111, 0, 0.2); 
   transform: translateY(-2px);
 }
 
@@ -155,7 +155,7 @@
   font-size: 1.8em;
   font-weight: 700;
   margin-bottom: 10px;
-  color: #E64A19; /* Primary Orange for package names */
+  color: #E64A19; 
   text-shadow: 0 1px 5px rgba(255, 111, 0, 0.2);
 }
 
@@ -174,24 +174,24 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent; /* Fallback */
+  color: transparent; 
   text-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
 }
 
 .package-card .package-description {
   font-size: 0.9em;
   color: var(--color-text-secondary);
-  min-height: 40px; /* Ensure consistent height for descriptions */
+  min-height: 40px; 
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.8;
 }
 
-/* --- Selected Package Details --- */
+
 .selected-package-details {
-  background-color: rgba(31, 31, 31, 0.7); /* Medium glass base */
-  border: 1px solid #E64A19; /* Primary Orange border */
+  background-color: rgba(31, 31, 31, 0.7); 
+  border: 1px solid #E64A19; 
   border-radius: var(--border-radius-medium);
   padding: 25px;
   margin-top: 40px;
@@ -199,7 +199,7 @@
 }
 
 .selected-package-details h3 {
-  color: #e6e6e6; /* Primary Orange for selected heading */
+  color: #e6e6e6; 
   margin-top: 0;
   margin-bottom: 15px;
   border-bottom: none;
@@ -218,7 +218,7 @@
   font-style: italic;
 }
 
-/* --- Tweet Links Section --- */
+
 .tweet-links-section {
   margin-top: 40px;
 }
@@ -248,7 +248,7 @@
 
 .tweet-input:focus {
   outline: none;
-  border-color: #E64A19; /* Primary Orange focus border */
+  border-color: #E64A19; 
   background-color: rgba(26, 32, 44, 0.8);
 }
 
@@ -257,7 +257,7 @@
   opacity: 0.7;
 }
 
-/* --- Create Campaign Button --- */
+
 .create-campaign-actions {
   margin-top: 40px;
   text-align: center;
@@ -274,13 +274,13 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 8px 25px rgba(255, 111, 0, 0.4);
-  width: 100%; /* Full width */
-  max-width: 400px; /* Max width for larger screens */
-  display: inline-block; /* For max-width to apply correctly */
+  width: 100%; 
+  max-width: 400px; 
+  display: inline-block; 
 }
 
 .submit-drip-button:hover:not(:disabled) {
-  background: linear-gradient(45deg,  #ff511c, #d83200); /* Reverse gradient on hover */
+  background: linear-gradient(45deg,  #ff511c, #d83200); 
   box-shadow: 0 12px 35px rgba(255, 111, 0, 0.6);
   transform: translateY(-4px);
 }
@@ -294,7 +294,7 @@
   transform: none;
 }
 
-/* --- Responsive Adjustments --- */
+
 @media (max-width: 768px) {
   .fire-drip-container {
     padding: 25px;
@@ -317,7 +317,7 @@
   }
 
   .package-list {
-    grid-template-columns: 1fr; /* Stack packages on small screens */
+    grid-template-columns: 1fr; 
   }
 
   .package-card {

@@ -1,4 +1,4 @@
-// src/index.js
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -12,7 +12,7 @@ import axiosInstance from './utils/axiosInstance';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider theme={customTheme}>
-      <UserProvider> {/* UserProvider will set up the interceptors */}
+      <UserProvider> {}
         <DialogProvider>
           <App />
         </DialogProvider>

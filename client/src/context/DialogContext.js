@@ -1,4 +1,4 @@
-// client/src/context/DialogContext.js
+
 import React, { createContext, useContext, useState } from 'react';
 import {
   Dialog,
@@ -93,7 +93,7 @@ export const DialogProvider = ({ children }) => {
         </DialogContent>
         <DialogActions>
           {dialogState.type === 'confirm' && (
-            <Button onClick={handleCancel} color="secondary"> {/* Themed secondary button */}
+            <Button onClick={handleCancel} color="secondary"> {}
               Cancel
             </Button>
           )}

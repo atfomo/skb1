@@ -1,4 +1,4 @@
-// client/src/pages/AvailableTasksPage/AvailableTasksPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import './AvailableTasksPage.css';
@@ -13,8 +13,8 @@ const AvailableTasksPage = () => {
             setLoading(true);
             setError(null); // Clear previous errors
 
-            // Get token from localStorage (assuming it's stored here after login)
-            // FIX: Changed 'token' to 'jwtToken' to match your UserContext
+
+
             const token = localStorage.getItem('jwtToken');
 
             if (!token) {
@@ -24,7 +24,7 @@ const AvailableTasksPage = () => {
             }
 
             try {
-                // Assuming your backend exposes active campaigns at this endpoint
+
                 const response = await fetch('https://api.atfomo.com/api/boost-volume/active', {
                     method: 'GET',
                     headers: {
@@ -34,7 +34,7 @@ const AvailableTasksPage = () => {
                 });
 
                 if (!response.ok) {
-                    // Check for specific 401 error or other status codes
+
                     if (response.status === 401) {
                         throw new Error('Unauthorized: Your session has expired. Please log in again.');
                     }
@@ -42,7 +42,7 @@ const AvailableTasksPage = () => {
                 }
 
                 const data = await response.json();
-                console.log("Fetched active campaigns:", data); // Log the fetched data
+
                 setTasks(data);
 
             } catch (err) {
@@ -76,7 +76,7 @@ const AvailableTasksPage = () => {
             ) : (
                 <div className="tasks-grid">
                     {tasks.map(task => (
-                        // FIX: Changed key={task.id} to key={task._id} to match MongoDB ObjectId
+
                         <TaskCard key={task._id} campaign={task} />
                     ))}
                 </div>

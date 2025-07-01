@@ -1,4 +1,4 @@
-// backend/models/CreateDrip.js
+
 const mongoose = require('mongoose');
 
 const CreateDripSchema = new mongoose.Schema({
@@ -56,7 +56,7 @@ const CreateDripSchema = new mongoose.Schema({
     }
 });
 
-// Update `updatedAt` on save
+
 CreateDripSchema.pre('save', function(next) {
     this.updatedAt = Date.now();
     next();

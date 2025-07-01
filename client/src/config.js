@@ -1,4 +1,4 @@
-// client/src/config.js
+
 
 export const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? 'https://api.atfomo.com' // Production Backend API URL: This is your live Render domain

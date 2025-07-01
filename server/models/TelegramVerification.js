@@ -1,4 +1,4 @@
-// backend/models/TelegramVerification.js
+
 const mongoose = require('mongoose');
 
 const telegramVerificationSchema = new mongoose.Schema({
@@ -22,8 +22,8 @@ const telegramVerificationSchema = new mongoose.Schema({
     expiresAt: {
         type: Date,
         required: true,
-        // This creates a TTL index in MongoDB, automatically deleting documents after `expiresAt`
-        // TTL indexes are great for temporary data like verification codes.
+
+
         index: { expires: 0 }
     },
     createdAt: {

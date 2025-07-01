@@ -1,4 +1,4 @@
-// backend/models/UserCampaignParticipation.js
+
 const mongoose = require('mongoose');
 
 const userCampaignParticipationSchema = new mongoose.Schema({
@@ -14,7 +14,7 @@ const userCampaignParticipationSchema = new mongoose.Schema({
         required: true,
         index: true // Index for efficient lookup by campaign
     },
-    // --- Telegram Actions ---
+
     telegramJoined: { // Indicates if the user has successfully joined the Telegram group
         type: Boolean,
         default: false
@@ -27,7 +27,7 @@ const userCampaignParticipationSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    // --- Twitter Actions (Example, based on your requiredActions) ---
+
     twitterLiked: {
         type: Boolean,
         default: false
@@ -44,7 +44,7 @@ const userCampaignParticipationSchema = new mongoose.Schema({
         type: Date,
         default: null
     },
-    // --- General Participation Status ---
+
     status: {
         type: String,
         enum: ['pending', 'active', 'completed', 'disqualified'],
@@ -57,7 +57,7 @@ const userCampaignParticipationSchema = new mongoose.Schema({
     },
 }, { timestamps: true }); // Mongoose adds createdAt and updatedAt automatically
 
-// Ensure that a user can only have one participation record per campaign
+
 userCampaignParticipationSchema.index({ userId: 1, campaignId: 1 }, { unique: true });
 
 module.exports = mongoose.model('UserCampaignParticipation', userCampaignParticipationSchema);

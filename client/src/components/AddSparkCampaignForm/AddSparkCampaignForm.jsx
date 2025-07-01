@@ -11,7 +11,7 @@ import {
     FaImage // Added FaImage icon for banner upload
 } from 'react-icons/fa'; // Added more specific icons
 
-// --- Internal Constants for Estimated Engagement (Define these based on your strategy) ---
+
 const MESSAGE_PAYOUT = 0.01;
 const LINK_CLICK_PAYOUT = 0.025;
 const REACTION_PAYOUT = 0.025;
@@ -40,7 +40,7 @@ const AddSparkCampaignForm = () => {
         joinTelegram: true,
     });
     const [additionalInstructions, setAdditionalInstructions] = useState('');
-    // --- NEW: State for banner image file and its preview URL ---
+
     const [bannerFile, setBannerFile] = useState(null);
     const [bannerPreviewUrl, setBannerPreviewUrl] = useState('');
 
@@ -48,7 +48,7 @@ const AddSparkCampaignForm = () => {
     const [formError, setFormError] = useState(null); // Renamed to avoid confusion with Dialog error
     const [formSuccess, setFormSuccess] = useState(null); // Renamed
 
-    // Effect to create and revoke object URL for banner preview
+
     useEffect(() => {
         if (bannerFile) {
             const objectUrl = URL.createObjectURL(bannerFile);
@@ -59,7 +59,7 @@ const AddSparkCampaignForm = () => {
         }
     }, [bannerFile]);
 
-    // Use useMemo for estimated engagement
+
     const estimatedEngagement = useMemo(() => {
         const parsedBudget = parseFloat(budget);
         if (isNaN(parsedBudget) || parsedBudget <= 0) {
@@ -104,7 +104,7 @@ const AddSparkCampaignForm = () => {
             return;
         }
 
-        // Basic validation
+
         if (!campaignName.trim() || !budget || !durationHours || !telegramGroupLink.trim() || !tweetUrl.trim()) {
             const msg = "Please fill in all required fields (Campaign Name, Budget, Duration, Telegram Link, X (Twitter) URL).";
             setFormError(msg);
@@ -126,7 +126,7 @@ const AddSparkCampaignForm = () => {
             setLoading(false);
             return;
         }
-        // --- NEW: Banner File Validation ---
+
         if (!bannerFile) {
             const msg = "Please upload a campaign banner image.";
             setFormError(msg);
@@ -145,8 +145,8 @@ const AddSparkCampaignForm = () => {
             return;
         }
 
-        // --- Prepare FormData for file upload ---
-        // FormData is used to send files and other form data in a single request
+
+
         const formData = new FormData();
         formData.append('creatorId', user._id);
         formData.append('name', campaignName.trim());
@@ -154,7 +154,7 @@ const AddSparkCampaignForm = () => {
         formData.append('durationHours', parseInt(durationHours));
         formData.append('telegramGroupLink', telegramGroupLink.trim());
         formData.append('tweetUrl', tweetUrl.trim());
-        // For array and object states, stringify them before appending to FormData
+
         formData.append('hashtags', JSON.stringify(hashtags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')));
         formData.append('requiredActions', JSON.stringify(requiredActions));
         formData.append('additionalInstructions', additionalInstructions.trim());
@@ -162,11 +162,11 @@ const AddSparkCampaignForm = () => {
         formData.append('bannerImage', bannerFile); // Append the actual file here, backend will receive it as 'bannerImage'
 
         try {
-            // Axios will automatically set Content-Type to multipart/form-data when sending FormData
+
             const response = await axios.post(`${API_BASE_URL}/api/spark-campaigns`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
-                    // No need to set 'Content-Type' manually; Axios handles it for FormData
+
                 }
             });
 
@@ -177,7 +177,7 @@ const AddSparkCampaignForm = () => {
                     `Your campaign "${campaignName}" has been successfully launched! You can view its status on your dashboard.`,
                     () => navigate('/creator-dashboard')
                 );
-                // Clear form fields
+
                 setCampaignName('');
                 setBudget('');
                 setDurationHours('');
@@ -242,7 +242,7 @@ const AddSparkCampaignForm = () => {
             )}
 
             <form onSubmit={handleSubmit} className="spark-campaign-form">
-                {/* Section 1: Basic Campaign Info */}
+                {}
                 <div className="form-section">
                     <h3><FaLightbulb className="section-icon" /> Campaign Basics</h3>
                     <div className="form-grid">
@@ -259,7 +259,7 @@ const AddSparkCampaignForm = () => {
                             />
                         </div>
 
-                        {/* --- NEW: Banner Upload Field --- */}
+                        {}
                         <div className="form-group full-width">
                             <label htmlFor="bannerImage">Campaign Banner Image:</label>
                             <input
@@ -278,7 +278,7 @@ const AddSparkCampaignForm = () => {
                                 </div>
                             )}
                         </div>
-                        {/* --- END NEW: Banner Upload Field --- */}
+                        {}
 
                         <div className="form-group">
                             <label htmlFor="budget">Total Campaign Budget (USD):</label>
@@ -343,7 +343,7 @@ const AddSparkCampaignForm = () => {
                     </div>
                 </div>
 
-                {/* Section 2: Engagement Details */}
+                {}
                 <div className="form-section">
                     <h3><FaExternalLinkAlt className="section-icon" /> Engagement Details</h3>
                     <div className="form-grid">
@@ -390,7 +390,7 @@ const AddSparkCampaignForm = () => {
                     </div>
                 </div>
 
-                {/* Section 3: Required Actions & Instructions */}
+                {}
                 <div className="form-section">
                     <h3><FaCheckCircle className="section-icon" /> Additional Actions</h3>
                     <div className="checkbox-grid">

@@ -1,4 +1,4 @@
-// utils/rewards.js
+
 
 /**
  * Calculate distribution of likes, retweets, comments based on budget.
@@ -13,7 +13,7 @@ function calculateDistribution(budgetUSD) {
   let retweetRate = 0.06;   // $0.06 per retweet
   let commentRate = 0.10;   // $0.10 per comment
 
-  // Adjust rates based on budget tiers
+
   if (budgetUSD >= 2500) {
     likeRate = 0.05;
     retweetRate = 0.10;
@@ -28,7 +28,7 @@ function calculateDistribution(budgetUSD) {
     commentRate = 0.12;
   }
 
-  // Total weights to distribute the budget (e.g., 3 parts like, 2 parts retweet, 5 parts comment)
+
   const totalWeight = 3 + 2 + 5;
   const likeShare = userBudget * (3 / totalWeight);
   const retweetShare = userBudget * (2 / totalWeight);
@@ -57,5 +57,4 @@ function calculateDistribution(budgetUSD) {
 
 module.exports = { calculateDistribution };
 
-// Example usage:
-// console.log(calculateDistribution(1000));
+

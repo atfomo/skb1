@@ -1,4 +1,4 @@
-// src/components/Admin/AdminBoostVolumeCampaignList.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAdminCampaigns } from '../../api/adminApi';

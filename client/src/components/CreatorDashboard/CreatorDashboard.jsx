@@ -5,13 +5,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import './CreatorDashboard.css';
 import { useUser } from '../../UserContext';
 import { API_BASE_URL } from '../../config';
-// Assuming you have a DialogContext for alerts, if not, remove or replace useDialog
+
 import { useDialog } from '../../context/DialogContext';
 import { toast, ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for react-toastify
 
 
-// Helper function to format remaining time
+
 const formatRemainingTime = (endTime) => {
     const now = Date.now();
     const end = new Date(endTime).getTime();
@@ -31,7 +31,7 @@ const formatRemainingTime = (endTime) => {
     if (days > 0) parts.push(`${days}d`);
     if (hours > 0) parts.push(`${hours}h`);
     if (minutes > 0) parts.push(`${minutes}m`);
-    // Only show seconds if less than a minute left
+
     if (seconds > 0 && days === 0 && hours === 0 && minutes < 2) parts.push(`${seconds}s`);
     if (parts.length === 0) return { text: 'Just finished', statusClass: 'completed' };
 
@@ -45,16 +45,16 @@ const CreatorDashboard = () => {
     const { userId } = useParams(); // Note: This userId might be different from user._id if navigating from a public profile
     const { showAlertDialog } = useDialog(); // Destructure showAlertDialog
 
-    console.log('CreatorDashboard (Frontend): Initial render/re-render');
-    console.log('     -> User Context: user=', user, 'token=', token ? 'PRESENT' : 'ABSENT', 'loadingUser=', loadingUser, 'hasDashboard=', hasDashboard);
-    console.log('     -> URL Param userId:', userId);
+    
+    
+    
 
     const [profileData, setProfileData] = useState(null);
     const [editingProfile, setEditingProfile] = useState(false);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [errorProfile, setErrorProfile] = useState(null);
 
-    // Existing campaign states
+
     const [dripCampaigns, setDripCampaigns] = useState([]);
     const [volumeBoostCampaigns, setVolumeBoostCampaigns] = useState([]);
     const [loadingVolumeBoosts, setLoadingVolumeBoosts] = useState(true);
@@ -66,7 +66,7 @@ const CreatorDashboard = () => {
     const [loadingFomoCampaigns, setLoadingFomoCampaigns] = useState(true);
     const [errorFomoCampaigns, setErrorFomoCampaigns] = useState(null);
 
-    // NEW: State for Spark Campaigns
+
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
     const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
     const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
@@ -85,7 +85,7 @@ const CreatorDashboard = () => {
 
     const [currentTime, setCurrentTime] = useState(Date.now());
 
-    // Timer for remaining time display
+
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentTime(Date.now());
@@ -93,7 +93,7 @@ const CreatorDashboard = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // Click outside handler for create campaign dropdown
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (createCampaignDropdownRef.current && !createCampaignDropdownRef.current.contains(event.target)) {
@@ -106,7 +106,7 @@ const CreatorDashboard = () => {
         };
     }, []);
 
-    // Function to handle copying to clipboard
+
     const handleCopyToClipboard = (text, id) => {
         navigator.clipboard.writeText(text).then(() => {
             toast.success(`Copied Campaign ID: ${id.substring(0, 8)}...`, {
@@ -136,7 +136,7 @@ const CreatorDashboard = () => {
 
 
     const fetchUserProfile = useCallback(async (currentUserId, authToken) => {
-        console.log(`CreatorDashboard (Frontend): Attempting to fetch creator profile for userId: ${currentUserId}`);
+        
         setLoadingProfile(true);
         setErrorProfile(null);
         try {
@@ -146,12 +146,12 @@ const CreatorDashboard = () => {
                 }
             });
             const fetchedProfileData = response.data.data;
-            console.log('CreatorDashboard (Frontend): Profile fetch successful, data:', fetchedProfileData);
+            
 
             if (!fetchedProfileData || Object.keys(fetchedProfileData).length === 0) {
-                console.log('CreatorDashboard (Frontend): No creator dashboard data returned from API.');
+                
                 setErrorProfile("No creator dashboard found. Please create one.");
-                // navigate('/create-dashboard'); // Only navigate if explicitly required to force creation
+
                 return;
             }
             setProfileData({
@@ -164,10 +164,10 @@ const CreatorDashboard = () => {
                 discord: fetchedProfileData.socials?.discord || "",
                 logo: null, // Keep file objects null initially
                 banner: null, // Keep file objects null initially
-                // *** CHANGE THESE LINES ***
+
                 previewLogo: fetchedProfileData.logo || "https://placehold.co/100x100/1a1a1a/00e676?text=LOGO", // Use directly
                 previewBanner: fetchedProfileData.banner || "https://placehold.co/1200x250/1a1a1a/00e676?text=BANNER", // Use directly
-                // ************************
+
             });
             console.log('CreatorDashboard (Frontend): Profile data state updated:', {
                 username: fetchedProfileData.username || "",
@@ -190,12 +190,12 @@ const CreatorDashboard = () => {
             }
         } finally {
             setLoadingProfile(false);
-            console.log('CreatorDashboard (Frontend): setLoadingProfile(false) called.');
+            
         }
     }, [navigate]);
 
     const fetchVolumeBoostCampaigns = useCallback(async (currentUserId, authToken) => {
-        console.log(`CreatorDashboard (Frontend): Attempting to fetch volume boost campaigns for userId: ${currentUserId}`);
+        
         setLoadingVolumeBoosts(true);
         setErrorVolumeBoosts(null);
         try {
@@ -209,19 +209,19 @@ const CreatorDashboard = () => {
                 end_time: campaign.end_time ? new Date(campaign.end_time) : null
             }));
             setVolumeBoostCampaigns(campaignsWithParsedTime);
-            console.log('CreatorDashboard (Frontend): Volume Boost campaigns fetched successfully:', campaignsWithParsedTime);
+            
         } catch (err) {
             console.error("CreatorDashboard (Frontend): Error fetching volume boost campaigns:", err.response?.data || err.message);
             setErrorVolumeBoosts(err.response?.data?.message || "Failed to load volume boost campaigns.");
             setVolumeBoostCampaigns([]);
         } finally {
             setLoadingVolumeBoosts(false);
-            console.log('CreatorDashboard (Frontend): setLoadingVolumeBoosts(false) called.');
+            
         }
     }, []);
 
     const fetchDripCampaigns = useCallback(async (currentUserId, authToken) => {
-        console.log(`CreatorDashboard (Frontend): Attempting to fetch drip campaigns for userId: ${currentUserId}`);
+        
         setLoadingDripCampaigns(true);
         setErrorDripCampaigns(null);
         try {
@@ -235,34 +235,34 @@ const CreatorDashboard = () => {
                 end_time: campaign.end_time ? new Date(campaign.end_time) : null
             }));
             setDripCampaigns(campaignsWithParsedTime);
-            console.log('CreatorDashboard (Frontend): Drip campaigns fetched successfully:', campaignsWithParsedTime);
+            
         } catch (err) {
             console.error("CreatorDashboard (Frontend): Error fetching drip campaigns:", err.response?.data || err.message);
             setErrorDripCampaigns(err.response?.data?.message || "Failed to load drip campaigns.");
             setDripCampaigns([]);
         } finally {
             setLoadingDripCampaigns(false);
-            console.log('CreatorDashboard (Frontend): setLoadingDripCampaigns(false) called.');
+            
         }
     }, []);
 
-    // NEW: Fetch Spark Campaigns (similar to FOMO/Drip/Volume Boost)
+
     const fetchSparkCampaigns = useCallback(async (currentUserId, authToken) => {
-        console.log(`CreatorDashboard (Frontend): Attempting to fetch Spark campaigns for userId: ${currentUserId}`);
+        
         setLoadingSparkCampaigns(true);
         setErrorSparkCampaigns(null);
         try {
-            // Assuming this endpoint fetches Spark Campaigns created by the user
+
             const response = await axios.get(`${API_BASE_URL}/api/spark-campaigns/creator/${currentUserId}`, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
-            // Ensure campaign data is structured correctly, add `end_time` parsing if needed
+
             const campaignsWithParsedTime = (response.data.data || []).map(campaign => ({
                 ...campaign,
                 end_time: campaign.end_time ? new Date(campaign.end_time) : null
             }));
             setSparkCampaigns(campaignsWithParsedTime);
-            console.log('CreatorDashboard (Frontend): Spark campaigns fetched successfully:', campaignsWithParsedTime);
+            
         } catch (err) {
             console.error("Error fetching Spark campaigns:", err.response?.data?.message || err.message);
             setErrorSparkCampaigns(err.response?.data?.message || 'Failed to fetch Spark campaigns.');
@@ -299,48 +299,48 @@ const CreatorDashboard = () => {
         fetchFomoCampaigns();
     }, [user, token]);
 
-    // Main data fetching effect
+
     useEffect(() => {
-        console.log('CreatorDashboard (Frontend): useEffect for data fetching triggered.');
-        console.log('     -> Current User Context state in useEffect:', { user, token, loadingUser, hasDashboard });
+        
+        
 
         if (loadingUser) {
-            console.log('CreatorDashboard: User context still loading. Waiting...');
+            
             return;
         }
 
         if (!user || !user._id || !token) {
-            console.log('CreatorDashboard: User not logged in, ID missing, or token absent. Redirecting to login.');
+            
             navigate('/login');
             return;
         }
 
-        // Only fetch data if user is logged in and has a dashboard
+
         if (user && user._id && token && hasDashboard) {
-            console.log('CreatorDashboard: All conditions met (user loaded, logged in, token, hasDashboard). Initiating data fetches.');
+            
             fetchUserProfile(user._id, token);
             fetchDripCampaigns(user._id, token);
             fetchVolumeBoostCampaigns(user._id, token);
             fetchSparkCampaigns(user._id, token); // NEW: Fetch Spark Campaigns
         } else if (user && user._id && token && !hasDashboard) {
-            console.log('CreatorDashboard: User logged in, but hasDashboard is false. Redirecting to /create-dashboard.');
+            
             navigate('/create-dashboard');
         }
 
     }, [user, token, loadingUser, hasDashboard, navigate, fetchUserProfile, fetchDripCampaigns, fetchVolumeBoostCampaigns, fetchSparkCampaigns]);
 
-    // Cleanup blob URLs on component unmount or profileData change
+
     useEffect(() => {
         const currentProfileData = profileData;
         return () => {
             if (currentProfileData) {
                 if (currentProfileData.previewLogo && typeof currentProfileData.previewLogo === 'string' && currentProfileData.previewLogo.startsWith('blob:')) {
                     URL.revokeObjectURL(currentProfileData.previewLogo);
-                    console.log('CreatorDashboard: Revoked blob URL for logo.');
+                    
                 }
                 if (currentProfileData.previewBanner && typeof currentProfileData.previewBanner === 'string' && currentProfileData.previewBanner.startsWith('blob:')) {
                     URL.revokeObjectURL(currentProfileData.previewBanner);
-                    console.log('CreatorDashboard: Revoked blob URL for banner.');
+                    
                 }
             }
         };
@@ -348,14 +348,14 @@ const CreatorDashboard = () => {
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
-        console.log(`CreatorDashboard: File change detected for ${name}.`);
+        
         if (files && files[0]) {
             const file = files[0];
             const previewUrlKey = `preview${name.charAt(0).toUpperCase() + name.slice(1)}`;
 
             if (profileData && profileData[previewUrlKey] && typeof profileData[previewUrlKey] === 'string' && profileData[previewUrlKey].startsWith('blob:')) {
                 URL.revokeObjectURL(profileData[previewUrlKey]);
-                console.log(`CreatorDashboard: Revoked previous blob URL for ${name}.`);
+                
             }
 
             setProfileData((prev) => {
@@ -364,7 +364,7 @@ const CreatorDashboard = () => {
                     [name]: file,
                     [previewUrlKey]: URL.createObjectURL(file),
                 };
-                console.log(`CreatorDashboard: Profile data updated after file change. New ${name} preview:`, newState[previewUrlKey]);
+                
                 return newState;
             });
         }
@@ -374,14 +374,14 @@ const CreatorDashboard = () => {
         const { name, value } = e.target;
         setProfileData((prev) => {
             const newState = { ...prev, [name]: value };
-            console.log(`CreatorDashboard: Profile data updated for field '${name}'. New value: '${value}'`);
+            
             return newState;
         });
     };
 
     const handleSubmitProfile = async (e) => {
         e.preventDefault();
-        console.log('CreatorDashboard (Frontend): handleSubmitProfile triggered.');
+        
         if (!user || !user._id || !token) {
             console.warn("CreatorDashboard: User not logged in, preventing profile update.");
             showAlertDialog({
@@ -397,15 +397,15 @@ const CreatorDashboard = () => {
             if (key === 'logo' || key === 'banner') {
                 if (profileData[key] instanceof File) {
                     data.append(key, profileData[key]);
-                    console.log(`CreatorDashboard: Appending file ${key} to FormData.`);
+                    
                 }
             } else if (!key.startsWith('preview') && profileData[key] !== null && profileData[key] !== undefined) {
                 data.append(key, profileData[key]);
-                console.log(`CreatorDashboard: Appending form field ${key}: ${profileData[key]} to FormData.`);
+                
             }
         });
         data.append("ownerId", user._id);
-        console.log('CreatorDashboard (Frontend): Sending profile update request with FormData.');
+        
 
         try {
             const response = await axios.post(`${API_BASE_URL}/api/project/creator-dashboard`, data, {
@@ -414,7 +414,7 @@ const CreatorDashboard = () => {
                     'Content-Type': 'multipart/form-data', // Important for FormData
                 },
             });
-            console.log('CreatorDashboard (Frontend): Profile update successful. Response data:', response.data);
+            
             showAlertDialog({
                 title: "Profile Updated",
                 message: "Your profile has been updated successfully!",
@@ -430,14 +430,14 @@ const CreatorDashboard = () => {
                 twitter: updatedData.socials?.twitter || "",
                 website: updatedData.socials?.website || "",
                 discord: updatedData.socials?.discord || "",
-                // *** CHANGE THESE LINES ***
+
                 previewLogo: updatedData.logo || "https://placehold.co/100x100/1a1a1a/00e676?text=LOGO", // Use directly
                 previewBanner: updatedData.banner || "https://placehold.co/1200x250/1a1a1a/00e676?text=BANNER", // Use directly
-                // ************************
+
                 logo: null, // Reset file objects
                 banner: null, // Reset file objects
             }));
-            console.log('CreatorDashboard (Frontend): Profile data state updated after successful submission.');
+            
 
 
         } catch (err) {
@@ -460,7 +460,7 @@ const CreatorDashboard = () => {
     const handleAddTweetToCampaign = async (e) => {
         e.preventDefault();
         const { campaignId, newTweetLink } = addTweetForm;
-        console.log(`CreatorDashboard: Attempting to add tweet "${newTweetLink}" to campaign ID: ${campaignId}`);
+        
 
         if (!campaignId || !newTweetLink.trim()) {
             const errorMessage = "Tweet link cannot be empty. Please ensure your backend allows this format if it's not a URL.";
@@ -490,7 +490,7 @@ const CreatorDashboard = () => {
                         ? { ...campaign, tweets: [...campaign.tweets, newTweetLink.trim()] }
                         : campaign
                 );
-                console.log('CreatorDashboard: Drip campaigns state updated after adding tweet.');
+                
                 return updatedCampaigns;
             });
 
@@ -500,7 +500,7 @@ const CreatorDashboard = () => {
                 message: response.data.message || "Tweet added successfully!",
                 type: "success"
             });
-            console.log('CreatorDashboard: Tweet added successfully. Response:', response.data);
+            
 
         } catch (err) {
             console.error("CreatorDashboard: Error adding tweet to campaign:", err.response?.data || err.message, err);
@@ -525,9 +525,9 @@ const CreatorDashboard = () => {
         }
     };
 
-    console.log('CreatorDashboard (Frontend): Checking conditional rendering blocks.');
+    
 
-    // Consolidated loading and auth checks for initial render
+
     if (loadingUser || loadingProfile || loadingDripCampaigns || loadingVolumeBoosts || loadingFomoCampaigns || loadingSparkCampaigns) {
         return (
             <div className="dashboard-loading-overlay">
@@ -546,8 +546,8 @@ const CreatorDashboard = () => {
         );
     }
 
-    // This block should only be reached if user is loaded and authenticated
-    // If hasDashboard is false, user needs to create one.
+
+
     if (!hasDashboard) {
         return (
             <div className="dashboard-error-message">
@@ -565,19 +565,19 @@ const CreatorDashboard = () => {
         return <div className="dashboard-error-message"><p>Failed to load creator profile. Please try again or create one.</p></div>;
     }
 
-    // Placeholder for creator specific stats (will need backend integration for real data)
-    // Assuming user object from context might have balance, or it needs to be fetched separately
+
+
     const totalCampaigns = dripCampaigns.length + volumeBoostCampaigns.length + fomoCampaigns.length + sparkCampaigns.length;
     const totalUsersEngaged = user?.metrics?.totalUsersEngaged || 0; // Example, adjust based on your user object structure
     const totalSpend = user?.metrics?.totalSpend || 0; // Example, adjust based on your user object structure
 
 
-    console.log('CreatorDashboard (Frontend): All checks passed. Rendering actual dashboard UI.');
+    
     return (
         <div className="creator-dashboard-container">
-            {/* Main Profile Header Section */}
+            {}
             <div className="creator-profile-header-section glass-card">
-                {/* Banner Section */}
+                {}
                 <div className="banner-section">
                     <div
                         className="banner-image-placeholder"
@@ -602,9 +602,9 @@ const CreatorDashboard = () => {
                     )}
                 </div>
             <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-                {/* Profile Picture and Info Area */}
+                {}
                 <div className="profile-info-area">
-                    {/* Profile Picture */}
+                    {}
                     <div className="profile-pic-wrapper">
                         <img
                             src={profileData.previewLogo}
@@ -632,15 +632,15 @@ const CreatorDashboard = () => {
                         )}
                     </div>
 
-                    {/* Wrapper for profile details and action buttons */}
+                    {}
                     <div className="profile-details-and-actions-wrapper">
-                        {/* Profile Name, Username, Description, Social Links, Tags */}
+                        {}
                         <div className="profile-details-content">
                             <h2 className="profile-name">{profileData.name || "Project Name"}</h2>
                             <p className="profile-username">@{profileData.username || "username"}</p>
                             <p className="profile-description">{profileData.description || "No description provided."}</p>
 
-                            {/* Social Links */}
+                            {}
                             <div className="social-links-container">
                                 {profileData.twitter && (
                                     <a href={profileData.twitter} target="_blank" rel="noreferrer" className="social-link twitter">
@@ -662,7 +662,7 @@ const CreatorDashboard = () => {
                                 )}
                             </div>
 
-                            {/* Tags */}
+                            {}
                             <div className="profile-tags-container">
                                 {profileData.tags &&
                                     profileData.tags.split(",").map((tag, i) => (
@@ -676,7 +676,7 @@ const CreatorDashboard = () => {
                             </div>
                         </div>
 
-                        {/* Profile Actions (Edit Profile, Create Campaign) */}
+                        {}
                         <div className="profile-action-buttons">
                             <button
                                 onClick={() => setEditingProfile(!editingProfile)}
@@ -685,7 +685,7 @@ const CreatorDashboard = () => {
                                 <FaEdit /> {editingProfile ? "Cancel Edit" : "Edit Profile"}
                             </button>
 
-                            {/* Dropdown for Create Campaign */}
+                            {}
                             <div className="create-campaign-dropdown" ref={createCampaignDropdownRef}>
                                 <button
                                     onClick={() => setShowCreateCampaignDropdown(prev => !prev)}
@@ -733,12 +733,12 @@ const CreatorDashboard = () => {
                                 )}
                             </div>
                         </div>
-                    </div> {/* End profile-details-and-actions-wrapper */}
-                </div> {/* End profile-info-area */}
-            </div> {/* End creator-profile-header-section */}
+                    </div> {}
+                </div> {}
+            </div> {}
 
 <div className="main-content-area">
-    {/* Editable Fields (Profile Form) */}
+    {}
     {editingProfile && (
         <form onSubmit={handleSubmitProfile} className="edit-profile-form glass-card">
             <h3 className="form-section-heading">Update Profile Information</h3>
@@ -779,13 +779,13 @@ const CreatorDashboard = () => {
         </form>
     )}
 
-    {/* --- Campaigns Section Navigation (Optional: Could be a real tab component) --- */}
+    {}
     <div className="campaign-sections-title glass-card">
         <h2>Your Campaigns Overview</h2>
         <p>Manage and monitor the performance of your active and past campaigns.</p>
     </div>
 
-    {/* --- Spark Campaigns Section (NEW) --- */}
+    {}
     <div className="campaign-section glass-card">
         <h3 className="section-title"><FaBullhorn className="section-icon" /> Your Spark Campaigns (Telegram)</h3>
         {errorSparkCampaigns && <div className="error-message">{errorSparkCampaigns}</div>}
@@ -860,7 +860,7 @@ const CreatorDashboard = () => {
             </div>
         )}
     </div>
-    {/* --- Drip Campaigns Section --- */}
+    {}
     <div className="campaign-section glass-card">
         <h3 className="section-title"><FaTasks className="section-icon" /> Your Drip Campaigns</h3>
         {errorDripCampaigns && <div className="error-message">{errorDripCampaigns}</div>}
@@ -963,7 +963,7 @@ const CreatorDashboard = () => {
         )}
     </div>
 
-    {/* Volume Boost Campaigns Section */}
+    {}
     <div className="campaign-section glass-card">
         <h3 className="section-title"><FaChartLine className="section-icon" /> Your Volume Boost Campaigns</h3>
         {errorVolumeBoosts && <div className="error-message">{errorVolumeBoosts}</div>}
@@ -1010,7 +1010,7 @@ const CreatorDashboard = () => {
         )}
     </div>
 
-    {/* FOMO Campaigns Section */}
+    {}
     <div className="campaign-section glass-card">
         <h3 className="section-title"><FaBullhorn className="section-icon" /> Your FOMO Campaigns</h3>
         {errorFomoCampaigns && <div className="error-message">{errorFomoCampaigns}</div>}

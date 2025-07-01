@@ -1,4 +1,4 @@
-// routes/campaigns.js
+
 const express = require('express');
 const router = express.Router();
 const { Campaign, UserParticipation } = require('../models/Campaign');
@@ -10,18 +10,18 @@ const cloudinary = require('../utils/cloudinaryConfig'); // Import your Cloudina
 const uploadProof = require('../middleware/upload'); // Multer middleware for file uploads
 const multer = require('multer'); // Import multer to catch Multer errors
 
-// Configure Multer for in-memory storage, as Cloudinary handles the actual storage
+
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: {
         fileSize: 5 * 1024 * 1024, // 5 MB file size limit for actual files
-        // *** ADD THIS LINE FOR TEXT FIELD SIZE LIMIT ***
+
         fieldSize: 10 * 1024 * 1024 // 10 MB limit for text fields (e.g., base64 string)
-                                   // Adjust this value as needed. 10MB is a good starting point for images.
+
     },
     fileFilter: (req, file, cb) => {
-        // Accept images only
+
         if (!file.mimetype.startsWith('image/')) {
             return cb(new Error('Only image files are allowed!'), false);
         }
@@ -30,14 +30,14 @@ const upload = multer({
 });
 
 
-// --- IMPORTANT: Ensure these constants match your frontend values exactly ---
+
 const PLATFORM_FEE_PERCENTAGE = 15;
 const CUSTOM_TASK_MIN_RATE = 0.20; // This rate is used for filtering and validation
 
-// --- GET all campaigns (PUBLIC) ---
+
 router.get('/', async (req, res) => {
     try {
-        // Populate the 'createdBy' field and select only the 'username'
+
         const campaigns = await Campaign.find({}).populate('createdBy', 'username');
         res.status(200).json(campaigns);
     } catch (err) {
@@ -46,11 +46,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-// --- GET a single campaign by ID (PUBLIC) ---
+
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        // Populate the 'createdBy' field and select only the 'username'
+
         const campaign = await Campaign.findById(id).populate('createdBy', 'username');
 
         if (!campaign) {
@@ -68,11 +68,11 @@ router.get('/:id', async (req, res) => {
 });
 
 
-// --- POST a new campaign ---
-// ADD upload.none() middleware here to parse text fields from FormData
+
+
 router.post('/', authenticateJWT, upload.none(), async (req, res) => {
     try {
-        console.log("[Backend] Campaign POST - req.body received by Multer:", req.body); // Debug log
+
 
         const {
             name,
@@ -89,18 +89,18 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
             bannerImage
         } = req.body;
 
-        // Parse JSON strings from formData
+
         const parsedCampaignTasks = typeof campaignTasks === 'string' ? JSON.parse(campaignTasks) : campaignTasks;
         const parsedRules = typeof rules === 'string' ? JSON.parse(rules) : rules;
         const parsedTaskDetailsForExecution = typeof taskDetailsForExecution === 'string' ? JSON.parse(taskDetailsForExecution) : taskDetailsForExecution;
         const parsedSocials = typeof socials === 'string' ? JSON.parse(socials) : socials;
 
 
-        console.log("BACKEND LOG: (Point 1) parsedCampaignTasks (from FormData string):", parsedCampaignTasks);
+        
         if (parsedCampaignTasks.length > 0 && parsedCampaignTasks[0].links) {
-            console.log("BACKEND LOG: (Point 1) First task's links array from parsed data:", parsedCampaignTasks[0].links);
+            
             if (parsedCampaignTasks[0].links.length > 0) {
-                console.log("BACKEND LOG: (Point 1) First link object in first task (from parsed data):", parsedCampaignTasks[0].links[0]);
+                
             }
         }
 
@@ -110,7 +110,7 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
             customTaskDefinitions = []
         } = parsedTaskDetailsForExecution || {};
 
-        // --- Server-side validation ---
+
         const parsedBudget = parseFloat(budget);
         const parsedNumberOfUsers = parseInt(numberOfUsers);
 
@@ -132,7 +132,7 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
             return res.status(400).json({ message: `Total task allocation must be around 100% (currently ${sumAllocations.toFixed(1)}%). Please adjust.` });
         }
 
-        // --- Handle image upload to Cloudinary ---
+
         let imageUrl = 'https://via.placeholder.com/600x400?text=Campaign'; // Default placeholder
         let imagePublicId = null;
 
@@ -152,7 +152,7 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
             return res.status(400).json({ message: "Campaign banner image is required." });
         }
 
-        // --- Calculate fields for ProjectGrid.jsx display ---
+
         let totalActiveTaskTypes = 0;
         let payoutPerUser = 0;
 
@@ -239,14 +239,14 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
 
         const finalDescription = description || 'A new campaign created via the platform.';
 
-        // *** NEW LOGIC: Fetch creator's logo from their Project/CreatorDashboard ***
+
         let creatorLogoUrl = 'https://via.placeholder.com/48?text=New'; // Default placeholder
         const creatorDashboard = await Project.findOne({ ownerId: creatorId }); // Find the creator's dashboard by their user ID
 
         if (creatorDashboard && creatorDashboard.logo) {
             creatorLogoUrl = creatorDashboard.logo; // Use the logo from the creator's dashboard
         }
-        // *** END NEW LOGIC ***
+
 
 
         const newCampaign = new Campaign({
@@ -274,16 +274,16 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
             completedUsers: [],
         });
 
-        console.log("BACKEND LOG: (Point 2) newCampaign document BEFORE .save():", newCampaign);
+        
         if (newCampaign.campaignTasks.length > 0 && newCampaign.campaignTasks[0].links) {
-            console.log("BACKEND LOG: (Point 2) First task's links array in Mongoose document BEFORE .save():", newCampaign.campaignTasks[0].links);
+            
             if (newCampaign.campaignTasks[0].links.length > 0) {
-                console.log("BACKEND LOG: (Point 2) First link object in Mongoose document BEFORE .save():", newCampaign.campaignTasks[0].links[0]);
+                
             }
         }
 
         const savedCampaign = await newCampaign.save();
-        console.log("BACKEND LOG: Campaign saved successfully (AFTER .save()):", savedCampaign);
+        
 
         res.status(201).json(savedCampaign);
 
@@ -300,7 +300,7 @@ router.post('/', authenticateJWT, upload.none(), async (req, res) => {
     }
 });
 
-// --- NEW ROUTE: User Joins a specific Task Group ---
+
 router.post('/:id/tasks/:taskGroupKey/join', authenticateJWT, async (req, res) => {
     try {
         const { id: campaignId, taskGroupKey } = req.params;
@@ -330,7 +330,7 @@ router.post('/:id/tasks/:taskGroupKey/join', authenticateJWT, async (req, res) =
             return res.status(409).json({ message: `You have already joined the '${taskGroup.name}' task group in this campaign.`, participation: existingParticipation.toObject() });
         }
 
-        // Calculate the payout amount for a single instance of this task group
+
         const payoutPerInstanceForThisGroup = taskGroup.payoutPerInstance || 0;
 
         const completedTasksArray = [];
@@ -398,21 +398,21 @@ router.post('/:id/tasks/:taskGroupKey/join', authenticateJWT, async (req, res) =
 });
 
 
-// --- Handle Proof File Upload to Cloudinary ---
+
 router.post(
     '/:id/tasks/:taskGroupKey/upload-proof',
     authenticateJWT,
     upload.single('proofImage'),
     async (req, res) => {
         try {
-            console.log('[UPLOAD-PROOF] Request received.');
+            
             const { id: campaignId, taskGroupKey } = req.params;
             const userId = req.user.id;
             const { link } = req.body;
 
-            console.log(`[UPLOAD-PROOF] Params from URL: CampaignID=${campaignId}, TaskGroupKey=${taskGroupKey}`);
-            console.log(`[UPLOAD-PROOF] Authenticated UserID: ${userId}`);
-            console.log(`[UPLOAD-PROOF] Link from Request Body (Frontend): ${link}`);
+            
+            
+            
 
             if (!req.file) {
                 console.warn('[UPLOAD-PROOF] No file received by multer for link:', link);
@@ -423,8 +423,8 @@ router.post(
                 return res.status(400).json({ message: "Sub-task identifier (link) is missing." });
             }
 
-            console.log('[UPLOAD-PROOF] File received. Mimetype:', req.file.mimetype);
-            console.log('[UPLOAD-PROOF] File buffer size:', req.file.buffer.length);
+            
+            
 
             const uploadResult = await cloudinary.uploader.upload(
                 `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`,
@@ -437,9 +437,9 @@ router.post(
             const proofFileUrl = uploadResult.secure_url;
             const proofFileId = uploadResult.public_id;
 
-            console.log('[UPLOAD-PROOF] Cloudinary upload successful. URL:', proofFileUrl);
+            
 
-            console.log(`[UPLOAD-PROOF] Attempting to find UserParticipation for Campaign: ${campaignId}, User: ${userId}, TaskGroupKey: ${taskGroupKey}`);
+            
             const userParticipation = await UserParticipation.findOne({
                 campaign: campaignId,
                 user: userId,
@@ -451,8 +451,8 @@ router.post(
                 return res.status(404).json({ message: "User participation for this task group not found." });
             }
 
-            console.log(`[UPLOAD-PROOF] Found UserParticipation document. ID: ${userParticipation._id}`);
-            console.log('[UPLOAD-PROOF] Current completedTasks links in DB:', userParticipation.completedTasks.map(t => t.link));
+            
+            
 
             let taskToUpdate = userParticipation.completedTasks.find(task => task.link === link);
 
@@ -469,11 +469,11 @@ router.post(
                 taskToUpdate.proofFileUrl = proofFileUrl;
                 taskToUpdate.proofFileId = proofFileId;
                 taskToUpdate.submittedAt = new Date();
-                console.log(`[UPLOAD-PROOF] Existing task entry updated for link: ${link}`);
+                
             }
 
             await userParticipation.save();
-            console.log('[UPLOAD-PROOF] UserParticipation saved successfully.');
+            
 
             const allTasksSubmittedOrCompleted = userParticipation.completedTasks.every(
                 task => task.status === 'completed' || task.status === 'pending-review' || task.status === 'rejected'
@@ -485,7 +485,7 @@ router.post(
                 if (userParticipation.status !== groupStatus) {
                     userParticipation.status = groupStatus;
                     await userParticipation.save();
-                    console.log('[UPLOAD-PROOF] UserParticipation group status updated to pending-review.');
+                    
                 }
             }
 
@@ -515,7 +515,7 @@ router.post(
     }
 );
 
-// --- SUBMIT Task Proof (User) for non-file based proofs ---
+
 router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req, res) => {
     try {
         const { id: campaignId, taskGroupKey } = req.params;
@@ -542,13 +542,13 @@ router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req
             return res.status(404).json({ message: "Specific task link not found in your participation record." });
         }
 
-        // Prevent resubmission if already completed or pending review
+
         if (taskToUpdate.status === 'completed' || taskToUpdate.status === 'pending-review') {
             return res.status(400).json({ message: `Proof for this task is already ${taskToUpdate.status}.` });
         }
 
-        // --- NEW LOGIC: Conditional Proof Validation ---
-        // First, get the specific task definition from the campaign to know its type
+
+
         const campaign = await Campaign.findById(campaignId);
         if (!campaign) {
             return res.status(404).json({ message: "Campaign not found for task type check." });
@@ -557,10 +557,10 @@ router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req
         if (!campaignTaskGroup) {
             return res.status(404).json({ message: "Campaign task group not found for type check." });
         }
-        // Assuming individual tasks within a group might also have types or specific requirements,
-        // though your current schema for `completedTasks` doesn't explicitly store `type` per link.
-        // If `subTask.type` is directly available on `taskToUpdate` (from initial `taskGroup.links` mapping), use that.
-        // Otherwise, you'll need to infer from `campaignTaskGroup.key`.
+
+
+
+
 
         const taskType = campaignTaskGroup.key; // Example: 'x-like', 'manual-link', 'manual-upload'
 
@@ -568,43 +568,43 @@ router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req
         let submittedProofFileUrl = null;
         let submittedProofFileId = null;
 
-        console.log(`[SUBMIT PROOF] Task Type: ${taskType}, Proof Data Received:`, proofData);
+        
 
-        // Define which task types do NOT require an explicit proofLink from the user input field
+
         const socialTaskTypes = ['x-like', 'x-retweet', 'x-comment', 'x-follow', 'telegram', 'discord', 'website'];
         const isManualLinkTask = taskType === 'manual-link' || (taskType.startsWith('custom-') && !campaignTaskGroup.requiresFileUpload); // Assuming 'requiresFileUpload' property for custom tasks
         const isManualUploadTask = taskType === 'manual-upload' || (taskType.startsWith('custom-') && campaignTaskGroup.requiresFileUpload);
 
         if (socialTaskTypes.includes(taskType)) {
-            // For social tasks, the frontend might send the original task link or a simple 'done' string
-            // We just need confirmation that *something* was submitted.
-            // The `proofData` might simply be `{ proofLink: 'done' }` or `{ proofLink: originalTaskLink }`
+
+
+
             if (!proofData || !proofData.proofLink) {
                  return res.status(400).json({ message: "Proof confirmation (e.g., 'done' or original task link) is required for this task." });
             }
             submittedProofLink = proofData.proofLink.trim();
         } else if (isManualLinkTask) {
-            // For manual-link tasks, an explicit proofLink is always required from the user
+
             if (!proofData || !proofData.proofLink || typeof proofData.proofLink !== 'string' || proofData.proofLink.trim().length === 0) {
                 return res.status(400).json({ message: "A valid proof link is required for this custom task." });
             }
             submittedProofLink = proofData.proofLink.trim();
         } else if (isManualUploadTask) {
-            // For manual-upload tasks, proofFileUrl and proofFileId are required
-            // This route should generally not handle the actual file upload, but confirm it was uploaded via the /upload-proof route
+
+
             if (!proofData || !proofData.proofFileUrl || !proofData.proofFileId) {
                 return res.status(400).json({ message: "Proof file upload data is required for this custom task. Please upload the file first." });
             }
             submittedProofFileUrl = proofData.proofFileUrl;
             submittedProofFileId = proofData.proofFileId;
         } else {
-            // Fallback for any other unexpected task types or if default proofLink is expected
+
             if (!proofData || !proofData.proofLink || typeof proofData.proofLink !== 'string' || proofData.proofLink.trim().length === 0) {
                 return res.status(400).json({ message: "Proof data (proofLink or proofFile) is required for this task." });
             }
             submittedProofLink = proofData.proofLink.trim();
         }
-        // --- END NEW LOGIC ---
+
 
         taskToUpdate.status = 'pending-review'; // Set status to pending review
         taskToUpdate.proofLink = submittedProofLink; // Store the conditionally set proof link
@@ -614,7 +614,7 @@ router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req
 
         await userParticipation.save();
 
-        // Update the overall group status if all individual tasks are submitted/completed
+
         const allTasksSubmittedOrCompleted = userParticipation.completedTasks.every(
             task => task.status === 'completed' || task.status === 'pending-review' || task.status === 'rejected'
         );
@@ -645,13 +645,13 @@ router.post('/:id/tasks/:taskGroupKey/submit-proof', authenticateJWT, async (req
 });
 
 
-// --- LEAVE Campaign Task Group ---
+
 router.post('/:id/tasks/:taskGroupKey/leave', authenticateJWT, async (req, res) => {
     try {
         const { id: campaignId, taskGroupKey } = req.params;
         const userId = req.user.id;
 
-        // 1. Find and delete the UserParticipation record for this user and task group
+
         const deletedParticipation = await UserParticipation.findOneAndDelete({
             campaign: campaignId,
             user: userId,
@@ -662,7 +662,7 @@ router.post('/:id/tasks/:taskGroupKey/leave', authenticateJWT, async (req, res) 
             return res.status(404).json({ message: "You are not currently participating in this task group." });
         }
 
-        // 2. Decrement the currentParticipants count in the Campaign model
+
         const updatedCampaign = await Campaign.findOneAndUpdate(
             { _id: campaignId, "campaignTasks.key": taskGroupKey },
             { $inc: { "campaignTasks.$.currentParticipants": -1 } },
@@ -671,8 +671,8 @@ router.post('/:id/tasks/:taskGroupKey/leave', authenticateJWT, async (req, res) 
 
         if (!updatedCampaign) {
             console.warn(`Campaign or task group not found for decrement after user left. Campaign ID: ${campaignId}, Task Group Key: ${taskGroupKey}`);
-            // It's possible the campaign itself was deleted, or the taskGroupKey became invalid.
-            // Still return success for the user leaving, but log a server-side warning.
+
+
             return res.status(200).json({ message: "Successfully left the task group, but campaign counter update failed. Please contact support if this persists." });
         }
         const updatedTaskGroup = updatedCampaign.campaignTasks.find(task => task.key === taskGroupKey);
@@ -691,7 +691,7 @@ router.post('/:id/tasks/:taskGroupKey/leave', authenticateJWT, async (req, res) 
     }
 });
 
-// --- VERIFY Task for a specific participation (Creator Only) ---
+
 router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verify', authenticateJWT, async (req, res) => {
     const { campaignId, participationId, taskIndex } = req.params;
     const { status, fraudReported } = req.body; // status: 'completed' or 'rejected', fraudReported: boolean
@@ -727,7 +727,7 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
         if (fraudReported) {
             taskToReview.isFraudulent = true;
             taskToReview.fraudReportedBy = creatorId;
-            console.log(`[Campaign Task Review] Fraud reported for user ${userParticipation.user} on task ${taskToReview.link} in campaign ${campaignId}`);
+            
         } else {
             taskToReview.isFraudulent = false;
             taskToReview.fraudReportedBy = null;
@@ -753,7 +753,7 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
         }
         await userParticipation.save(); // Save the updated userParticipation record
 
-        // --- Trust Score and Earnings Logic ---
+
         const user = await User.findById(userParticipation.user);
         if (!user) {
             console.error(`User ${userParticipation.user} not found during task verification.`);
@@ -765,17 +765,17 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
             const MAX_TRUST_SCORE = 1000;
             user.reputationScore = Math.min(user.reputationScore + TRUST_SCORE_INCREASE, MAX_TRUST_SCORE);
 
-            // Directly use payoutAmount from the embedded taskToReview
+
             const earningPerSingleTaskInstance = taskToReview.payoutAmount || 0;
             user.pendingEarnings = (user.pendingEarnings || 0) + earningPerSingleTaskInstance;
 
-            console.log(`User ${user.username}'s trust score increased to ${user.reputationScore}.`);
-            console.log(`User ${user.username}'s pending earnings increased by ${earningPerSingleTaskInstance}. New total: ${user.pendingEarnings}`);
+            
+            
         } else if (status === 'rejected') {
             if (!fraudReported) {
                 const TRUST_SCORE_DECREASE_REJECTION = 2;
                 user.reputationScore = Math.max(user.reputationScore - TRUST_SCORE_DECREASE_REJECTION, 0);
-                console.log(`User ${user.username}'s trust score decreased to ${user.reputationScore} due to rejection.`);
+                
             }
         }
 
@@ -789,12 +789,12 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
                 user.accountStatus = 'banned';
                 user.banReason = `Banned for ${user.fraudulentSubmissionsCount} fraudulent submissions.`;
                 user.banDate = new Date();
-                console.log(`User ${user.username} banned due to repeated fraudulent submissions.`);
+                
             }
         }
         await user.save(); // Save updated user profile
 
-        // Logic to update campaign's completedUsersCount if all required tasks for a user are completed
+
         if (groupJustCompleted) {
             const allUserParticipationsForCampaign = await UserParticipation.find({
                 campaign: campaignId,
@@ -814,7 +814,7 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
                 campaign.completedUsersCount = (campaign.completedUsersCount || 0) + 1;
                 campaign.completedUsers.push(userParticipation.user); // Add user to completed list
                 await campaign.save();
-                console.log(`User ${user.username} has completed all tasks for Campaign "${campaign.name}". completedUsersCount incremented to ${campaign.completedUsersCount}.`);
+                
             }
         }
 
@@ -835,28 +835,28 @@ router.post('/:campaignId/participations/:participationId/tasks/:taskIndex/verif
     }
 });
 
-// --- GET User Participation for a specific campaign ---
+
 router.get('/:campaignId/user-participation', authenticateJWT, async (req, res) => {
     try {
         const { campaignId } = req.params;
         const userId = req.user.id; // Get the authenticated user's ID
 
-        // 1. Find all participation documents for this user and campaign
+
         const userParticipationsArray = await UserParticipation.find({
             campaign: campaignId,
             user: userId
         });
 
-        // 2. Transform the array into an object (map) keyed by taskGroupKey
+
         const participationsMap = {};
         userParticipationsArray.forEach(participation => {
-            // Use .toObject() to convert Mongoose document to a plain JavaScript object
-            // This prevents potential issues with direct property access on Mongoose objects
+
+
             participationsMap[participation.taskGroupKey] = participation.toObject();
         });
 
-        // 3. Send the transformed map back to the frontend
-        // If participationsMap is empty, it will send an empty object {}, which is also fine for the frontend.
+
+
         res.status(200).json(participationsMap);
 
     } catch (err) {
@@ -869,7 +869,7 @@ router.get('/:campaignId/user-participation', authenticateJWT, async (req, res) 
 });
 
 
-// --- GET campaigns created by a specific user (creator) ---
+
 router.get('/creator/:creatorId', authenticateJWT, async (req, res) => {
     try {
         const { creatorId } = req.params;
@@ -878,8 +878,8 @@ router.get('/creator/:creatorId', authenticateJWT, async (req, res) => {
             return res.status(403).json({ message: 'Forbidden: You are not authorized to view these campaigns.' });
         }
 
-        // Find campaigns where the 'createdBy' field matches the creatorId
-        // Populate the 'createdBy' field and select only the 'username'
+
+
         const campaigns = await Campaign.find({ createdBy: creatorId })
             .populate('createdBy', 'username') // Added populate
             .sort({ createdAt: -1 }); // Sort by creation date
@@ -895,7 +895,7 @@ router.get('/creator/:creatorId', authenticateJWT, async (req, res) => {
 
     } catch (err) {
         console.error('Error fetching creator campaigns:', err);
-        // Handle CastError if creatorId is not a valid ObjectId
+
         if (err.name === 'CastError') {
             return res.status(400).json({ message: 'Invalid creator ID format.' });
         }
@@ -904,7 +904,7 @@ router.get('/creator/:creatorId', authenticateJWT, async (req, res) => {
 });
 
 
-// --- VERIFY General Tweet (Simulated) - This route's functionality is a placeholder ---
+
 router.post('/:id/verify-general-tweet', authenticateJWT, async (req, res) => {
     const { id: campaignId } = req.params;
     const { username, tweetContent } = req.body;
@@ -915,10 +915,10 @@ router.post('/:id/verify-general-tweet', authenticateJWT, async (req, res) => {
     }
 
     try {
-        console.log(`Attempting to verify tweet for user ${username} in campaign ${campaignId}`);
-        console.log(`Expected tweet content: "${tweetContent}"`);
+        
+        
 
-        // Simulate API call and verification logic
+
         const isTweetFound = Math.random() > 0.3; // Simulate success/failure for demonstration
 
         if (isTweetFound) {
@@ -929,24 +929,24 @@ router.post('/:id/verify-general-tweet', authenticateJWT, async (req, res) => {
             });
 
             if (!generalTweetParticipation) {
-                // If it's the first time, create a new participation record for this 'general-tweet' task type
+
                 generalTweetParticipation = new UserParticipation({
                     campaign: campaignId,
                     user: userId,
                     taskGroupKey: 'general-tweet',
-                    // Assuming 'general-tweet' is a task group in your campaign schema
-                    // You might need to retrieve the payoutPerInstance for 'general-tweet' from the campaign object
-                    // For simplicity here, assuming a fixed or 0 payout for this simulated general tweet.
+
+
+
                     completedTasks: [{ link: 'N/A', status: 'completed', proofLink: 'auto-verified', payoutAmount: 0 }], // Auto-verified
                     status: 'completed'
                 });
             } else {
-                // If it exists, update its status
+
                 const existingTask = generalTweetParticipation.completedTasks.find(t => t.link === 'N/A');
                 if (existingTask) {
                     existingTask.status = 'completed';
                     existingTask.proofLink = 'auto-verified';
-                    // Update payoutAmount if it's dynamic for this task type
+
                 } else {
                     generalTweetParticipation.completedTasks.push({ link: 'N/A', status: 'completed', proofLink: 'auto-verified', payoutAmount: 0 });
                 }
@@ -965,13 +965,13 @@ router.post('/:id/verify-general-tweet', authenticateJWT, async (req, res) => {
     }
 });
 
-// GET all tasks pending review for a specific campaign
+
 router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) => {
     try {
         const { campaignId } = req.params;
         const creatorId = req.user.id;
 
-        // 1. Verify that the authenticated user is the creator of this campaign
+
         const campaign = await Campaign.findById(campaignId);
         if (!campaign) {
             return res.status(404).json({ message: 'Campaign not found.' });
@@ -980,7 +980,7 @@ router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) =>
             return res.status(403).json({ message: 'Forbidden: You are not the creator of this campaign.' });
         }
 
-        // 2. Find all UserParticipation documents for this campaign that have tasks pending review
+
         const pendingParticipations = await UserParticipation.find({
             campaign: campaignId,
             'completedTasks.status': 'pending-review' // Query for documents where at least one task is pending
@@ -988,14 +988,14 @@ router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) =>
         .populate('user', 'username email reputationScore fraudulentSubmissionsCount') // Populate user details
         .select('user taskGroupKey completedTasks'); // Select only necessary fields
 
-        // 3. Flatten the results and filter for only the 'pending-review' tasks
+
         const tasksToReview = [];
         pendingParticipations.forEach(participation => {
             const userDetails = participation.user ? participation.user.toObject() : {};
 
             participation.completedTasks.forEach((task, taskIndex) => {
                 if (task.status === 'pending-review') {
-                    // Find the original task definition from the campaign to get more context
+
                     const campaignTaskDef = campaign.campaignTasks.find(ct => ct.key === participation.taskGroupKey);
                     const originalLinkDef = campaignTaskDef && campaignTaskDef.links ? campaignTaskDef.links.find(l => l.link === task.link) : null;
 
@@ -1019,7 +1019,7 @@ router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) =>
                         submittedAt: task.submittedAt,
                         payoutAmount: task.payoutAmount,
                         reviewerNotes: task.reviewerNotes,
-                        // Add more fields from campaignTaskDef or originalLinkDef if helpful
+
                         campaignTaskDefinition: campaignTaskDef, // Useful for showing guideText, guideLink, etc.
                         originalSubTaskDefinition: originalLinkDef // Useful for showing proofRequired, placeholder
                     });
@@ -1027,7 +1027,7 @@ router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) =>
             });
         });
 
-        // 4. Sort by submission time, oldest first (so creators review oldest first)
+
         tasksToReview.sort((a, b) => a.submittedAt - b.submittedAt);
 
         res.status(200).json(tasksToReview);
@@ -1042,13 +1042,13 @@ router.get('/:campaignId/tasks-for-review', authenticateJWT, async (req, res) =>
 });
 
 
-// GET a user's summarized completed tasks for a specific campaign
+
 router.get('/:campaignId/users/:userId/summary', authenticateJWT, async (req, res) => {
     try {
         const { campaignId, userId } = req.params;
         const creatorId = req.user.id;
 
-        // Verify creator (optional, depending on if you want users to see others' summaries)
+
         const campaign = await Campaign.findById(campaignId);
         if (!campaign) {
             return res.status(404).json({ message: 'Campaign not found.' });
@@ -1087,7 +1087,7 @@ router.get('/:campaignId/users/:userId/summary', authenticateJWT, async (req, re
         let totalPotentialEarnings = 0;
         let totalEarned = 0;
 
-        // Iterate through each joined task group for this user
+
         userParticipations.forEach(participation => {
             const taskGroupKey = participation.taskGroupKey;
             const campaignTaskDef = campaign.campaignTasks.find(ct => ct.key === taskGroupKey);
@@ -1130,7 +1130,7 @@ router.get('/:campaignId/users/:userId/summary', authenticateJWT, async (req, re
             totalPotentialEarnings += groupPotentialEarn;
         });
 
-        // Determine overall campaign completion status for the user
+
         const requiredTaskGroupKeys = campaign.campaignTasks
             .filter(task => task.targetParticipants > 0 && task.allocationPercentage > 0)
             .map(task => task.key);

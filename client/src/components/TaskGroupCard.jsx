@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fa';
 import './TaskGroupCard.css';
 
-// --- Constants for Task Types (improves readability and reduces magic strings) ---
+
 const TASK_TYPES = {
     X_LIKE: 'x-like',
     X_RETWEET: 'x-retweet',
@@ -29,10 +29,10 @@ const TASK_TYPES = {
     MANUAL_UPLOAD: 'manual-upload', // For custom tasks requiring image upload
     MANUAL_LINK: 'manual-link',     // For custom tasks requiring link proof
     GENERIC_LINK: 'generic-link',   // Example for other tasks that just need a "Done" button
-    // Potentially add more types if needed, e.g., 'quiz', 'survey'
+
 };
 
-// --- Helper for dynamic icons based on task type ---
+
 const getTaskIcon = (type) => {
     switch (type) {
         case TASK_TYPES.X_LIKE:
@@ -55,7 +55,7 @@ const getTaskIcon = (type) => {
     }
 };
 
-// --- SubTaskItem Component ---
+
 const SubTaskItem = ({
     subTask,
     taskGroupKey,
@@ -64,13 +64,13 @@ const SubTaskItem = ({
     handleUploadProof, // For file uploads
     onVerifyXTask, // Renamed from onVerifyLink for clarity
     xUser,
-    // proofRequiredByGroup // This prop isn't directly used here as subTask.proofRequired is more specific
+
 }) => {
     const [proofLink, setProofLink] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null); // Ref for file input to clear it
 
-    // Use a more descriptive identifier for the subtask, prioritizing _id
+
     const subTaskIdentifier = useMemo(() => subTask._id || subTask.link, [subTask._id, subTask.link]);
 
     const isXTask = useMemo(() => [
@@ -83,31 +83,31 @@ const SubTaskItem = ({
     const isManualUploadTask = useMemo(() => subTask.type === TASK_TYPES.MANUAL_UPLOAD, [subTask.type]);
     const isManualLinkTask = useMemo(() => subTask.type === TASK_TYPES.MANUAL_LINK, [subTask.type]);
 
-    // Determines if an explicit proof input (link or file) is required for THIS specific subtask
-    // 'proofRequired' on the subTask object takes precedence over group-level setting if any
+
+
     const requiresExplicitProofInput = useMemo(() =>
         subTask.proofRequired || isManualUploadTask || isManualLinkTask,
         [subTask.proofRequired, isManualUploadTask, isManualLinkTask]
     );
 
-    // The action section (where inputs/buttons are) should be visible if task is not yet verified, rejected, or still verifying
+
     const showActionSection = useMemo(() => {
-        // If it's already verified or pending review (final status), hide action
+
         if (status === 'verified' || status === 'pending-review') {
             return false;
         }
-        // Otherwise, show action if it's not started, rejected, or still in 'verifying' state
+
         return true;
     }, [status]);
 
 
-    // Button disabled state
+
     const isButtonDisabled = useMemo(() =>
         status === 'pending-review' || status === 'verified' || status === 'verifying', // Disable while verifying
         [status]
     );
 
-    // Dynamic button class for styling
+
     const buttonClass = useMemo(() => {
         let classes = 'action-button submit-action-button';
         if (isButtonDisabled) {
@@ -129,8 +129,8 @@ const SubTaskItem = ({
     }, [proofLink, handleSubmitProof, taskGroupKey, subTaskIdentifier]);
 
     const handleDoneButtonClick = useCallback(() => {
-        // For tasks that don't require explicit input, just confirm completion
-        // Pass subTask.link as proof if it exists, otherwise a generic 'done' string
+
+
         handleSubmitProof(taskGroupKey, subTaskIdentifier, subTask.link || 'done');
     }, [subTask.link, handleSubmitProof, taskGroupKey, subTaskIdentifier]);
 
@@ -140,7 +140,7 @@ const SubTaskItem = ({
             alert("Please select a file to upload.");
             return;
         }
-        // console.log("Submitting file for:", subTaskIdentifier, selectedFile.name); // Keep for debugging
+
 
         if (handleUploadProof) {
             handleUploadProof(taskGroupKey, subTaskIdentifier, selectedFile);
@@ -160,7 +160,7 @@ const SubTaskItem = ({
             alert("Please connect your X (Twitter) account first!");
             return;
         }
-        // 'onVerifyXTask' prop should be handled by the parent (ProjectDetail)
+
         if (onVerifyXTask) {
             onVerifyXTask(taskGroupKey, subTaskIdentifier, subTask.requiredContent);
         } else {
@@ -183,7 +183,7 @@ const SubTaskItem = ({
                 return <span className="status-badge status-rejected"><FaTimesCircle /> Rejected</span>;
             case 'not-started':
             default:
-                // Only render "Not Started" if explicitly needed, otherwise it's implicit by absence of other statuses
+
                 return null; // Don't show "Not Started" badge by default, it clutters the UI
         }
     }, []);
@@ -209,12 +209,12 @@ const SubTaskItem = ({
                             Go
                         </a>
                     )}
-                    {/* Ensure status is rendered only if it's not null/undefined for cleaner display when not started */}
+                    {}
                     {renderStatusVisual(status)}
                 </div>
             </div>
 
-            {/* Action/Proof Section - Always visible if task is not yet verified or pending review */}
+            {}
             {showActionSection && (
                 <div className="sub-task-action-row">
                     {(subTask.description || subTask.requiredContent) && (
@@ -279,7 +279,7 @@ const SubTaskItem = ({
                                 </div>
                             )}
 
-                            {/* Generic proof required (if not manual-link or manual-upload but still needs proof input) */}
+                            {}
                             {!(isManualLinkTask || isManualUploadTask) && subTask.proofRequired && (
                                 <div className="proof-input-group">
                                     <input
@@ -351,7 +351,7 @@ const TaskGroupCard = ({
         links?.every(subTask => {
             const subTaskId = subTask._id || subTask.link;
             const status = getSubTaskStatus(subTaskId);
-            // Consider 'completed' status as well if that's a final state from generic proof submission
+
             return status === 'verified' || status === 'completed' || status === 'pending-review';
         }) || false,
         [links, getSubTaskStatus]
@@ -428,7 +428,7 @@ const TaskGroupCard = ({
                                             handleUploadProof={handleUploadProof}
                                             onVerifyXTask={onVerifyLink} // Pass the X verification handler
                                             xUser={xUser}
-                                            // proofRequiredByGroup={proofRequired} // Not needed, subTask.proofRequired is used
+
                                         />
                                     ))}
                                 </ul>

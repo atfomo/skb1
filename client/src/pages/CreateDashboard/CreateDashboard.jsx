@@ -1,4 +1,4 @@
-// client/src/pages/CreateDashboard/CreateDashboard.jsx
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCamera, FaSpinner, FaExclamationCircle } from "react-icons/fa"; // Added icons for better feedback
@@ -7,7 +7,7 @@ import { useUser } from '../../UserContext'; // Path to your UserContext
 import axiosInstance from '../../utils/axiosInstance'; // Import your custom Axios instance
 
 const CreateDashboard = () => {
-    // Correctly deconstruct refetchUserData from useUser hook
+
     const { user, token, loadingUser, refetchUserData } = useUser();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -20,26 +20,26 @@ const CreateDashboard = () => {
         discord: '',
         logo: null,
         banner: null,
-        // Default placeholder images for preview - matched to dark theme
+
         previewLogo: "https://placehold.co/120x120/1a1a1a/FFFFFF?text=Logo",
         previewBanner: "https://placehold.co/800x280/1a1a1a/FFFFFF?text=Your+Banner",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
 
-    // --- Authentication and Redirection Check ---
+
     useEffect(() => {
         if (!loadingUser) {
             if (!user) {
-                // Using an alert is fine for critical user actions, but for a "billion dollar website",
-                // consider a custom modal or inline message instead of native alert.
+
+
                 alert('Please log in to create your Creator Dashboard.');
                 navigate('/login'); // Redirect to login page
             }
         }
     }, [user, loadingUser, navigate]); // Dependencies for this effect
 
-    // Cleanup for preview URLs (blob URLs) when component unmounts or formData changes
+
     useEffect(() => {
         const currentFormData = formData;
         return () => {
@@ -56,15 +56,15 @@ const CreateDashboard = () => {
         const { name, files } = e.target;
         if (files && files[0]) {
             const file = files[0];
-            // Determine the corresponding preview URL key (e.g., 'logo' -> 'previewLogo')
+
             const previewUrlKey = `preview${name.charAt(0).toUpperCase() + name.slice(1)}`;
 
-            // Revoke previous blob URL to prevent memory leaks if a new file is selected
+
             if (formData[previewUrlKey] && formData[previewUrlKey].startsWith('blob:')) {
                 URL.revokeObjectURL(formData[previewUrlKey]);
             }
 
-            // Update form data with the file and its new preview URL
+
             setFormData((prev) => ({
                 ...prev,
                 [name]: file,
@@ -83,8 +83,8 @@ const CreateDashboard = () => {
         setSubmitError(null); // Clear any previous errors
         setIsSubmitting(true); // Set submitting state to true
 
-        // --- AUTHENTICATION CHECK ---
-        // Ensure user is logged in and has a user ID. Token check is implicitly handled by axiosInstance.
+
+
         if (!user || !user._id) {
             const authError = "Authentication error. Please log in to proceed.";
             setSubmitError(authError);
@@ -94,51 +94,51 @@ const CreateDashboard = () => {
 
         const data = new FormData(); // Create a new FormData object for multipart/form-data submission
 
-        // --- FORM DATA APPENDING ---
+
         Object.keys(formData).forEach((key) => {
             if (key === 'logo' || key === 'banner') {
-                // Append File objects directly
+
                 if (formData[key] instanceof File) {
                     data.append(key, formData[key]);
                 }
             } else if (!key.startsWith('preview') && formData[key] !== null && formData[key] !== undefined) {
-                // Append text fields, excluding preview URLs and null/undefined values
+
                 data.append(key, formData[key]);
             }
         });
 
-        // Append the ownerId from the authenticated user's ID
+
         data.append("ownerId", user._id);
 
         try {
-            // Use axiosInstance instead of global axios.
-            // The Authorization header is now handled by the axiosInstance's request interceptor.
+
+
             const response = await axiosInstance.post(`/api/project/creator-dashboard`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Essential for FormData
                 },
             });
 
-            // Axios typically throws an error for non-2xx status codes,
-            // so this check might be redundant if the interceptor handles 401/403.
-            // However, for other success codes (like 200, 201), this remains valid.
+
+
+
             if (response.status === 200 || response.status === 201) {
                 alert("Creator Dashboard created successfully!"); // Consider custom modal
-                // Re-fetch user data to update hasDashboard status in context
+
                 await refetchUserData();
-                // Navigate to the dashboard view page after successful creation
+
                 navigate(`/creator-dashboard`); // Navigate to specific user dashboard
             } else {
-                // This 'else' block will now only be hit for actual errors (e.g., 400, 401, 403, 500)
-                // If axiosInstance's response interceptor handles 401/403 by logging out,
-                // this block will typically handle other non-2xx statuses that aren't 401/403.
+
+
+
                 setSubmitError(response.data.message || `Failed to create dashboard with status: ${response.status}.`);
             }
         } catch (err) {
-            // Enhanced error handling for different Axios error types
+
             if (err.response) {
-                // The interceptor might have already handled 401/403 and logged out.
-                // This branch would catch other server errors like 400, 500.
+
+
                 setSubmitError(err.response.data.message || `Server error (Status: ${err.response.status})`);
             } else if (err.request) {
                 setSubmitError("No response from server. Is the backend running? Check network connection.");
@@ -150,7 +150,7 @@ const CreateDashboard = () => {
         }
     };
 
-    // --- Page-level Loading and Authentication Required States ---
+
     if (loadingUser) {
         return (
             <div className="create-dashboard-container dashboard-loading-overlay">
@@ -161,30 +161,30 @@ const CreateDashboard = () => {
     }
 
     if (!user) {
-        // This message is shown before the useEffect navigates, for immediate feedback
+
         return (
             <div className="create-dashboard-container dashboard-error-message">
                 <FaExclamationCircle className="error-icon" />
                 <p className="error-text">You must be logged in to create a dashboard.</p>
-                {/* You might want a button here to navigate to login if not already handled by useEffect */}
+                {}
                 <button onClick={() => navigate('/login')} className="reload-button">Go to Login</button>
             </div>
         );
     }
 
-    // Main component render
+
     return (
-        <div className="create-dashboard-main"> {/* Renamed container for proper centering/layout */}
-            <div className="glass-card create-dashboard-card"> {/* Applying glass-card style */}
+        <div className="create-dashboard-main"> {}
+            <div className="glass-card create-dashboard-card"> {}
                 <h1 className="create-dashboard-title">Create Your Creator Dashboard</h1>
                 <p className="create-dashboard-subtitle">Set up your profile to start creating campaigns and engaging your audience.</p>
 
                 <form onSubmit={handleSubmit} className="create-dashboard-form">
-                    {/* Banner and Logo Section - mimicking CreatorDashboard's header structure */}
+                    {}
                     <div className="image-upload-section">
                         <div className="banner-area">
                             <div className="banner-preview-display" style={{ backgroundImage: `url(${formData.previewBanner})` }}>
-                                {/* Label for banner upload, positioned over the preview */}
+                                {}
                                 <label htmlFor="banner-upload" className="banner-upload-label">
                                     <FaCamera className="upload-icon" /> Change Banner
                                 </label>
@@ -199,7 +199,7 @@ const CreateDashboard = () => {
                             />
                         </div>
 
-                        {/* Logo Upload Section - positioned to overlap the banner */}
+                        {}
                         <div className="logo-area">
                             <label htmlFor="logo-upload" className="logo-upload-label">
                                 <img
@@ -223,7 +223,7 @@ const CreateDashboard = () => {
                         </div>
                     </div>
 
-                    {/* Basic Info Section */}
+                    {}
                     <div className="form-section-heading">Basic Information</div>
                     <div className="form-grid">
                         <div className="form-group">
@@ -281,9 +281,9 @@ const CreateDashboard = () => {
                         />
                     </div>
 
-                    {/* Social Links Section */}
+                    {}
                     <div className="form-section-heading">Social Links (Optional)</div>
-                    <div className="form-grid-socials"> {/* Reusing form-grid-socials from CreatorDashboard */}
+                    <div className="form-grid-socials"> {}
                         <div className="form-group">
                             <label htmlFor="twitter">Twitter URL:</label>
                             <input
@@ -322,14 +322,14 @@ const CreateDashboard = () => {
                         </div>
                     </div>
 
-                    {/* Submission Error Display */}
+                    {}
                     {submitError && (
-                        <p className="submit-error-message error-message"> {/* Using existing error-message class */}
+                        <p className="submit-error-message error-message"> {}
                             <FaExclamationCircle className="error-icon" /> {submitError}
                         </p>
                     )}
 
-                    {/* Submit Button */}
+                    {}
                     <button
                         type="submit"
                         className="save-changes-button" // Reusing the save button style

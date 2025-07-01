@@ -1,9 +1,9 @@
-// models/Campaign.js
+
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// --- Campaign Task Sub-Schema (for individual tasks within a group) ---
+
 const userIndividualTaskSchema = new Schema({
     link: { type: String, required: true }, // <-- This field will now store the unique ID (e.g., "1750304620264-0")
     targetUrl: { type: String }, // <-- ADD THIS NEW FIELD to store the actual URL (e.g., "google.com")
@@ -23,7 +23,7 @@ const userIndividualTaskSchema = new Schema({
     payoutAmount: { type: Number, default: 0 } // Stores the specific payout for this single task instance
 });
 
-// --- User Participation Schema ---
+
 const userParticipationSchema = new Schema({
     campaign: { type: Schema.Types.ObjectId, ref: 'Campaign', required: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -41,10 +41,10 @@ const userParticipationSchema = new Schema({
     completedAt: { type: Date }
 });
 
-// Add a unique compound index to prevent a user from joining the same task group multiple times in a campaign
+
 userParticipationSchema.index({ campaign: 1, user: 1, taskGroupKey: 1 }, { unique: true });
 
-// --- Campaign Schema (no changes needed here for this specific issue) ---
+
 const campaignSchema = new Schema({
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true },

@@ -1,11 +1,11 @@
-// client/src/components/TaskCard/TaskCard.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaDollarSign, FaExchangeAlt, FaRedo, FaWallet } from 'react-icons/fa';
 import './TaskCard.css'; // Create this CSS file
 
 const TaskCard = ({ campaign }) => {
-    // Calculate total estimated earnings for all loops
+
     const totalEstimatedEarnings = (campaign.payoutPerLoopUSD * campaign.loopsPerUser).toFixed(2);
 
     return (

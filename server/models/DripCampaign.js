@@ -1,4 +1,4 @@
-// backend/models/DripCampaign.js
+
 const mongoose = require('mongoose');
 
 const DripCampaignSchema = new mongoose.Schema({
@@ -28,11 +28,11 @@ const DripCampaignSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    // Array of all tweet links associated with this campaign
+
     tweet_links: [{
         url: { type: String, required: true },
         addedAt: { type: Date, default: Date.now },
-        // You might add specific targets for this tweet here later
+
     }],
     total_engagements_target: { // Overall target for the campaign duration
         type: Number,
@@ -47,7 +47,7 @@ const DripCampaignSchema = new mongoose.Schema({
         retweets: { type: Number, default: 0 },
         comments: { type: Number, default: 0 },
     },
-    // --- NEW FIELDS FOR UNIQUE PARTICIPANTS ---
+
     unique_participants_count: { // Total count of unique users who fully completed tasks in this campaign
         type: Number,
         default: 0
@@ -56,9 +56,9 @@ const DripCampaignSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-    // --- END NEW FIELDS ---
 
-    // --- MISSING FIELD: userCampaignProgress ---
+
+
     userCampaignProgress: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -78,7 +78,7 @@ const DripCampaignSchema = new mongoose.Schema({
             default: null
         }
     }],
-    // --- END MISSING FIELD ---
+
 
     createdAt: {
         type: Date,
@@ -90,7 +90,7 @@ const DripCampaignSchema = new mongoose.Schema({
     },
 });
 
-// Update `updatedAt` on save
+
 DripCampaignSchema.pre('save', function(next) {
     this.updatedAt = Date.now();
     next();

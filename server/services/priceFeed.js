@@ -1,4 +1,4 @@
-// server/services/priceFeed.js
+
 const axios = require('axios');
 
 const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';

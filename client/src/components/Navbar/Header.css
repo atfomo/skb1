@@ -1,52 +1,52 @@
-/* client/src/components/Header.css */
 
-/* --- Root CSS Variables (Dark Theme, Billion-Dollar Tech Palette) --- */
+
+
 :root {
-    /* Brand Accent Colors */
-    --brand-red-orange: #ec1708; /* Primary vibrant accent */
-    --brand-peach-orange: #ff5858; /* Secondary softer accent for highlights/subtle elements */
+    
+    --brand-red-orange: #ec1708; 
+    --brand-peach-orange: #ff5858; 
 
-    /* Neutrals - Dark Theme Focus */
-    --background-dark-deep: #0A0A0A; /* The absolute darkest background for body/base */
-    --background-dark-card: #141414; /* Slightly lighter than deep black for cards/sections, provides depth */
-    --background-dark-glass: rgba(10, 10, 10, 0.7); /* For glassmorphism, slightly opaque */
-    --border-dark-subtle: #252525; /* Very subtle dark grey border */
-    --shadow-dark-deep: rgba(0, 0, 0, 0.6); /* Deeper, more diffused shadow for dark elements */
-    --shadow-dark-medium: rgba(0, 0, 0, 0.4); /* Mid-level shadow */
-    --shadow-dark-light: rgba(0, 0, 0, 0.2); /* Soft, subtle shadow */
+    
+    --background-dark-deep: #0A0A0A; 
+    --background-dark-card: #141414; 
+    --background-dark-glass: rgba(10, 10, 10, 0.7); 
+    --border-dark-subtle: #252525; 
+    --shadow-dark-deep: rgba(0, 0, 0, 0.6); 
+    --shadow-dark-medium: rgba(0, 0, 0, 0.4); 
+    --shadow-dark-light: rgba(0, 0, 0, 0.2); 
 
-    /* Text Colors - High Contrast on Dark Background */
-    --text-primary-light: #F8F8F8; /* Clean, bright text for main content */
-    --text-secondary-light: #A9A9A9; /* Mid-grey for descriptions, labels */
-    --text-dimmed-light: #777777; /* Darker grey for less important text */
+    
+    --text-primary-light: #F8F8F8; 
+    --text-secondary-light: #A9A9A9; 
+    --text-dimmed-light: #777777; 
 
-    /* State Colors (standard, adjusted for dark theme visibility) */
-    --success-color: #4CAF50; /* Green */
-    --error-color: #F44336;   /* Red */
-    --warning-color: #FFEB3B; /* Yellow */
-    --info-color: #2196F3;    /* Blue */
+    
+    --success-color: #4CAF50; 
+    --error-color: #F44336;   
+    --warning-color: #FFEB3B; 
+    --info-color: #2196F3;    
 }
 
-/* Basic Reset & Font */
+
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif; /* Recommended professional font */
-    background-color: var(--background-dark-deep); /* Using the new variable */
-    color: var(--text-primary-light); /* Using the new variable */
+    font-family: 'Inter', sans-serif; 
+    background-color: var(--background-dark-deep); 
+    color: var(--text-primary-light); 
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Header Container --- */
+
 .app-header {
     width: 100%;
-    /* Enhanced Glassmorphism Effect for Header */
-    background-color: #000000; /* Slightly more opaque for better contrast */
-    backdrop-filter: blur(25px); /* Increased blur for a premium feel */
+    
+    background-color: #000000; 
+    backdrop-filter: blur(25px); 
     -webkit-backdrop-filter: blur(25px);
-    border-bottom: 1px solid var(--border-dark-subtle); /* Very subtle border */
-    box-shadow: 0 8px 40px var(--shadow-dark-deep); /* Deeper, more diffused shadow */
+    border-bottom: 1px solid var(--border-dark-subtle); 
+    box-shadow: 0 8px 40px var(--shadow-dark-deep); 
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -66,11 +66,11 @@ body {
     gap: 30px;
 }
 
-/* --- Left Section: Logo + Social Icons --- */
+
 .header-left-section {
     display: flex;
     align-items: center;
-    gap: 25px; /* Space between logo and social icons */
+    gap: 25px; 
 }
 
 .site-logo-link {
@@ -85,59 +85,59 @@ body {
 }
 
 .site-logo-img {
-    height: 70px; /* Adjusted height for balance */
+    height: 70px; 
     width: 70px;
-    border-radius: 6px; /* Slightly less rounded */
-    /* Use the brand-red-orange for shadow if logo is dark, or a subtle glow if logo is light */
-    filter: drop-shadow(0 2px 10px rgba(236, 23, 8, 0.1)); /* Vibrant glow from brand color */
+    border-radius: 6px; 
+    
+    filter: drop-shadow(0 2px 10px rgba(236, 23, 8, 0.1)); 
 }
 
 .social-icons-header {
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between social icons */
-    padding-left: 15px; /* Padding to visually separate from logo */
-    border-left: 1px solid var(--border-dark-subtle); /* Subtle separator */
+    gap: 15px; 
+    padding-left: 15px; 
+    border-left: 1px solid var(--border-dark-subtle); 
 }
 
 .social-icon-header {
-    font-size: 1.4em; /* Slightly larger icons */
-    color: var(--text-secondary-light); /* Default icon color */
+    font-size: 1.4em; 
+    color: var(--text-secondary-light); 
     transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .social-icon-header:hover {
-    color: #E64A19; /* Vibrant red-orange on hover */
-    transform: translateY(-2px); /* Subtle lift */
+    color: #E64A19; 
+    transform: translateY(-2px); 
 }
 
-/* --- Main Navigation --- */
+
 .main-nav {
     display: flex;
     align-items: center;
-    gap: 0; /* Remove gap here, use border for separation */
-    flex-grow: 1; /* Allows nav to take available space */
-    justify-content: center; /* Center the nav items */
+    gap: 0; 
+    flex-grow: 1; 
+    justify-content: center; 
 }
 
 .nav-link {
     background: none;
     border: none;
-    color: var(--text-primary-light); /* Bright text for links */
-    font-size: 1.05em; /* Slightly adjusted font size */
+    color: var(--text-primary-light); 
+    font-size: 1.05em; 
     font-weight: 500;
     cursor: pointer;
-    padding: 10px 25px; /* Adjusted padding */
+    padding: 10px 25px; 
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
-    position: relative; /* For the separator */
+    position: relative; 
 }
 
 .nav-link:hover {
-    color: #E64A19; /* Vibrant red-orange on hover */
+    color: #E64A19; 
 }
 
-/* Separator between nav links */
+
 .main-nav .nav-link:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -146,39 +146,39 @@ body {
     transform: translateY(-50%);
     width: 1px;
     height: 60%;
-    background-color: var(--border-dark-subtle); /* Subtle dark border */
+    background-color: var(--border-dark-subtle); 
 }
 
 
-/* --- Right Section: Create Button + User Auth/Profile --- */
+
 .header-right-section {
     display: flex;
     align-items: center;
-    gap: 25px; /* Space between create button and auth section */
+    gap: 25px; 
 }
 
-/* Create Campaign Button */
+
 .create-campaign-button {
-    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); /* Vibrant gradient */
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
     color: #fff;
-    padding: 10px 22px; /* Slightly adjusted padding */
+    padding: 10px 22px; 
     border: none;
-    border-radius: 8px; /* Consistent rounding */
+    border-radius: 8px; 
     cursor: pointer;
-    font-size: 0.95em; /* Adjusted font size */
+    font-size: 0.95em; 
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(236, 23, 8, 0.4); /* Shadow from brand red-orange */
-    white-space: nowrap; /* Prevent wrapping */
+    box-shadow: 0 4px 15px rgba(236, 23, 8, 0.4); 
+    white-space: nowrap; 
 }
 
 .create-campaign-button:hover {
-    background: linear-gradient(45deg, var(--brand-peach-orange), var(--brand-red-orange)); /* Reverse gradient on hover */
-    box-shadow: 0 6px 20px rgba(252, 167, 115, 0.6); /* Shadow from peach-orange */
+    background: linear-gradient(45deg, var(--brand-peach-orange), var(--brand-red-orange)); 
+    box-shadow: 0 6px 20px rgba(252, 167, 115, 0.6); 
     transform: translateY(-2px);
 }
 
-/* User Auth Section (Login/Register or Avatar) */
+
 .user-auth-section {
     display: flex;
     align-items: center;
@@ -193,7 +193,7 @@ body {
 
 .auth-button {
     padding: 10px 20px;
-    border: 1px solid var(--border-dark-subtle); /* Subtle dark border */
+    border: 1px solid var(--border-dark-subtle); 
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.95em;
@@ -202,12 +202,12 @@ body {
 }
 
 .login-button {
-    background-color: rgba(255, 255, 255, 0.08); /* Very subtle light background for contrast */
-    color: var(--text-primary-light); /* Bright text */
+    background-color: rgba(255, 255, 255, 0.08); 
+    color: var(--text-primary-light); 
 }
 
 .login-button:hover {
-    background-color: #e649192f; /* Tinted with red-orange on hover */
+    background-color: #e649192f; 
     color: #E64A19;
     transform: translateY(-2px);
     box-shadow: 0 3px 10px rgba(236, 23, 8, 0.15);
@@ -225,7 +225,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* User Avatar and Dropdown */
+
 .user-avatar-button {
     background: none;
     border: none;
@@ -236,14 +236,14 @@ body {
     justify-content: center;
     border-radius: 50%;
     overflow: hidden;
-    width: 40px; /* Standard avatar size */
+    width: 40px; 
     height: 40px;
-    box-shadow: 0 0 0 2px rgba(236, 23, 8, 0.4); /* Thinner red-orange ring */
+    box-shadow: 0 0 0 2px rgba(236, 23, 8, 0.4); 
     transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .user-avatar-button:hover {
-    box-shadow: 0 0 0 3px var(--brand-red-orange); /* More prominent on hover */
+    box-shadow: 0 0 0 3px var(--brand-red-orange); 
     transform: scale(1.05);
 }
 
@@ -253,123 +253,123 @@ body {
     object-fit: cover;
 }
 
-/* --- Dropdown Menu (for User) --- */
+
 .user-dropdown-menu {
     position: absolute;
     right: 30px; 
-    top: calc(100% + 15px); /* Slightly more space from button */
+    top: calc(100% + 15px); 
     
-    /* Enhanced Glassmorphism for Dropdown */
-    background-color: var(--background-dark-glass); /* Darker, slightly more opaque base */
-    backdrop-filter: blur(25px); /* Increased blur for stronger effect */
+    
+    background-color: var(--background-dark-glass); 
+    backdrop-filter: blur(25px); 
     -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle, slightly more visible border */
-    border-radius: 14px; /* More rounded corners, matching header vibes */
-    box-shadow: 0 15px 50px var(--shadow-dark-deep); /* Deeper, softer shadow */
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 14px; 
+    box-shadow: 0 15px 50px var(--shadow-dark-deep); 
     
-    min-width: 250px; /* Slightly wider dropdown for better content spacing */
-    padding: 15px; /* More generous padding */
+    min-width: 250px; 
+    padding: 15px; 
     display: flex;
     flex-direction: column;
-    gap: 10px; /* More space between items */
-    z-index: 1001; /* Ensure it's above other elements */
+    gap: 10px; 
+    z-index: 1001; 
     
-    /* Animation for appearance */
+    
     opacity: 0;
-    transform: translateY(-20px) scale(0.95); /* Start slightly smaller and higher */
+    transform: translateY(-20px) scale(0.95); 
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-    pointer-events: none; /* Prevents interaction when hidden */
+    pointer-events: none; 
 }
 
 .user-dropdown-menu.show {
     opacity: 1;
-    transform: translateY(0) scale(1); /* Return to original size and position */
+    transform: translateY(0) scale(1); 
     pointer-events: all;
-    background-color: #0A0A0A; /* Ensure it uses a solid background on show */
+    background-color: #0A0A0A; 
 }
 
 .dropdown-username {
-    font-weight: 700; /* Bolder username */
-    color:  #ff511c; /* Brand red-orange for username */
-    padding: 0px 5px 0px; /* Adjusted padding within dropdown */
+    font-weight: 700; 
+    color:  #ff511c; 
+    padding: 0px 5px 0px; 
     font-size: 1.1em;
-    margin-bottom: -20px; /* Closer to handle */
+    margin-bottom: -20px; 
 }
 
 .dropdown-userhandle {
     font-size: 0.9em;
-    color: var(--text-secondary-light); /* Secondary light text */
-    padding: 0px 5px 10px; /* Adjusted padding within dropdown */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Slightly more visible divider */
-    margin-bottom: 12px; /* More space below divider */
+    color: var(--text-secondary-light); 
+    padding: 0px 5px 10px; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 12px; 
 }
 
 .dropdown-divider {
-    border-top: 1px solid var(--border-dark-subtle); /* Consistent divider style */
-    margin: 10px 0; /* More margin around divider */
+    border-top: 1px solid var(--border-dark-subtle); 
+    margin: 10px 0; 
 }
 
 .dropdown-section-title {
-    font-size: 0.8em; /* Slightly smaller title */
-    color: var(--brand-peach-orange); /* Peach-orange for section titles */
+    font-size: 0.8em; 
+    color: var(--brand-peach-orange); 
     font-weight: 600;
-    padding: 0 5px; /* Adjusted padding within dropdown */
+    padding: 0 5px; 
     margin-bottom: 8px;
     text-transform: uppercase;
-    letter-spacing: 0.7px; /* Slightly increased letter spacing */
+    letter-spacing: 0.7px; 
 }
 
-/* Individual dropdown buttons (general styles) */
+
 .dropdown-button {
-    background: rgba(255, 255, 255, 0.03); /* Very subtle background for standard items */
+    background: rgba(255, 255, 255, 0.03); 
     border: none;
-    color: var(--text-primary-light); /* Bright text */
-    padding: 12px 15px; /* Generous padding */
+    color: var(--text-primary-light); 
+    padding: 12px 15px; 
     text-align: left;
     width: 100%;
-    border-radius: 10px; /* More rounded, matching overall style */
+    border-radius: 10px; 
     cursor: pointer;
-    font-size: 0.98em; /* Slightly larger text */
+    font-size: 0.98em; 
     font-weight: 500;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; /* Faster, snappier transition */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; 
     text-decoration: none;
-    display: flex; /* Use flex for potential icon/text alignment */
+    display: flex; 
     align-items: center;
-    justify-content: space-between; /* Space out content if icons are added */
+    justify-content: space-between; 
 }
 
 .dropdown-button:hover {
-    background-color: rgba(236, 23, 8, 0.18); /* More noticeable red-orange tint on hover */
-    color: var(--brand-red-orange); /* Red-orange on hover */
-    transform: translateX(3px); /* Subtle slide on hover */
+    background-color: rgba(236, 23, 8, 0.18); 
+    color: var(--brand-red-orange); 
+    transform: translateX(3px); 
 }
 
-/* Specific button styles within dropdowns */
+
 .dropdown-button.primary-button {
     background: linear-gradient(45deg,  #E64A19, #ff3c00);
     color: #fff;
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 17, 0, 0.3); /* Subtle shadow */
+    box-shadow: 0 2px 8px rgba(255, 17, 0, 0.3); 
 }
 .dropdown-button.primary-button:hover {
     background: linear-gradient(45deg,  #ff511c, #d83200);
     color: #fff;
-    transform: translateX(0); /* No horizontal slide for primary, just gradient change */
-    box-shadow: 0 4px 12px rgba(252, 115, 115, 0.5); /* More pronounced shadow on hover */
+    transform: translateX(0); 
+    box-shadow: 0 4px 12px rgba(252, 115, 115, 0.5); 
 }
 
 .dropdown-button.secondary-button {
-    background-color: rgba(255, 255, 255, 0.05); /* Even lighter background */
-    color: var(--text-secondary-light); /* Secondary light text */
+    background-color: rgba(255, 255, 255, 0.05); 
+    color: var(--text-secondary-light); 
 }
 .dropdown-button.secondary-button:hover {
-    background-color: rgba(252, 167, 115, 0.1); /* Subtle peach-orange tint */
-    color:  #ff511c; /* Peach-orange on hover */
+    background-color: rgba(252, 167, 115, 0.1); 
+    color:  #ff511c; 
 }
 
 .dropdown-button.admin-button {
-    background-color: rgba(0, 180, 180, 0.08); /* Subtle teal tint */
-    color: #00BFFF; /* Standard info blue for admin */
+    background-color: rgba(0, 180, 180, 0.08); 
+    color: #00BFFF; 
 }
 .dropdown-button.admin-button:hover {
     background-color: rgba(0, 180, 180, 0.15);
@@ -377,55 +377,55 @@ body {
 }
 
 .dropdown-button.logout-button {
-    background-color: rgba(255, 0, 0, 0.08); /* Subtle red tint */
-    color: #FF7777; /* Soft red for logout */
-    margin-top: 5px; /* Add slight margin for visual separation */
+    background-color: rgba(255, 0, 0, 0.08); 
+    color: #FF7777; 
+    margin-top: 5px; 
 }
 .dropdown-button.logout-button:hover {
     background-color: rgba(255, 0, 0, 0.15);
     color: #FF4444;
 }
 
-/* --- Responsive Adjustments --- */
+
 @media (max-width: 991px) {
     .header-content-wrapper {
-        flex-wrap: wrap; /* Allow wrapping */
-        justify-content: center; /* Center items when wrapped */
+        flex-wrap: wrap; 
+        justify-content: center; 
         gap: 20px;
     }
 
     .header-left-section {
-        width: 100%; /* Full width on smaller screens */
+        width: 100%; 
         justify-content: center;
     }
 
     .main-nav {
-        order: 3; /* Push nav to a new line below logo/socials */
+        order: 3; 
         width: 100%;
         justify-content: center;
         gap: 15px;
     }
 
     .main-nav .nav-link:not(:last-child)::after {
-        height: 50%; /* Adjust separator height */
+        height: 50%; 
     }
 
     .header-right-section {
-        order: 2; /* Position create/auth after logo/socials but before main nav */
+        order: 2; 
         width: 100%;
-        justify-content: center; /* Center these elements */
+        justify-content: center; 
         gap: 15px;
     }
 
     .user-auth-section {
-        /* Adjust for smaller screens if needed, keep current behavior */
+        
         justify-content: center;
     }
 
     .user-dropdown-menu {
-        right: 50%; /* Center the dropdown horizontally */
-        transform: translateX(50%) translateY(-20px) scale(0.95); /* Adjust initial position */
-        transform-origin: top center; /* Scale from top center */
+        right: 50%; 
+        transform: translateX(50%) translateY(-20px) scale(0.95); 
+        transform-origin: top center; 
     }
     .user-dropdown-menu.show {
         transform: translateX(50%) translateY(0) scale(1);
@@ -438,47 +438,47 @@ body {
     }
 
     .header-left-section {
-        flex-direction: column; /* Stack logo and social icons */
+        flex-direction: column; 
         gap: 10px;
     }
 
     .social-icons-header {
-        border-left: none; /* Remove vertical line when stacked */
+        border-left: none; 
         padding-left: 0;
     }
 
     .main-nav {
-        flex-direction: column; /* Stack nav links */
+        flex-direction: column; 
         gap: 8px;
     }
 
     .main-nav .nav-link {
-        width: 100%; /* Full width links */
+        width: 100%; 
         text-align: center;
         padding: 8px 15px;
     }
 
     .main-nav .nav-link:not(:last-child)::after {
-        display: none; /* Hide vertical separator for stacked links */
+        display: none; 
     }
 
     .header-right-section {
-        flex-direction: column; /* Stack create button and auth */
+        flex-direction: column; 
         gap: 10px;
     }
 
     .create-campaign-button,
     .auth-button {
-        width: 100%; /* Full width buttons */
+        width: 100%; 
         text-align: center;
         padding: 8px 15px;
         font-size: 0.9em;
     }
 
     .user-dropdown-menu {
-        right: auto; /* Allow auto positioning for centering */
+        right: auto; 
         left: 50%;
-        transform: translateX(-50%) translateY(-20px) scale(0.95); /* Re-center, maintain scale */
+        transform: translateX(-50%) translateY(-20px) scale(0.95); 
         transform-origin: top center;
     }
     .user-dropdown-menu.show {
@@ -488,7 +488,7 @@ body {
 
 @media (max-width: 400px) {
     .site-logo-img {
-        height: 35px; /* Even smaller logo on very small screens */
+        height: 35px; 
     }
     .social-icon-header {
         font-size: 1.2em;
@@ -498,7 +498,7 @@ body {
         height: 35px;
     }
     .user-dropdown-menu {
-        min-width: unset; /* Allow dropdown to shrink */
-        width: calc(100% - 40px); /* Fit within screen with padding */
+        min-width: unset; 
+        width: calc(100% - 40px); 
     }
 }

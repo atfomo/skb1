@@ -1,53 +1,53 @@
-/* AddProjectForm.css */
 
-/* --- Base Variables & Global Styles --- */
+
+
 :root {
-  --color-bg-dark: #0F141A; /* Main background */
-  --color-bg-medium: #1A202C; /* Card/Panel background */
-  --color-bg-light: #2A303C; /* Nested card/input background */
+  --color-bg-dark: #0F141A; 
+  --color-bg-medium: #1A202C; 
+  --color-bg-light: #2A303C; 
 
-  --color-accent-primary: #FF6F00; /* PRIMARY ORANGE for actions/progress */
-  --color-accent-secondary: #FF8C00; /* SLIGHTLY LIGHTER ORANGE for emphasis/icons */
-  --color-accent-green: #2ECC71; /* Success */
-  --color-accent-orange: #F39C12; /* Warning (kept for specific warnings, distinct from primary) */
-  --color-accent-red: #E74C3C; /* Error */
+  --color-accent-primary: #FF6F00; 
+  --color-accent-secondary: #FF8C00; 
+  --color-accent-green: #2ECC71; 
+  --color-accent-orange: #F39C12; 
+  --color-accent-red: #E74C3C; 
 
-  --color-text-primary: #E2E8F0; /* Light text for main content */
-  --color-text-secondary: #A0AEC0; /* Muted text for labels/placeholders */
-  --color-text-dark: #5B6B7C; /* Very muted text */
+  --color-text-primary: #E2E8F0; 
+  --color-text-secondary: #A0AEC0; 
+  --color-text-dark: #5B6B7C; 
 
   --border-radius-large: 16px;
   --border-radius-medium: 12px;
   --border-radius-small: 8px;
 }
 
-/* --- Base Form & Layout --- */
+
 .create-campaign-form {
-  background-color: rgba(17, 16, 15, 0.7); /* Use variable */
-  border-radius: var(--border-radius-large); /* Use variable */
+  background-color: rgba(17, 16, 15, 0.7); 
+  border-radius: var(--border-radius-large); 
   padding: 40px;
   max-width: 900px;
   margin: 50px auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  color: var(--color-text-primary); /* Use variable */
+  color: var(--color-text-primary); 
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(42, 48, 60, 0.5); /* Use lighter border */
+  border: 1px solid rgba(42, 48, 60, 0.5); 
 }
 
-/* Global body styling */
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #050505; /* Use variable */
+  background-color: #050505; 
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: var(--color-text-primary); /* Use variable */
+  color: var(--color-text-primary); 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Progress Bar --- */
+
 .progress-bar {
   display: flex;
   justify-content: space-between;
@@ -61,8 +61,8 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: var(--color-bg-light); /* Use variable */
-  color: var(--color-text-dark); /* Use variable */
+  background-color: var(--color-bg-light); 
+  color: var(--color-text-dark); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,30 +74,30 @@ body {
 }
 
 .progress-step.active {
-  background-color: var(--color-accent-primary); /* Orange */
+  background-color: var(--color-accent-primary); 
   color: #FFFFFF;
-  box-shadow: 0 0 15px rgba(255, 111, 0, 0.5); /* Orange glow */
+  box-shadow: 0 0 15px rgba(255, 111, 0, 0.5); 
 }
 
 .progress-line {
   flex-grow: 1;
   height: 2px;
-  background-color: var(--color-bg-light); /* Use variable */
+  background-color: var(--color-bg-light); 
   margin: 0 -20px;
   z-index: 5;
   transition: background-color 0.3s ease;
 }
 
 .progress-line.active {
-  background-color: var(--color-accent-primary); /* Orange */
+  background-color: var(--color-accent-primary); 
 }
 
 
-/* --- Headings --- */
+
 .form-title {
   font-size: 2.2rem;
   font-weight: 700;
-  color: var(--color-text-primary); /* Use variable */
+  color: var(--color-text-primary); 
   margin-bottom: 30px;
   text-align: center;
   letter-spacing: -0.02em;
@@ -107,25 +107,25 @@ body {
 .custom-tasks-title {
   font-size: 1.6rem;
   font-weight: 600;
-  color: var(--color-accent-secondary); /* Orange Accent */
+  color: var(--color-accent-secondary); 
   margin-top: 40px;
   margin-bottom: 25px;
-  border-left: 4px solid var(--color-accent-secondary); /* Orange accent line */
+  border-left: 4px solid var(--color-accent-secondary); 
   padding-left: 15px;
 }
 
-/* --- Labels & Inputs --- */
+
 .form-group {
-  margin-bottom: 25px; /* Added for consistency with previous changes */
+  margin-bottom: 25px; 
 }
 
 .form-label {
   display: flex;
   flex-direction: column;
-  /* margin-bottom: 25px; Removed for form-group usage */
+  
   font-size: 1rem;
   font-weight: 500;
-  color: var(--color-text-secondary); /* Use variable */
+  color: var(--color-text-secondary); 
 }
 
 .form-input,
@@ -133,10 +133,10 @@ body {
   width: calc(100% - 24px);
   padding: 12px;
   margin-top: 8px;
-  background-color: var(--color-bg-light); /* Use variable */
-  border: 1px solid var(--color-text-dark); /* Use variable */
-  border-radius: var(--border-radius-small); /* Use variable */
-  color: var(--color-text-primary); /* Use variable */
+  background-color: var(--color-bg-light); 
+  border: 1px solid var(--color-text-dark); 
+  border-radius: var(--border-radius-small); 
+  color: var(--color-text-primary); 
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   resize: vertical;
@@ -145,26 +145,26 @@ body {
 
 .form-input:focus,
 .form-textarea:focus {
-  border-color: var(--color-accent-primary); /* Orange */
-  box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.25); /* Orange glow */
+  border-color: var(--color-accent-primary); 
+  box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.25); 
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--color-text-dark); /* Use variable */
+  color: var(--color-text-dark); 
 }
 
 .form-input-file {
   margin-top: 8px;
   padding: 12px 0;
-  color: var(--color-accent-secondary); /* Orange Accent */
+  color: var(--color-accent-secondary); 
   cursor: pointer;
-  border: 1px dashed var(--color-text-dark); /* Use variable */
-  border-radius: var(--border-radius-small); /* Use variable */
+  border: 1px dashed var(--color-text-dark); 
+  border-radius: var(--border-radius-small); 
   text-align: center;
   width: 100%;
   transition: border-color 0.2s ease;
-  background-color: var(--color-bg-light); /* Added background for consistency */
+  background-color: var(--color-bg-light); 
 }
 
 .form-input-file::-webkit-file-upload-button {
@@ -175,7 +175,7 @@ body {
   content: 'Upload Image';
   margin-left: 10px;
   display: inline-block;
-  background: #E64A19; /* Orange */
+  background: #E64A19; 
   color: #FFFFFF;
   border: none;
   border-radius: 6px;
@@ -190,23 +190,23 @@ body {
 }
 
 .form-input-file:hover::before {
-  background-color: #CC5A00; /* Darker orange on hover */
-  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.5); /* Orange glow */
+  background-color: #CC5A00; 
+  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.5); 
 }
 
 .form-input-file:active {
   outline: 0;
 }
 
-/* --- Banner Preview --- */
+
 .banner-preview-container {
   margin-top: 20px;
-  border: 1px dashed var(--color-accent-secondary); /* Orange Accent */
-  border-radius: var(--border-radius-small); /* Use variable */
+  border: 1px dashed var(--color-accent-secondary); 
+  border-radius: var(--border-radius-small); 
   padding: 10px;
   display: inline-block;
   max-width: 100%;
-  background-color: rgba(0,0,0,0.2); /* Added background */
+  background-color: rgba(0,0,0,0.2); 
 }
 
 .banner-preview-image {
@@ -217,33 +217,33 @@ body {
 }
 
 
-/* --- Error and Warning Messages --- */
+
 .error-message {
-  color: var(--color-accent-red); /* Red */
+  color: var(--color-accent-red); 
   font-size: 0.85rem;
   margin-top: 8px;
   font-weight: 500;
   padding-left: 5px;
-  display: flex; /* Added for icon alignment */
+  display: flex; 
   align-items: center;
   column-gap: 5px;
 }
 
 .warning-message {
-  color: var(--color-accent-orange); /* Orange */
+  color: var(--color-accent-orange); 
   font-size: 0.85rem;
   margin-top: 8px;
   font-weight: 500;
   padding-left: 5px;
-  display: flex; /* Added for icon alignment */
+  display: flex; 
   align-items: center;
   column-gap: 5px;
 }
 
-/* --- Earning Tag --- */
+
 .earning-tag-display {
   font-size: 1rem;
-  color: var(--color-text-secondary); /* Use variable */
+  color: var(--color-text-secondary); 
   margin-top: 15px;
   text-align: center;
   display: block;
@@ -262,23 +262,23 @@ body {
 
 .tag-highearning {
   background-color: rgba(39, 174, 96, 0.2);
-  color: var(--color-accent-green); /* Green */
+  color: var(--color-accent-green); 
   border: 1px solid var(--color-accent-green);
 }
 
 .tag-mediumearning {
-  background-color: rgba(255, 140, 0, 0.2); /* Orange tint */
-  color: var(--color-accent-orange); /* Orange */
+  background-color: rgba(255, 140, 0, 0.2); 
+  color: var(--color-accent-orange); 
   border: 1px solid var(--color-accent-orange);
 }
 
 .tag-lowearning {
   background-color: rgba(231, 76, 60, 0.2);
-  color: var(--color-accent-red); /* Red */
+  color: var(--color-accent-red); 
   border: 1px solid var(--color-accent-red);
 }
 
-/* --- Buttons (Navigation & Actions) --- */
+
 .form-navigation-buttons {
   display: flex;
   justify-content: space-between;
@@ -293,7 +293,7 @@ body {
 .add-custom-task-button,
 .remove-custom-task-button {
   padding: 12px 25px;
-  border-radius: var(--border-radius-small); /* Use variable */
+  border-radius: var(--border-radius-small); 
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -302,54 +302,54 @@ body {
   text-align: center;
   border: none;
   min-width: 120px;
-  display: inline-flex; /* Added for icon alignment */
+  display: inline-flex; 
   align-items: center;
   justify-content: center;
-  column-gap: 8px; /* Added for icon spacing */
+  column-gap: 8px; 
 }
 
 .next-button,
 .submit-button {
-  background-color: var(--color-accent-primary); /* Orange */
+  background-color: var(--color-accent-primary); 
   color: #FFFFFF;
-  box-shadow: 0 4px 15px rgba(255, 111, 0, 0.3); /* Orange shadow */
+  box-shadow: 0 4px 15px rgba(255, 111, 0, 0.3); 
 }
 
 .next-button:hover,
 .submit-button:hover {
-  background-color: #CC5A00; /* Darker orange on hover */
-  box-shadow: 0 6px 20px rgba(255, 111, 0, 0.4); /* Orange shadow */
+  background-color: #CC5A00; 
+  box-shadow: 0 6px 20px rgba(255, 111, 0, 0.4); 
   transform: translateY(-2px);
 }
 
 .next-button:disabled,
 .submit-button:disabled {
-  background-color: var(--color-bg-light); /* Use variable */
-  color: var(--color-text-dark); /* Use variable */
+  background-color: var(--color-bg-light); 
+  color: var(--color-text-dark); 
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
-  opacity: 0.6; /* Added opacity */
+  opacity: 0.6; 
 }
 
 .back-button {
-  background-color: var(--color-bg-light); /* Use variable */
-  color: var(--color-text-secondary); /* Use variable */
-  border: 1px solid var(--color-text-dark); /* Use variable */
+  background-color: var(--color-bg-light); 
+  color: var(--color-text-secondary); 
+  border: 1px solid var(--color-text-dark); 
   height: 40px;
   width: 40px;
   margin-top: 50px;
 }
 
 .back-button:hover {
-  background-color: #3C4A5C; /* Slightly darker grey on hover */
-  color: var(--color-text-primary); /* Use variable */
+  background-color: #3C4A5C; 
+  color: var(--color-text-primary); 
   transform: translateY(-2px);
 }
 
 .add-link-button,
 .add-custom-task-button {
-  background-color: var(--color-accent-green); /* Green */
+  background-color: var(--color-accent-green); 
   color: #FFFFFF;
   font-size: 0.9rem;
   padding: 8px 15px;
@@ -365,7 +365,7 @@ body {
 }
 
 .remove-custom-task-button {
-  background-color: var(--color-accent-red); /* Red */
+  background-color: var(--color-accent-red); 
   color: #FFFFFF;
   font-size: 0.9rem;
   padding: 8px 15px;
@@ -381,20 +381,20 @@ body {
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
 
-/* --- Task Specific Styling (Step 2) --- */
+
 .task-row {
-  background-color: #111111; /* Use variable */
-  border-radius: var(--border-radius-medium); /* Use variable */
+  background-color: #111111; 
+  border-radius: var(--border-radius-medium); 
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid var(--color-bg-light); /* Use variable */
+  border: 1px solid var(--color-bg-light); 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 }
 
 .task-row:hover {
-  border-color: var(--color-accent-secondary); /* Orange Accent */
-  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.1); /* Orange glow */
+  border-color: var(--color-accent-secondary); 
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.1); 
 }
 
 .task-toggle-label {
@@ -408,9 +408,9 @@ body {
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-accent-primary); /* Orange */
+  border: 2px solid var(--color-accent-primary); 
   border-radius: 4px;
-  background-color: var(--color-bg-light); /* Use variable */
+  background-color: var(--color-bg-light); 
   position: relative;
   margin-right: 12px;
   cursor: pointer;
@@ -418,8 +418,8 @@ body {
 }
 
 .task-checkbox:checked {
-  background-color: var(--color-accent-primary); /* Orange */
-  border-color: var(--color-accent-primary); /* Orange */
+  background-color: var(--color-accent-primary); 
+  border-color: var(--color-accent-primary); 
 }
 
 .task-checkbox:checked::after {
@@ -436,13 +436,13 @@ body {
 .task-name {
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--color-text-primary); /* Use variable */
+  color: var(--color-text-primary); 
   flex-grow: 1;
 }
 
 .task-instances {
   font-size: 0.9rem;
-  color: var(--color-text-secondary); /* Use variable */
+  color: var(--color-text-secondary); 
   margin-left: 10px;
   font-weight: 500;
 }
@@ -453,7 +453,7 @@ body {
   gap: 10px;
   margin-top: 10px;
   padding-left: 32px;
-  border-left: 2px solid rgba(255, 140, 0, 0.2); /* Orange Accent */
+  border-left: 2px solid rgba(255, 140, 0, 0.2); 
   padding-top: 5px;
 }
 
@@ -463,22 +463,22 @@ body {
 }
 
 .link-input {
-  background-color: var(--color-bg-dark); /* Use variable */
-  border-color: var(--color-bg-light); /* Use variable */
+  background-color: var(--color-bg-dark); 
+  border-color: var(--color-bg-light); 
 }
 
 .link-input:focus {
-  border-color: var(--color-accent-secondary); /* Orange Accent */
-  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.15); /* Orange glow */
+  border-color: var(--color-accent-secondary); 
+  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.15); 
 }
 
-/* Custom Tasks */
+
 .custom-task-item {
-  background-color: #111111; /* Use variable */
-  border-radius: var(--border-radius-medium); /* Use variable */
+  background-color: #111111; 
+  border-radius: var(--border-radius-medium); 
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid var(--color-bg-light); /* Use variable */
+  border: 1px solid var(--color-bg-light); 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -487,8 +487,8 @@ body {
 }
 
 .custom-task-item:hover {
-  border-color: var(--color-accent-secondary); /* Orange Accent */
-  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.1); /* Orange glow */
+  border-color: var(--color-accent-secondary); 
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.1); 
     
 }
 
@@ -510,20 +510,20 @@ body {
 }
 
 
-/* --- Section Divider --- */
+
 .section-divider {
   border: none;
-  border-top: 1px solid var(--color-bg-light); /* Use variable */
+  border-top: 1px solid var(--color-bg-light); 
   margin: 40px 0;
 }
 
-/* --- Allocation Sliders (Step 3) --- */
+
 .allocation-section {
-  background-color: var(--color-bg-medium); /* Use variable */
-  border-radius: var(--border-radius-medium); /* Use variable */
+  background-color: var(--color-bg-medium); 
+  border-radius: var(--border-radius-medium); 
   padding: 25px;
   margin-top: 30px;
-  border: 1px solid var(--color-bg-light); /* Use variable */
+  border: 1px solid var(--color-bg-light); 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -538,20 +538,20 @@ body {
 .form-label-small {
   font-size: 1rem;
   font-weight: 500;
-  color: var(--color-text-secondary); /* Use variable */
+  color: var(--color-text-secondary); 
   display: block;
   margin-bottom: 10px;
 }
 
 .allocation-value {
   font-weight: 700;
-  color: var(--color-accent-secondary); /* Orange Accent */
+  color: var(--color-accent-secondary); 
   font-size: 1.1rem;
 }
 
 .allocated-users {
   font-weight: 600;
-  color: #FFB366; /* A new shade of orange for user count */
+  color: #FFB366; 
 }
 
 .slider {
@@ -559,7 +559,7 @@ body {
   -webkit-appearance: none;
   appearance: none;
   height: 8px;
-  background: var(--color-bg-light); /* Use variable */
+  background: var(--color-bg-light); 
   outline: none;
   border-radius: 4px;
   transition: opacity 0.2s;
@@ -572,10 +572,10 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--color-accent-primary); /* Orange */
+  background: var(--color-accent-primary); 
   cursor: pointer;
-  border: 3px solid var(--color-bg-medium); /* Use variable */
-  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.4); /* Orange glow */
+  border: 3px solid var(--color-bg-medium); 
+  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.4); 
   transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
@@ -583,32 +583,32 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--color-accent-primary); /* Orange */
+  background: var(--color-accent-primary); 
   cursor: pointer;
-  border: 3px solid var(--color-bg-medium); /* Use variable */
-  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.4); /* Orange glow */
+  border: 3px solid var(--color-bg-medium); 
+  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.4); 
   transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .slider::-webkit-slider-thumb:hover,
 .slider::-moz-range-thumb:hover {
-  background: #CC5A00; /* Darker orange on hover */
-  box-shadow: 0 0 0 4px rgba(255, 111, 0, 0.6); /* Orange glow */
+  background: #CC5A00; 
+  box-shadow: 0 0 0 4px rgba(255, 111, 0, 0.6); 
   transform: scale(1.05);
 }
 
 .allocation-summary {
   margin-top: 25px;
   padding-top: 15px;
-  border-top: 1px solid var(--color-bg-light); /* Use variable */
+  border-top: 1px solid var(--color-bg-light); 
   text-align: right;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--color-text-primary); /* Use variable */
+  color: var(--color-text-primary); 
 }
 
 .total-allocation-value {
-  color: var(--color-accent-secondary); /* Orange Accent */
+  color: var(--color-accent-secondary); 
   font-size: 1.2rem;
 }
 
@@ -622,16 +622,16 @@ body {
 
 .allocation-status-success {
   background-color: rgba(39, 174, 96, 0.2);
-  color: var(--color-accent-green); /* Green */
+  color: var(--color-accent-green); 
 }
 
 .allocation-status-warning {
   background-color: rgba(231, 76, 60, 0.2);
-  color: var(--color-accent-red); /* Red */
+  color: var(--color-accent-red); 
 }
 
 
-/* --- Summary Section (Step 4) --- */
+
 .summary-section {
   background-color: rgba(32, 32, 32, 0.178);
   border-radius: var(--border-radius-medium);
@@ -671,14 +671,14 @@ body {
   width: 200px;
 }
 
-/* Styles for the banner container itself */
+
 .summary-banner-preview {
-  grid-column: 1 / -1; /* Makes it span the full width of the grid */
-  display: flex;       /* Use flexbox for internal centering */
-  flex-direction: column; /* Stack image and text vertically */
-  align-items: center; /* Center horizontally within this container */
-  text-align: center;  /* Ensure any text inside is centered */
-  margin-bottom: 0; /* Reduce margin to pull the next element closer */
+  grid-column: 1 / -1; 
+  display: flex;       
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center;  
+  margin-bottom: 0; 
 }
 
 .summary-banner-image {
@@ -688,39 +688,39 @@ body {
   height: auto;
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-accent-secondary);
-  margin-top: 15px; /* Spacing from the "Campaign Banner:" label */
+  margin-top: 15px; 
   box-shadow: 0 5px 20px rgba(255, 140, 0, 0.2);
-  margin-bottom: 0; /* Remove default bottom margin */
+  margin-bottom: 0; 
 }
 
-/* Styles for the Project Name P tag (the first P tag in summary-details-grid) */
+
 .summary-details-grid > p:first-of-type {
-  grid-column: 1 / -1; /* Make it span the full grid width, placing it directly after the banner preview */
-  text-align: center; /* Center the text content within this paragraph */
-  margin-top: 20px; /* Space between the banner image and the project name */
-  margin-bottom: 20px; /* Space before the next grid items */
-  font-size: 1.2rem; /* Make the project name more prominent */
+  grid-column: 1 / -1; 
+  text-align: center; 
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+  font-size: 1.2rem; 
   font-weight: 700;
-  color: var(--color-accent-primary); /* Use your primary orange color */
-  text-shadow: 0 1px 5px rgba(255, 111, 0, 0.2); /* Subtle orange shadow */
-  /* Ensure strong and span tags inside inherit styles */
-  display: flex; /* Make it flex to center its own children if needed */
-  justify-content: center; /* Center strong and span tags */
+  color: var(--color-accent-primary); 
+  text-shadow: 0 1px 5px rgba(255, 111, 0, 0.2); 
+  
+  display: flex; 
+  justify-content: center; 
   align-items: center;
-  gap: 5px; /* Small gap between "Project Name:" and the actual name */
+  gap: 5px; 
 }
 
-/* Override default styles for strong and span inside this specific project name p tag */
+
 .summary-details-grid > p:first-of-type strong {
-    color: inherit; /* Inherit color from the parent .summary-details-grid > p:first-of-type */
+    color: inherit; 
     font-weight: inherit;
-    margin-bottom: 0; /* Remove any default bottom margin */
-    font-size: 1rem; /* Adjust if the inherited size is too large for the label part */
+    margin-bottom: 0; 
+    font-size: 1rem; 
 }
 .summary-details-grid > p:first-of-type span {
-    color: inherit; /* Inherit color from the parent */
+    color: inherit; 
     font-weight: inherit;
-    font-size: 1.2rem; /* Keep the actual name larger */
+    font-size: 1.2rem; 
 }
 
 
@@ -757,7 +757,7 @@ body {
   font-weight: 600;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
   .create-campaign-form {
     padding: 25px;

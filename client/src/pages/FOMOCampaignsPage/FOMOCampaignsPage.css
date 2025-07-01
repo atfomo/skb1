@@ -1,57 +1,57 @@
-/* client/src/pages/FOMOCampaignsPage/FOMOCampaignsPage.css */
 
-/* --- Base Styles for the Page --- */
-/* Inherit from body in global CSS if you have it, otherwise set here */
-/* For consistency, ensuring body styles are applied is important */
+
+
+
+
 body {
-    background-color: #050505; /* Very dark background for contrast */
-    color: #e0e0e0; /* Default light text color */
+    background-color: #050505; 
+    color: #e0e0e0; 
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.6;
     scroll-behavior: smooth;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden; 
 }
 
 .fomo-campaigns-container {
-    max-width: 1400px; /* Match homepage width */
-    margin: 40px auto; /* Center with top/bottom margin */
+    max-width: 1400px; 
+    margin: 40px auto; 
     padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Space between title, subtitle, and grid */
+    gap: 30px; 
 
     /* Apply glassmorphism card style to the container itself if you want the whole page content to be inside a card,
        or apply it to individual sections within the container if you introduce them.
        For this example, let's make the main container a glassmorphism card. */
-    background-color: rgba(17, 16, 15, 0.7); /* The desired main background color with transparency */
-    backdrop-filter: blur(15px); /* Stronger blur for prominent glass effect */
+    background-color: rgba(17, 16, 15, 0.7); 
+    backdrop-filter: blur(15px); 
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
-    border-radius: 20px; /* More rounded corners */
-    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6); /* Deep, prominent shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 20px; 
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .fomo-campaigns-container:hover {
-    transform: translateY(-5px); /* Subtle lift on hover */
-    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.8); /* Stronger shadow on hover */
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.8); 
 }
 
 
-/* --- Page Title and Subtitle --- */
+
 .fomo-campaigns-title {
-    font-size: 2.8em; /* Slightly smaller than hero title, but still impactful */
-    font-weight: 800; /* Bold */
+    font-size: 2.8em; 
+    font-weight: 800; 
     margin-bottom: 10px;
-    background-image: linear-gradient(45deg, #E64A19, #ff3c00); /* Vibrant orange gradient */
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for non-webkit */
-    text-shadow: 0 0 15px rgba(255, 72, 0, 0.4); /* Glow */
+    color: transparent; 
+    text-shadow: 0 0 15px rgba(255, 72, 0, 0.4); 
     text-align: center;
     line-height: 1.2;
 }
@@ -60,15 +60,15 @@ body {
     font-size: 1.2em;
     color: #c0c0c0;
     max-width: 800px;
-    margin: 0 auto 30px auto; /* Center and add space below */
+    margin: 0 auto 30px auto; 
     line-height: 1.5;
     text-align: center;
 }
 
-/* --- Loading and Error Messages --- */
+
 .fomo-campaigns-container.loading-message,
 .fomo-campaigns-container.error-message {
-    min-height: 300px; /* Ensure sufficient height for messages */
+    min-height: 300px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -78,7 +78,7 @@ body {
     text-align: center;
     /* Remove glassmorphism if these are overlaying the page,
        but if they are the sole content of the container, keep it */
-    background-color: rgba(17, 16, 15, 0.7); /* Keep glassmorphism for consistency */
+    background-color: rgba(17, 16, 15, 0.7); 
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -87,20 +87,20 @@ body {
 }
 
 .loading-message {
-    color: #E64A19; /* Orange for loading */
+    color: #E64A19; 
 }
 
 .error-message {
-    color: #FF7777; /* Red for errors */
+    color: #FF7777; 
 }
 
 /* You might want to reuse the loading spinner from HomePage if available globally,
    or define a simple one here */
-/* Example simple spinner (copy from HomePage.css if you don't have it global) */
+
 .fomo-campaigns-container.loading-message::before {
     content: '';
     border: 6px solid rgba(255, 255, 255, 0.2);
-    border-top: 6px solid #E64A19; /* Matching orange */
+    border-top: 6px solid #E64A19; 
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -114,7 +114,7 @@ body {
 }
 
 
-/* --- Responsive Design (Matching HomePage.css) --- */
+
 @media (max-width: 1200px) {
     .fomo-campaigns-container {
         padding: 15px;

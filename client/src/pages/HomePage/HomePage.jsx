@@ -30,7 +30,7 @@ const HomePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const tasksPerPage = 50;
 
-    // --- Fetch Tasks Callback ---
+
     const fetchTasks = useCallback(async () => {
         setLoadingTasks(true);
         setErrorTasks(null);
@@ -107,8 +107,8 @@ const HomePage = () => {
         }
     }, [user]);
 
-    // --- Fetch ALL Campaigns Callback (Current setup) ---
-    // Keep this if you still need to fetch other types of campaigns that require authentication
+
+
     const fetchCampaigns = useCallback(async () => {
         setLoadingCampaigns(true);
         setErrorCampaigns(null);
@@ -148,12 +148,12 @@ const HomePage = () => {
         }
     }, []);
 
-    // --- NEW: Fetch Public Spark Campaigns Callback ---
+
     const fetchSparkCampaigns = useCallback(async () => {
         setLoadingSparkCampaigns(true);
         setErrorSparkCampaigns(null);
         try {
-            // No token needed for this public endpoint!
+
             const response = await fetch(`${API_BASE_URL}/api/spark-campaigns/public-active`, {
                 method: 'GET',
                 headers: {
@@ -185,7 +185,7 @@ const HomePage = () => {
 
 
     const handleActionComplete = async (taskId, actionType) => {
-        console.log(`HomePage: Marking individual action '${actionType}' for task ${taskId}`);
+        
 
         if (!user || !localStorage.getItem('jwtToken')) {
             alert("Please log in to perform this action.");
@@ -217,7 +217,7 @@ const HomePage = () => {
                 throw new Error(data.message || `Failed to mark ${actionType} as done`);
             }
 
-            console.log(`Individual Action ${actionType} for Task ${taskId} reported. Backend response:`, data);
+            
 
             setTasks(prevTasks => prevTasks.map(task => {
                 if (task._id === taskId) {
@@ -262,7 +262,7 @@ const HomePage = () => {
     };
 
     const handleTaskDone = async (task) => {
-        console.log(`HomePage: User clicked DONE for task ${task._id}. Attempting to mark as fully completed.`);
+        
 
         if (!user || !localStorage.getItem('jwtToken')) {
             alert("Please log in to mark tasks as done.");
@@ -296,7 +296,7 @@ const HomePage = () => {
                 throw new Error(data.message || `Failed to mark task ${task._id} as fully completed.`);
             }
 
-            console.log(`Task ${task._id} successfully marked as fully completed by user.`);
+            
 
             setTasks(prevTasks => prevTasks.map(t =>
                 t._id === task._id
@@ -328,7 +328,7 @@ const HomePage = () => {
         (task._id && task._id.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-    // Filter sparkCampaigns based on searchTerm
+
     const filteredSparkCampaigns = sparkCampaigns.filter(campaign =>
         (campaign.name && campaign.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (campaign.hashtags && campaign.hashtags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))) ||
@@ -336,7 +336,7 @@ const HomePage = () => {
         (campaign._id && campaign._id.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-    // Filter OTHER campaigns if 'campaigns' state is for other types of campaigns that still need to be displayed
+
     const filteredProjects = campaigns.filter(project =>
         project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -365,7 +365,7 @@ const HomePage = () => {
         setCurrentPage(1);
     };
 
-    // Consolidated loading and error handling
+
     if (loadingUser || loadingTasks || loadingCampaigns || loadingSparkCampaigns) {
         return (
             <div className="homepage-loading-overlay">
@@ -488,7 +488,7 @@ const HomePage = () => {
                 )}
             </section>
 
-            {/* --- NEW SECTION FOR PUBLIC SPARK CAMPAIGNS, USING YOUR SparkCampaignGrid --- */}
+            {}
             <section className="homepage-section public-spark-campaigns-section glassmorphism-card">
                 <h2 className="section-heading"> Spark Campaigns</h2>
                 <p className="section-description">
@@ -500,14 +500,14 @@ const HomePage = () => {
                         <p className="loading-text">Loading public spark campaigns...</p>
                     </div>
                 ) : filteredSparkCampaigns.length > 0 ? (
-                    // ⭐ Use your SparkCampaignGrid here!
+
                     <SparkCampaignGrid sparkCampaigns={filteredSparkCampaigns} />
                 ) : (
                     <p className="no-campaigns-message">No public Spark Campaigns available at the moment. Check back soon!</p>
                 )}
             </section>
 
-            {/* --- Existing section for other campaigns (now with an overlay) --- */}
+            {}
             <section className="homepage-section available-campaigns-section glassmorphism-card">
                 <h2 className="section-heading">FOMO Campaigns</h2>
                 <p className="section-description">Discover high-impact campaigns tailored for significant community growth and volume generation.</p>
@@ -517,7 +517,7 @@ const HomePage = () => {
                         <p className="loading-text">Loading campaigns...</p>
                     </div>
                 ) : filteredProjects.length > 0 ? (
-                    // Wrap ProjectGrid with a div for the overlay and cool effect
+
                     <div className="project-grid-container-tease">
                         <ProjectGrid projects={filteredProjects} />
                         <div className="overlay-tease">

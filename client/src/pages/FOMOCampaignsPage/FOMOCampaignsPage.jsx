@@ -1,4 +1,4 @@
-// client/src/pages/FOMOCampaignsPage/FOMOCampaignsPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import ProjectGrid from '../../components/ProjectGrid/ProjectGrid';
 import './FOMOCampaignsPage.css';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useUser } from '../../UserContext'; // Import useUser to get the token
 import { API_BASE_URL } from '../../config';
 
-// const API_BASE_URL = "http://localhost:5000";
+
 
 const FOMOCampaignsPage = () => {
     const [campaigns, setCampaigns] = useState([]);
@@ -19,20 +19,20 @@ const FOMOCampaignsPage = () => {
             setLoading(true);
             setError(null);
             try {
-                // Check if token exists before making a protected API call
+
                 if (!token) {
                     setError("You must be logged in to view campaigns.");
                     setLoading(false);
                     return;
                 }
 
-                console.log('FOMOCampaignsPage: Fetching FOMO campaigns from backend...');
+                
                 const response = await axios.get(`${API_BASE_URL}/api/campaigns`, { // <--- Changed endpoint to /api/campaigns
                     headers: {
                         Authorization: `Bearer ${token}`, // <--- Added Authorization header
                     },
                 });
-                console.log('FOMOCampaignsPage: Received data:', response.data);
+                
 
                 setCampaigns(response.data);
 
@@ -41,7 +41,7 @@ const FOMOCampaignsPage = () => {
                 setError(err.response?.data?.message || 'Failed to fetch FOMO campaigns. Please try again later.');
             } finally {
                 setLoading(false);
-                console.log('FOMOCampaignsPage: Fetching complete.');
+                
             }
         };
 

@@ -1,11 +1,11 @@
-// client/src/setupProxy.js
+
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
   app.use(
     (req, res, next) => {
-      // THIS IS A VERY PERMISSIVE CSP FOR DIAGNOSTIC PURPOSES ONLY.
-      // DO NOT USE IN PRODUCTION.
+
+
       const cspDirectives = [
         "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:",
         "script-src * 'unsafe-inline' 'unsafe-eval' data: blob:",

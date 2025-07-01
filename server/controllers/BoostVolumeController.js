@@ -1,8 +1,8 @@
-// backend/boost_volume/controllers/BoostVolumeController.js
+
 const BoostVolumeCampaign = require('../models/BoostVolumeCampaign');
 const BoostVolumeParticipation = require('../models/BoostVolumeParticipation');
 const User = require('../models/User'); // Link to your existing User model
-// const { calculateCampaignMetrics } = require('../utils/calculations'); // No longer directly used for cost calculations here
+
 const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose');
 
@@ -16,7 +16,7 @@ const BoostVolumeController = {
         const {
             campaignName, tokenAddress, selectedDEX, targetVolume,
             volumePerLoop, loopsPerUser, speed, notes,
-            // These calculated fields are sent from the frontend
+
             estimatedTotalCost,
             estimatedUserPayouts,
             estimatedPlatformProfit,
@@ -24,10 +24,10 @@ const BoostVolumeController = {
             usersNeeded
         } = req.body;
 
-        // Ensure createdBy is correctly set from the authenticated user's ID
+
         const createdBy = req.user.id;
 
-        // Validation for all required fields, including the new calculated ones
+
         if (!campaignName || !tokenAddress || !selectedDEX || !targetVolume ||
             !volumePerLoop || !loopsPerUser || !speed || !createdBy ||
             estimatedTotalCost === undefined || estimatedUserPayouts === undefined ||
@@ -36,16 +36,16 @@ const BoostVolumeController = {
         }
 
         try {
-            // --- CRITICAL FIX: REMOVE REDUNDANT CALCULATIONS HERE ---
-            // The frontend already calculates these and sends them.
-            // Keeping these lines here was overriding the correct values from the frontend with 0s.
-            // const { numberOfLoops, usersNeeded } = calculateCampaignMetrics(targetVolume, volumePerLoop, loopsPerUser);
-            // const singleLoopPayout = typeof payoutPerLoop === 'number' ? payoutPerLoop : 0;
-            // const estimatedUserPayouts = numberOfLoops * singleLoopPayout;
-            // const platformFeePercentage = 0.10;
-            // const totalEstimatedCost = estimatedUserPayouts / (1 - platformFeePercentage);
-            // const estimatedPlatformProfit = totalEstimatedCost - estimatedUserPayouts;
-            // --- END CRITICAL FIX ---
+
+
+
+
+
+
+
+
+
+
 
             const newCampaign = new BoostVolumeCampaign({
                 campaignName,
@@ -57,7 +57,7 @@ const BoostVolumeController = {
                 volumePerLoop: Number(volumePerLoop),
                 loopsPerUser: Number(loopsPerUser),
                 
-                // --- USE THE VALUES RECEIVED DIRECTLY FROM THE FRONTEND ---
+
                 totalCampaignLoops: Number(totalCampaignLoops), // Use the value from req.body
                 usersNeeded: Number(usersNeeded),               // Use the value from req.body
                 estimatedTotalCost: Number(estimatedTotalCost), // Use the value from req.body
@@ -69,7 +69,7 @@ const BoostVolumeController = {
             });
 
             await newCampaign.save();
-            console.log(`BoostVolume campaign "${newCampaign.campaignName}" created with ID: ${newCampaign._id}`);
+            
 
             res.status(201).json({
                 message: 'BoostVolume campaign created successfully!',
@@ -120,7 +120,7 @@ const BoostVolumeController = {
         try {
             const { creatorId } = req.params;
 
-            // Security check: Ensure the authenticated user is requesting their own campaigns.
+
             if (req.user.id !== creatorId) {
                 return res.status(403).json({ message: 'Forbidden: You are not authorized to view these campaigns.' });
             }
@@ -179,23 +179,23 @@ const BoostVolumeController = {
                 await session.abortTransaction();
                 return res.status(400).json({ message: 'This BoostVolume campaign has already reached its target volume and is finished.' });
             }
-            // Removed: campaign.currentParticipants >= campaign.usersNeeded check here
-            // This check should primarily be done on the frontend for user experience,
-            // or if it strictly prevents new participants. If you allow more participants than 'usersNeeded'
-            // but cap overall loops, then this check might be too strict.
-            // If you want to strictly cap participants, re-add this, but consider if it's the right place.
+
+
+
+
+
 
             let participation = await BoostVolumeParticipation.findOne({ campaign: campaignId, user: userId }).session(session);
 
             if (participation) {
-                // User is already participating
+
                 if (participation.walletAddress !== walletAddress) {
-                    // Update wallet address if it's different
+
                     participation.walletAddress = walletAddress;
-                    // No need to reset status or loops here unless specific business logic demands it.
-                    // Existing progress (verifiedLoops, pendingLoops) should be preserved.
+
+
                     await participation.save({ session });
-                    console.log(`User ${userId} updated wallet for campaign ${campaignId} to ${walletAddress}.`);
+                    
                     await session.commitTransaction(); // Commit here for wallet update
                     return res.status(200).json({
                         message: 'Your wallet address for this campaign has been updated!',
@@ -210,9 +210,9 @@ const BoostVolumeController = {
                         overallCampaignUsersNeeded: campaign.usersNeeded
                     });
                 } else {
-                    // Wallet address is the same, no change needed.
+
                     await session.abortTransaction(); // No changes to commit, abort transaction
-                    console.log(`User ${userId} (wallet: ${walletAddress}) already associated with BoostVolume campaign ${campaignId}. No change needed.`);
+                    
                     return res.status(200).json({
                         message: 'You are already registered for this campaign with this wallet.',
                         associatedWallet: walletAddress,
@@ -227,7 +227,7 @@ const BoostVolumeController = {
                     });
                 }
             } else {
-                // If not already participating, create a new participation record
+
                 participation = new BoostVolumeParticipation({
                     campaign: campaignId,
                     user: userId,
@@ -239,12 +239,12 @@ const BoostVolumeController = {
                 });
                 await participation.save({ session });
 
-                // Increment currentParticipants for the campaign only when a NEW participation is created
+
                 campaign.currentParticipants = (campaign.currentParticipants || 0) + 1;
                 await campaign.save({ session });
 
                 await session.commitTransaction(); // Commit for new participation
-                console.log(`New user ${userId} (wallet: ${walletAddress}) associated with BoostVolume campaign ${campaignId}. Current participants: ${campaign.currentParticipants}`);
+                
                 return res.status(201).json({ // Use 201 Created for a new resource
                     message: 'Your wallet address has been registered for this campaign!',
                     associatedWallet: walletAddress,
@@ -262,10 +262,10 @@ const BoostVolumeController = {
         } catch (error) {
             await session.abortTransaction();
             console.error('Error in BoostVolume participation:', error);
-            // Provide more specific error message for duplicate key errors on the user+campaign index
+
             if (error.code === 11000 && error.keyPattern && error.keyPattern.campaign === 1 && error.keyPattern.user === 1) {
-                // This case should be largely handled by the `findOne` check above,
-                // but kept here as a fallback for concurrent requests or other issues.
+
+
                 return res.status(409).json({ message: 'You are already registered for this campaign. If you need to change your wallet, update it using the provided input field.', error: error.message });
             }
             res.status(500).json({ message: 'Failed to participate in BoostVolume campaign.', error: error.message });
@@ -307,22 +307,22 @@ const BoostVolumeController = {
             if (participation.walletAddress !== walletAddress) {
                 return res.status(403).json({ message: 'Provided wallet address does not match your registered wallet for this campaign.' });
             }
-            // Check against sum of verified and pending loops for user's limit
+
             const totalUserSubmittedLoops = participation.verifiedLoops.length + (participation.pendingLoops || 0);
             if (totalUserSubmittedLoops >= campaign.loopsPerUser) {
                 return res.status(400).json({ message: 'You have completed or submitted all allowed BoostVolume loops for this campaign.' });
             }
 
-            // Increment pending loops
+
             participation.pendingLoops = (participation.pendingLoops || 0) + 1;
             await participation.save();
 
-            // Re-fetch to ensure the most up-to-date values are returned in the response
+
             const updatedCampaign = await BoostVolumeCampaign.findById(campaignId);
             const updatedParticipation = await BoostVolumeParticipation.findOne({ campaign: campaignId, user: userId });
 
-            // ADD THIS LOG:
-            console.log("Backend sending markLoopAsDone response. Updated Participation:", updatedParticipation);
+
+            
 
 
             res.status(200).json({
@@ -366,21 +366,21 @@ const BoostVolumeController = {
             return res.status(400).json({ message: 'No pending loops to verify for this participation.' });
         }
 
-        // Fetch the associated campaign
+
         const campaign = await Campaign.findById(participation.campaign).session(session);
         if (!campaign) {
             await session.abortTransaction();
             return res.status(404).json({ message: 'Associated campaign not found.' });
         }
 
-        // Update participation counts
+
         participation.pendingLoops -= 1;
         participation.completedLoops += 1;
 
-        // Generate a unique signature if not provided by admin
+
         const finalSignature = providedSignature || `admin-verified-${uuidv4()}`;
 
-        // Add the verified loop to the array
+
         participation.verifiedLoops.push({
             loopNumber: participation.verifiedLoops.length + 1, // Simple incremental loop number
             verifiedAt: new Date(),
@@ -390,12 +390,12 @@ const BoostVolumeController = {
             proof: loopProof // Store the proof link/details
         });
 
-        // Update overall campaign completed loops
+
         campaign.currentLoopsCompleted += 1;
 
-        // (Optional) Update user's total earned if rewards are immediately liquid
-        // This assumes you have access to the User model and its ID from participation
-        // You might need to adjust this based on your user/wallet/reward management
+
+
+
         const user = await User.findById(participation.user).session(session);
         if (user) {
             user.totalEarned += campaign.payoutPerLoopUSD;
@@ -431,7 +431,7 @@ const BoostVolumeController = {
             const formattedCampaigns = campaigns.map(campaign => {
                 let payoutPerLoopUSD = 0;
                 if (typeof campaign.estimatedUserPayouts === 'number' && typeof campaign.totalCampaignLoops === 'number' && campaign.totalCampaignLoops > 0) {
-                    // REMOVE .toFixed(4) here
+
                     payoutPerLoopUSD = campaign.estimatedUserPayouts / campaign.totalCampaignLoops; 
                 } else {
                     console.warn(`[getAllActiveCampaigns] Cannot accurately calculate payoutPerLoopUSD for campaign ${campaign._id}. estimatedUserPayouts: ${campaign.estimatedUserPayouts}, totalCampaignLoops: ${campaign.totalCampaignLoops}`);
@@ -464,7 +464,7 @@ const BoostVolumeController = {
         const { campaignId } = req.params;
         const userId = req.user.id;
 
-        console.log(`[getCampaignStatus] Attempting to fetch status for campaignId: ${campaignId}, userId: ${userId}`);
+        
 
         if (!campaignId) {
             console.error('[getCampaignStatus] Error: Missing campaign ID.');
@@ -489,7 +489,7 @@ const BoostVolumeController = {
                 console.warn(`[getCampaignStatus] Campaign not found for ID: ${campaignId}`);
                 return res.status(404).json({ message: 'BoostVolume campaign not found.' });
             }
-            console.log(`[getCampaignStatus] Found campaign: ${campaign.campaignName}`);
+            
 
             let userProgress = {
                 associatedWallet: null,
@@ -506,15 +506,15 @@ const BoostVolumeController = {
                     pendingLoops: participation.pendingLoops || 0,
                     userParticipationStatus: participation.status
                 };
-                console.log(`[getCampaignStatus] Found user participation for ${userId}. Wallet: ${userProgress.associatedWallet}, Verified Loops: ${userProgress.completedLoops}, Pending Loops: ${userProgress.pendingLoops}`);
+                
             } else {
-                console.log(`[getCampaignStatus] No participation found for user ${userId} in campaign ${campaignId}.`);
+                
             }
 
-            // Payout per loop now directly uses campaign's pre-calculated/defined estimatedUserPayouts
+
             let payoutPerLoopUSD = 0;
             if (typeof campaign.estimatedUserPayouts === 'number' && typeof campaign.totalCampaignLoops === 'number' && campaign.totalCampaignLoops > 0) {
-                // REMOVE .toFixed(4) here as well
+
                  payoutPerLoopUSD = campaign.estimatedUserPayouts / campaign.totalCampaignLoops; 
             } else {
                 console.warn(`[getCampaignStatus] Cannot accurately calculate payoutPerLoopUSD. estimatedUserPayouts: ${campaign.estimatedUserPayouts}, totalCampaignLoops: ${campaign.totalCampaignLoops}`);

@@ -1,4 +1,4 @@
-// backend/routes/authRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // Using bcryptjs as per your code, previously I might have used bcrypt
@@ -7,7 +7,7 @@ const User = require('../models/User');
 const authenticateJWT = require('../middleware/authenticateJWT');
 const checkUserStatus = require('../middleware/checkUserStatus');
 
-// --- Registration Route ---
+
 router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -16,14 +16,14 @@ router.post('/register', async (req, res) => {
     }
 
     try {
-        // --- NEW AND IMPROVED LOGGING (Add these lines) ---
-        console.log("-----------------------------------------");
-        console.log("REGISTRATION ATTEMPT - INCOMING REQ.BODY:");
-        console.log("Username:", username);
-        console.log("Email:", email);
-        console.log("Password (pre-hash):", password ? '[PRESENT]' : '[NOT PRESENT]'); // Don't log actual password
-        console.log("-----------------------------------------");
-        // ---------------------------------
+
+        
+        
+        
+        
+
+        
+
 
         let existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
@@ -35,8 +35,8 @@ router.post('/register', async (req, res) => {
             email,
             passwordHash: password, // Mongoose pre-save hook handles hashing
             name: username, // Default 'name' to 'username' if not provided by frontend
-            // Explicitly setting these to null to ensure consistency,
-            // even though 'default: null' in schema would achieve similar for missing fields.
+
+
             walletAddress: null,
             xUsername: null,
             telegramUserId: null, // Critical: Ensure this is null for web registrations
@@ -44,24 +44,24 @@ router.post('/register', async (req, res) => {
             telegramFirstName: null,
             telegramLastName: null,
             telegramPhotoUrl: null,
-            // role: 'user' // Default is already set in schema, no need to explicitly set here unless you want to override
+
         });
 
-        // --- LOGGING BEFORE SAVE (Add these lines) ---
-        console.log("New User object BEFORE save():");
-        console.log(newUser.toObject()); // Log the plain JavaScript object representation
-        console.log("Value of newUser.telegramUserId before save:", newUser.telegramUserId);
-        console.log("-----------------------------------------");
-        // -----------------------------
+
+        
+
+        
+        
+
 
         await newUser.save();
 
-        // --- LOGGING AFTER SAVE (Add these lines) ---
-        console.log("User successfully saved:");
-        console.log("Saved User ID:", newUser._id);
-        console.log("Saved telegramUserId:", newUser.telegramUserId);
-        console.log("-----------------------------------------");
-        // --------------------------
+
+        
+        
+        
+        
+
 
         const payload = {
             user: {
@@ -100,9 +100,9 @@ router.post('/register', async (req, res) => {
         );
 
     } catch (err) {
-        // --- IMPROVED ERROR LOGGING (Modify this line) ---
+
         console.error('SERVER-SIDE REGISTRATION ERROR (CAUGHT):', err);
-        // --------------------------------------------------
+
 
         if (err.code === 11000) {
             const field = Object.keys(err.keyValue)[0];
@@ -115,7 +115,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// --- Login Route ---
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -135,7 +135,7 @@ router.post('/login', async (req, res) => {
         }
 
         if (user.accountStatus === 'banned') {
-            console.log(`Banned user ${user.username} (ID: ${user._id}) attempted to log in.`);
+            
             return res.status(403).json({
                 message: 'Your account has been permanently banned due to fraudulent activity. All pending earnings have been forfeited. This decision is final.',
                 banned: true
@@ -186,7 +186,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// --- /me route for fetching user data with JWT ---
+
 router.get('/me', authenticateJWT, checkUserStatus, async (req, res) => {
     if (!req.fullUser) {
         return res.status(404).json({ message: 'User data not found.' });
@@ -206,7 +206,7 @@ router.get('/me', authenticateJWT, checkUserStatus, async (req, res) => {
         banReason: req.fullUser.banReason,
         banDate: req.fullUser.banDate,
         role: req.fullUser.role,
-        // ADD THESE THREE LINES:
+
         telegramFirstName: req.fullUser.telegramFirstName || null,
         telegramUserId: req.fullUser.telegramUserId || null,
         telegramUsername: req.fullUser.telegramUsername || null,

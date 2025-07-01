@@ -1,19 +1,19 @@
-/* client/src/components/DripGrid/DripGrid.css */
 
-/* --- CSS Variables (Ensure these are defined globally or in a parent file) --- */
-/* For optimal results, ensure these variables are defined, e.g., in :root {} */
+
+
+
 
 :root {
     --background-dark-primary: #0d111c;
     --background-dark-glass: rgba(17, 16, 15, 0.7);
-    --background-dark-glass-alt: rgba(28, 32, 45, 0.7); /* Slightly different glass for empty state */
+    --background-dark-glass-alt: rgba(28, 32, 45, 0.7); 
      --background-dark-input: rgba(0, 0, 0, 0.4);
 
     --text-primary-light: #e0e0e0;
     --text-secondary-light: #c0c0c0;
     --text-dimmed-light: #A0A0A0;
     --text-faded-light: #B0B0B0;
-    --text-dark-on-orange: #0d111c; /* Dark text specifically for orange backgrounds */
+    --text-dark-on-orange: #0d111c; 
 
     --brand-red-orange: #EC1708;
     --brand-peach-orange: #FF5858;
@@ -36,7 +36,7 @@
 
     --status-incomplete-bg: rgba(255, 38, 0, 0.2);
     --status-incomplete-border: rgba(248, 105, 61, 0.4);
-    --status-incomplete-text: #E64A19; /* Your brand orange */
+    --status-incomplete-text: #E64A19; 
 
     --shadow-light: rgba(0, 0, 0, 0.3);
     --shadow-medium: rgba(0, 0, 0, 0.4);
@@ -52,9 +52,9 @@
 }
 
 
-/* --- General Table Container --- */
+
 .drip-tasks-table-container {
-    background-color: var(--background-dark-glass); /* Darker glass base for the entire table */
+    background-color: var(--background-dark-glass); 
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--border-subtle-light);
@@ -62,22 +62,22 @@
     box-shadow: 0 10px 40px var(--shadow-medium);
     padding: 25px;
     color: var(--text-primary-light);
-    font-family: 'Inter', sans-serif; /* Modern font */
-    overflow-x: auto; /* Enable horizontal scrolling on small screens */
+    font-family: 'Inter', sans-serif; 
+    overflow-x: auto; 
 }
 
-/* --- Table Header --- */
+
 .drip-table-header {
     display: grid;
-    grid-template-columns: 0.2fr 1.4fr 1.0fr 0.6fr 0.6fr; /* Adjusted column widths */
+    grid-template-columns: 0.2fr 1.4fr 1.0fr 0.6fr 0.6fr; 
     gap: 20px;
     padding: 15px 20px;
     margin-bottom: 10px;
-    background-color: rgb(28 28 28 / 61%); /* Slightly more opaque header */
+    background-color: rgb(28 28 28 / 61%); 
     border-radius: 15px;
     font-weight: 700;
     font-size: 1em;
-    color: var(--text-primary-light); /* Ensure header text is bright */
+    color: var(--text-primary-light); 
     border-bottom: 1px solid var(--border-subtle-light);
 }
 
@@ -86,7 +86,7 @@
     padding-right: 10px;
 }
 
-/* --- Table Body and Rows --- */
+
 .drip-table-body {
     display: flex;
     flex-direction: column;
@@ -94,72 +94,72 @@
 
 .drip-table-row {
     display: grid;
-    grid-template-columns: 1.2fr 1.5fr 2fr 0.8fr 1.2fr; /* Matches header */
+    grid-template-columns: 1.2fr 1.5fr 2fr 0.8fr 1.2fr; 
     gap: 20px;
     align-items: center;
     padding: 18px 20px;
-    border-radius: 12px; /* Slightly rounded rows */
+    border-radius: 12px; 
     margin-bottom: 10px;
-    /* Use a very subtle dark background for rows, or a slightly less transparent glass */
-    background-color: rgba(17, 16, 15, 0.5); /* Slightly less opaque glass for rows */
+    
+    background-color: rgba(17, 16, 15, 0.5); 
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease-in-out;
-    position: relative; /* For the NEW badge */
+    position: relative; 
 }
 
 .drip-table-row:hover {
-    background-color: rgb(15, 15, 15); /* Darker on hover for depth */
+    background-color: rgb(15, 15, 15); 
     transform: translateY(-3px);
     box-shadow: 0 8px 20px var(--shadow-light);
 }
 
-/* Specific row states */
+
 .drip-new-task {
-    animation: pulseBorder 1.5s infinite alternate; /* Subtle pulse effect */
+    animation: pulseBorder 1.5s infinite alternate; 
 }
 
 @keyframes pulseBorder {
     0% { border-color: #ff6333, 0.5; }
-    100% { border-color: #3b190e, 0.2; } /* Stronger orange pulse */
+    100% { border-color: #3b190e, 0.2; } 
 }
 
 .drip-completed-row {
-    opacity: 0.8; /* Slightly dim completed rows */
-    background-color: rgba(40, 50, 45, 0.5); /* Greenish tint for completed */
+    opacity: 0.8; 
+    background-color: rgba(40, 50, 45, 0.5); 
     border: 1px solid rgba(0, 255, 0, 0.1);
 }
 
 .drip-pending-row {
-    background-color: rgba(var(--brand-peach-orange-rgb), 0.1); /* Subtle orange tint for pending */
-    border: 1px solid rgba(var(--brand-peach-orange-rgb), 0.3); /* Lighter orange border for pending */
+    background-color: rgba(var(--brand-peach-orange-rgb), 0.1); 
+    border: 1px solid rgba(var(--brand-peach-orange-rgb), 0.3); 
 }
 
 .drip-table-cell {
     padding: 0 10px;
     font-size: 0.95em;
-    color: var(--text-secondary-light); /* Consistent secondary text */
-    word-break: break-word; /* Prevent long words from overflowing */
+    color: var(--text-secondary-light); 
+    word-break: break-word; 
 }
 
-/* --- Creator Info --- */
+
 .drip-creator-info {
     font-weight: 600;
     color: var(--text-primary-light);
 }
 
-/* --- Tweet Link --- */
+
 .drip-tweet-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--social-twitter); /* Twitter blue */
+    color: var(--social-twitter); 
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .drip-tweet-link:hover {
-    color: var(--social-twitter-light); /* Lighter blue on hover */
+    color: var(--social-twitter-light); 
     transform: translateX(3px);
 }
 
@@ -167,14 +167,14 @@
     font-size: 1.2em;
 }
 
-/* --- Action Buttons (Like, Retweet, Comment) --- */
+
 .drip-action-buttons {
     display: flex;
     gap: 12px;
 }
 
 .drip-action-btn {
-    background: rgba(255, 255, 255, 0.1); /* Subtle transparent background */
+    background: rgba(255, 255, 255, 0.1); 
     border: 1px solid var(--border-subtle-medium);
     border-radius: 8px;
     padding: 10px 14px;
@@ -185,14 +185,14 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    flex: 1; /* Distribute space evenly */
+    flex: 1; 
 }
 
 .drip-action-btn:hover:not(:disabled) {
-    background: #E64A19, 0.1; /* Orange tint on hover */
-    color: #ff3c00; /* Orange text on hover */
+    background: #E64A19, 0.1; 
+    color: #ff3c00; 
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px var(--shadow-orange-glow-light); /* Orange glow on hover */
+    box-shadow: 0 4px 10px var(--shadow-orange-glow-light); 
 }
 
 .drip-action-btn:disabled {
@@ -203,13 +203,13 @@
 }
 
 .drip-action-done {
-    background: linear-gradient(45deg, #E64A19, #ff3c00); /* Orange gradient for done actions */
+    background: linear-gradient(45deg, #E64A19, #ff3c00); 
     border-color: var(--brand-red-orange);
-    color: #4c4c4c; /* Dark text on bright orange */
+    color: #4c4c4c; 
     box-shadow: 0 4px 10px var(--shadow-orange-glow-medium);
 }
 
-/* --- Earning Amount --- */
+
 .drip-earning-amount {
     font-weight: 700;
     font-size: 1.15em;
@@ -217,27 +217,27 @@
 }
 
 .earning-value {
-    background-image: linear-gradient(45deg, #E64A19, #ff3c00); /* Vibrant orange gradient */
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for browsers not supporting text gradients */
+    color: transparent; 
     text-shadow: 0 0 8px var(--shadow-orange-glow-light);
 }
 
-/* --- Status Cell and Buttons --- */
+
 .drip-status-cell {
     display: flex;
-    flex-direction: column; /* Stack status tags and buttons */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
     gap: 8px;
-    position: relative; /* For popup positioning */
+    position: relative; 
 }
 
 .drip-done-btn {
-    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); /* Brand orange gradient */
-    color: var(--text-dark-on-orange); /* Dark text on bright orange */
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--text-dark-on-orange); 
     border: none;
     border-radius: 10px;
     padding: 10px 18px;
@@ -246,7 +246,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 5px 15px var(--shadow-orange-glow-medium);
-    min-width: 100px; /* Ensure consistent button size */
+    min-width: 100px; 
 }
 
 .drip-done-btn:hover {
@@ -262,25 +262,25 @@
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.9em;
-    white-space: nowrap; /* Prevent wrapping */
+    white-space: nowrap; 
 }
 
 .drip-status-completed {
-    background-color: var(--status-completed-bg); /* Green tint */
+    background-color: var(--status-completed-bg); 
     border: 1px solid var(--status-completed-border);
     color: var(--status-completed-text);
 }
 
 .drip-status-pending {
-    background-color: var(--status-pending-bg); /* Orange tint */
+    background-color: var(--status-pending-bg); 
     border: 1px solid var(--status-pending-border);
     color: var(--status-pending-text);
 }
 
 .drip-status-incomplete {
-    background-color: var(--status-incomplete-bg); /* Red tint (can be your primary orange) */
+    background-color: var(--status-incomplete-bg); 
     border: 1px solid var(--status-incomplete-border);
-    color: var(--status-incomplete-text); /* Use your brand orange for incomplete status */
+    color: var(--status-incomplete-text); 
 }
 
 .drip-status-icon {
@@ -300,24 +300,24 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); /* Orange gradient for new badge */
-    color: var(--text-dark-on-orange); /* Dark text on bright badge */
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--text-dark-on-orange); 
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.7em;
     font-weight: bold;
     letter-spacing: 0.5px;
     box-shadow: 0 2px 8px var(--shadow-orange-glow-light);
-    z-index: 10; /* Ensure it's on top */
+    z-index: 10; 
 }
 
-/* --- Reward Message Popup --- */
+
 .drip-reward-message-popup {
     position: absolute;
-    bottom: calc(100% + 10px); /* Position above the row */
+    bottom: calc(100% + 10px); 
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--background-dark-glass-alt); /* Use a glass background */
+    background-color: var(--background-dark-glass-alt); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--border-subtle-light);
@@ -325,10 +325,10 @@
     padding: 15px 20px;
     font-size: 0.9em;
     color: var(--text-primary-light);
-    white-space: normal; /* Allow text to wrap */
+    white-space: normal; 
     text-align: center;
     box-shadow: 0 5px 20px var(--shadow-medium);
-    z-index: 20; /* Ensure it's above other elements */
+    z-index: 20; 
     min-width: 250px;
     max-width: 300px;
     animation: fadeInScale 0.3s ease-out;
@@ -359,10 +359,10 @@
 }
 
 .drip-close-message-btn:hover {
-    color: var(--brand-red-orange); /* Orange on hover */
+    color: var(--brand-red-orange); 
 }
 
-/* --- Empty State --- */
+
 .drip-empty-state {
     display: flex;
     flex-direction: column;
@@ -370,7 +370,7 @@
     justify-content: center;
     text-align: center;
     padding: 60px 20px;
-    background-color: var(--background-dark-glass-alt); /* Consistent glass for empty state */
+    background-color: var(--background-dark-glass-alt); 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-subtle-light);
@@ -382,9 +382,9 @@
 
 .drip-empty-state-icon {
     font-size: 4.5em;
-    color: var(--brand-red-orange); /* Orange accent for empty state icon */
+    color: var(--brand-red-orange); 
     margin-bottom: 25px;
-    text-shadow: 0 0 20px var(--shadow-orange-glow-medium); /* Orange glow */
+    text-shadow: 0 0 20px var(--shadow-orange-glow-medium); 
 }
 
 .drip-empty-state-title {
@@ -405,7 +405,7 @@
 
 .drip-empty-state-action-button {
     padding: 14px 30px;
-    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); /* Brand orange gradient */
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
     color: var(--text-dark-on-orange);
     border: none;
     border-radius: 12px;
@@ -429,7 +429,7 @@
     font-size: 1.2em;
 }
 
-/* --- Responsive Design for Smaller Screens (Mobile) --- */
+
 @media (max-width: 768px) {
     .drip-tasks-table-container {
         padding: 15px;
@@ -437,11 +437,11 @@
     }
 
     .drip-table-header {
-        display: none; /* Hide header on mobile for card-like view */
+        display: none; 
     }
 
     .drip-table-row {
-        grid-template-columns: 1fr; /* Single column layout for rows */
+        grid-template-columns: 1fr; 
         padding: 15px;
         margin-bottom: 15px;
         border-radius: 15px;
@@ -450,17 +450,17 @@
     }
 
     .drip-table-cell {
-        padding: 8px 0; /* Adjust padding for cells */
+        padding: 8px 0; 
         display: flex;
         flex-direction: column;
-        align-items: flex-start; /* Align content to the left */
+        align-items: flex-start; 
         position: relative;
     }
 
     .drip-table-cell::before {
-        content: attr(data-label); /* Show data-label as a heading */
+        content: attr(data-label); 
         font-weight: 700;
-        color: var(--text-dimmed-light); /* Dimmed light color for labels */
+        color: var(--text-dimmed-light); 
         font-size: 0.8em;
         margin-bottom: 5px;
         text-transform: uppercase;
@@ -468,14 +468,14 @@
     }
 
     .drip-action-buttons {
-        flex-wrap: wrap; /* Allow buttons to wrap */
+        flex-wrap: wrap; 
         justify-content: center;
         width: 100%;
-        gap: 8px; /* Smaller gap */
+        gap: 8px; 
     }
 
     .drip-action-btn {
-        flex: 1 1 auto; /* Allow buttons to grow/shrink but maintain min-width */
+        flex: 1 1 auto; 
         min-width: 80px;
         max-width: 120px;
         padding: 8px 10px;
@@ -483,15 +483,15 @@
     }
     
     .drip-status-cell {
-        flex-direction: row; /* Keep status tags/buttons in a row on mobile */
+        flex-direction: row; 
         flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
-        padding-top: 15px; /* Add space from previous cell */
+        padding-top: 15px; 
     }
 
     .drip-done-btn {
-        width: 100%; /* Full width button */
+        width: 100%; 
         max-width: 200px;
         padding: 12px;
     }
@@ -509,10 +509,10 @@
     }
 
     .drip-reward-message-popup {
-        bottom: unset; /* Remove specific bottom positioning */
+        bottom: unset; 
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%); /* Center horizontally and vertically */
+        transform: translate(-50%, -50%); 
         min-width: 90%;
         max-width: 90%;
         padding: 15px;

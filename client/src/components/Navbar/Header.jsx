@@ -1,4 +1,4 @@
-// client/src/components/Navbar/Header.jsx
+
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import './Header.css';
@@ -12,10 +12,10 @@ const Header = () => {
     const userDropdownRef = useRef();
     const { user, loadingUser, logout, hasDashboard } = useUser();
 
-    // Close dropdowns when clicking outside or on their toggler
+
     useEffect(() => {
         function handleClickOutside(event) {
-            // Check if the click is outside the user dropdown and not on the avatar button
+
             if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) && !event.target.closest('.user-avatar-button')) {
                 setShowUserDropdown(false);
             }
@@ -24,7 +24,7 @@ const Header = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Helper to close dropdowns on navigation
+
     useEffect(() => {
         setShowUserDropdown(false);
     }, [location.pathname]);
@@ -60,11 +60,11 @@ const Header = () => {
             navigate('/login');
             return;
         }
-        // Assuming this navigates to a form or selection page for creating campaigns
+
         navigate('/create-campaign'); // Or /create-boost-volume etc.
     };
 
-    // New handlers for Admin dropdown (retained for admin functionality)
+
     const handleGoToAdminCampaigns = () => {
         navigate("/admin/boost-volume/campaigns");
         setShowUserDropdown(false);
@@ -75,7 +75,7 @@ const Header = () => {
         setShowUserDropdown(false);
     };
 
-    // --- NEW: Handler for Admin Banner Controller ---
+
     const handleGoToAdminBannerController = () => {
         navigate("/admin/banner-controller");
         setShowUserDropdown(false);
@@ -85,7 +85,7 @@ const Header = () => {
         <header className="app-header">
             <div className="header-container">
                 <div className="header-content-wrapper">
-                    <div className="header-left-section"> {/* New wrapper for logo and social icons */}
+                    <div className="header-left-section"> {}
                         <Link to="/" className="site-logo-link">
                             <img src="/logo.png" alt="@FOMO Logo" className="site-logo-img" />
                         </Link>
@@ -106,7 +106,7 @@ const Header = () => {
                         <Link to="/docs" className="nav-link">Docs</Link>
                     </nav>
 
-                    <div className="header-right-section"> {/* New wrapper for create and auth/profile */}
+                    <div className="header-right-section"> {}
 
                         <div className="user-auth-section">
                             {loadingUser ? (
@@ -153,7 +153,7 @@ const Header = () => {
                                                 Creator Dashboard
                                             </button>
 
-                                            {/* --- ADMIN LINKS (CONDITIONAL RENDERING) --- */}
+                                            {}
                                             {user.role === 'admin' && (
                                                 <>
                                                     <div className="dropdown-divider"></div>
@@ -170,7 +170,7 @@ const Header = () => {
                                                     >
                                                         Verify Tasks
                                                     </button>
-                                                    {/* --- NEW: Admin Banner Controller Link --- */}
+                                                    {}
                                                     <button
                                                         onClick={handleGoToAdminBannerController}
                                                         className="dropdown-button admin-button"
@@ -179,7 +179,7 @@ const Header = () => {
                                                     </button>
                                                 </>
                                             )}
-                                            {/* --- END ADMIN LINKS --- */}
+                                            {}
 
 
                                             <button

@@ -15,8 +15,8 @@ const SparkCampaignCard = ({ campaign }) => {
 
     const activeEarnersCount = campaign.uniqueUsersEngagedCount || 0;
 
-    // ⭐ NEW: Get the creator's name ⭐
-    // Use optional chaining (?.) to safely access creatorId and then username/name
+
+
     const creatorDisplayName = campaign.creatorId?.username || campaign.creatorId?.name || 'Unknown Creator';
 
 
@@ -190,7 +190,7 @@ const SparkCampaignCard = ({ campaign }) => {
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/60x60/1a1a1a/00e676?text=Project'; }}
                 />
                 <div className="spark-card-info-text-top">
-                    {/* ⭐ MODIFIED: Display creatorDisplayName instead of campaign.name ⭐ */}
+                    {}
                     <h3 className="spark-card-name">
                         {creatorDisplayName}
                     </h3>

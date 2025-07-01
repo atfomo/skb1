@@ -1,46 +1,46 @@
-/* client/src/index.css */
 
-/* Global CSS Reset - IMPORTANT for removing default browser margins/padding */
+
+
 html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* This is crucial for consistent layout calculations */
+    box-sizing: border-box; 
 }
 
-/* Optional: Apply box-sizing to all elements for a consistent model */
+
 /* * {
     box-sizing: border-box;
 } */
 
 
-/* Hide horizontal scrollbar */
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;    /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
 }
 
-/* Keyframes for banner scroller */
+
 @keyframes scroll-left {
   0% {
     transform: translateX(0%);
   }
-  /* If you have 3 banners, move past 2 of them to loop */
-  /* If you have 4 banners, move past 3 of them */
+  
+  
   100% {
-    transform: translateX(-66.66%); /* Adjust this percentage based on num banners */
+    transform: translateX(-66.66%); 
   }
 }
 
-/* Apply the animation */
+
 .animate-scroll-banner {
-  animation: scroll-left 20s linear infinite; /* Adjust duration and timing as needed */
+  animation: scroll-left 20s linear infinite; 
 }
 
-/* Add any other global styles you need below this */
-/* For example: */
+
+
 body {
     line-height: 1.6;
 }
