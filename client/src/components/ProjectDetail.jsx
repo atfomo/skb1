@@ -60,7 +60,7 @@ const ProjectDetail = () => {
 
             try {
 
-                const campaignRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}`, {
+                const campaignRes = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}`, {
 
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -75,7 +75,7 @@ const ProjectDetail = () => {
 
                 if (campaignData.createdBy && campaignData.createdBy._id) {
                     
-                    const creatorDashboardRes = await fetch(`https://api.atfomo.com/api/project/creator-dashboard/${campaignData.createdBy._id}`, {
+                    const creatorDashboardRes = await fetch(`https://atfomo-beta.onrender.com/api/project/creator-dashboard/${campaignData.createdBy._id}`, {
 
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -100,7 +100,7 @@ const ProjectDetail = () => {
 
                 if (user && user._id && token) {
                     
-                    const participationsRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/user-participation`, {
+                    const participationsRes = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/user-participation`, {
 
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
@@ -175,7 +175,7 @@ const ProjectDetail = () => {
         
 
         try {
-            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/join`, {
+            const res = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/join`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ userId: user._id })
@@ -193,7 +193,7 @@ const ProjectDetail = () => {
                     alert(data.message + " Refreshing participation status.");
 
 
-                    const participationsRes = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/user-participation`, {
+                    const participationsRes = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/user-participation`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const participationsData = await participationsRes.json();
@@ -285,7 +285,7 @@ const ProjectDetail = () => {
                 }
             }));
 
-            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/verify-x-action`, {
+            const res = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/verify-x-action`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ userId: user._id, subTaskIdentifier, xUsername: xUser, requiredContent })
@@ -348,7 +348,7 @@ const ProjectDetail = () => {
                 }
             }));
 
-            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/submit-proof`, {
+            const res = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/submit-proof`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
 
@@ -437,7 +437,7 @@ const ProjectDetail = () => {
         formData.append('link', subTaskIdentifier);
         formData.append('proofImage', file); // Make sure your backend expects 'proofImage' as the field name
 
-        const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/upload-proof`, {
+        const res = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/upload-proof`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -493,7 +493,7 @@ const ProjectDetail = () => {
 
         try {
             
-            const res = await fetch(`https://api.atfomo.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/leave`, {
+            const res = await fetch(`https://atfomo-beta.onrender.com/api/campaigns/${campaignId}/tasks/${taskGroupKey}/leave`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

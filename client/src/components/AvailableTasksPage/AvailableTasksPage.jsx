@@ -25,7 +25,7 @@ const AvailableTasksPage = () => {
 
             try {
 
-                const response = await fetch('https://api.atfomo.com/api/boost-volume/active', {
+                const response = await fetch('https://atfomo-beta.onrender.com/api/boost-volume/active', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

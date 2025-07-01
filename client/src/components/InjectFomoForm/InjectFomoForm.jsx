@@ -125,7 +125,7 @@ const InjectFomoForm = () => {
 
         try {
             
-            const response = await fetch('https://api.atfomo.com/api/boost-volume/campaigns', {
+            const response = await fetch('https://atfomo-beta.onrender.com/api/boost-volume/campaigns', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

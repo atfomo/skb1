@@ -12,7 +12,7 @@ const BannerScroller = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('https://api.atfomo.com/api/public/banners');
+                const response = await fetch('https://atfomo-beta.onrender.com/api/public/banners');
 
                 if (!response.ok) {
                     const errorText = await response.text();

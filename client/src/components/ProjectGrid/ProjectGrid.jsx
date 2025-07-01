@@ -34,7 +34,7 @@ const ProjectGrid = ({ projects }) => {
                         bannerImageUrl = campaign.image;
                     } else {
 
-                        bannerImageUrl = `https://api.atfomo.com${campaign.image}`;
+                        bannerImageUrl = `https://atfomo-beta.onrender.com${campaign.image}`;
                     }
                 } else {
                     bannerImageUrl = 'https://via.placeholder.com/300x600?text=Campaign+Banner'; // Placeholder for 300x600
