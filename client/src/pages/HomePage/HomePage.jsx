@@ -18,7 +18,7 @@ const HomePage = () => {
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
     const [loadingTasks, setLoadingTasks] = useState(true);
     const [errorTasks, setErrorTasks] = useState(null);
-    const [loadingCampaigns, setLoadingCampaigns] = (true);
+    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
     const [errorCampaigns, setErrorCampaigns] = useState(null);
     const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
     const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
