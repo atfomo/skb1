@@ -6,19 +6,9 @@ const { Task, User, DripCampaign } = require('../services/db'); // Assuming db.j
 const mongoose = require('mongoose');
 
 
-
 router.get('/available', async (req, res) => {
-
-
-
     const userId = req.user ? req.user.id : null;
     const userIdObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
-
-    if (userId) {
-        
-    } else {
-        
-    }
 
     try {
         const availableTasks = await Task.find({
@@ -26,9 +16,8 @@ router.get('/available', async (req, res) => {
         })
         .populate('dripCampaign', 'package_id status end_time unique_participants_count userCampaignProgress tweet_links')
         .populate('creatorId', 'username profilePictureUrl')
-        .sort({ createdAt: -1 });
-
-        
+        .sort({ createdAt: -1 })
+        .lean(); // <-- ADD .lean() HERE! This ensures plain JS objects, including populated fields.
 
         let filteredTasks = availableTasks.filter(task => {
             if (!task.dripCampaign) {
@@ -39,18 +28,8 @@ router.get('/available', async (req, res) => {
             const campaignEnded = new Date() > task.dripCampaign.end_time;
             const campaignActive = task.dripCampaign.status === 'active';
 
-            if (!campaignActive) {
-                
-            }
-            if (campaignEnded) {
-                
-            }
-
-
             return campaignActive && !campaignEnded;
         });
-
-        
 
         const tasksWithUserProgress = filteredTasks.map(task => {
             if (!task.dripCampaign) {
@@ -61,12 +40,14 @@ router.get('/available', async (req, res) => {
             let userCompletionEntry = null;
             let userCampaignEntry = null;
 
-
-            if (userIdObjectId) { // Use ObjectId for comparison
-                userCompletionEntry = task.completedBy.find(entry => entry.userId.equals(userIdObjectId));
-                userCampaignEntry = task.dripCampaign.userCampaignProgress?.find(entry => entry.userId.equals(userIdObjectId));
+            if (userIdObjectId) {
+                // Ensure task.completedBy exists and iterate through it
+                userCompletionEntry = task.completedBy ? task.completedBy.find(entry => entry.userId.equals(userIdObjectId)) : null;
+                userCampaignEntry = task.dripCampaign.userCampaignProgress ? task.dripCampaign.userCampaignProgress.find(entry => entry.userId.equals(userIdObjectId)) : null;
             }
 
+            // Now, userCompletionEntry will be a plain object (because of .lean()),
+            // so its properties will be directly accessible and reliable.
             return {
                 _id: task._id,
                 creatorId: task.creatorId._id,
@@ -83,8 +64,7 @@ router.get('/available', async (req, res) => {
                 retweetLink: `https://x.com/intent/retweet?tweet_id=${task.tweetId}`,
                 commentLink: `https://x.com/intent/tweet?in_reply_to=${task.tweetId}`,
 
-
-
+                // These lines are already correct in your code, but will now work reliably
                 isFullyCompletedByUser: userCompletionEntry ? userCompletionEntry.isFullyCompleted : false,
                 userActionProgress: userCompletionEntry ? {
                     isLiked: userCompletionEntry.isLiked,
@@ -96,7 +76,6 @@ router.get('/available', async (req, res) => {
             };
         }).filter(Boolean); // Filter out any null entries
 
-        
         res.status(200).json(tasksWithUserProgress);
 
     } catch (error) {
