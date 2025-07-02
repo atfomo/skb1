@@ -35,10 +35,9 @@ const UserSchema = new mongoose.Schema({
     },
 
     telegramUserId: {
-        type: String, // Telegram user IDs are typically large integers, store as string
-        unique: true, // A Telegram ID should be unique across all users on your platform
-        sparse: true, // Allows null values, so users without linked Telegram won't violate unique constraint
-        default: null,
+        type: String,
+        unique: true,
+        sparse: true,
     },
     telegramUsername: {
         type: String,

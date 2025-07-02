@@ -45,12 +45,6 @@ const Register = () => {
 
             navigate('/');
 
-
-
-
-
-
-
         } catch (err) {
             console.error('Registration error:', err.response?.data || err.message);
             const errorMessage = err.response?.data?.message || 'Registration failed.';
