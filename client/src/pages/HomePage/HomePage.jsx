@@ -14,12 +14,12 @@ const HomePage = () => {
     const [tasks, setTasks] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
-    const [loadingTasks, setLoadingTasks] = useState(true);
-    const [errorTasks, setErrorTasks] = useState(null);
-    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
-    const [errorCampaigns, setErrorCampaigns] = useState(null);
-    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
-    const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
+    const [loadingTasks, setLoadingTasks] = true;
+    const [errorTasks, setErrorTasks] = null;
+    const [loadingCampaigns, setLoadingCampaigns] = true;
+    const [errorCampaigns, setErrorCampaigns] = null;
+    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = true;
+    const [errorSparkCampaigns, setErrorSparkCampaigns] = null;
     const [showRewardMessageTaskId, setShowRewardMessageTaskId] = useState(null);
     const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]);
     const { user, loadingUser, hasDashboard } = useUser();
@@ -51,7 +51,7 @@ const HomePage = () => {
             if (!response.ok && response.status === 401 && !token) {
                 console.warn("Unauthorized to fetch tasks without a token. Displaying no tasks for logged-out users.");
                 setTasks([]);
-                setPendingVerificationTaskIds([]);
+                setPendingVerificationTaskIds([]); // Ensure it's empty if unauthorized
                 setLoadingTasks(false);
                 return;
             }
@@ -71,7 +71,7 @@ const HomePage = () => {
                         ? (task.completedBy || []).find(entry => String(entry.userId) === String(currentUserId))
                         : null;
 
-                    const areAllIndividualActionsCompleted = userCompletionEntry
+                    const allIndividualActionsCompleted = userCompletionEntry
                         ? userCompletionEntry.isLiked && userCompletionEntry.isRetweeted && userCompletionEntry.isCommented
                         : false;
 
@@ -83,8 +83,11 @@ const HomePage = () => {
                         isCommented: userCompletionEntry.isCommented,
                     } : { isLiked: false, isRetweeted: false, isCommented: false };
 
-                    // Task is pending verification if all individual actions are done but it's not fully completed yet
-                    if (areAllIndividualActionsCompleted && !isFullyCompletedByUser) {
+                    // THIS IS THE KEY LOGIC ON INITIAL LOAD/REFRESH
+                    // A task should be in pending verification if:
+                    // 1. All individual actions are completed by the user (as per backend data).
+                    // 2. The backend has NOT yet marked it as fully completed (isFullyCompleted: false).
+                    if (allIndividualActionsCompleted && !isFullyCompletedByUser) {
                         newPendingVerificationTaskIds.push(task._id);
                     }
 
@@ -92,12 +95,12 @@ const HomePage = () => {
                         ...task,
                         isFullyCompletedByUser: isFullyCompletedByUser,
                         userActionProgress: userActionProgress,
-                        areAllIndividualActionsCompleted: areAllIndividualActionsCompleted // Kept for logic internal to HomePage if needed
+                        areAllIndividualActionsCompleted: allIndividualActionsCompleted // Kept for logic internal to HomePage if needed
                     };
                 });
 
             setTasks(processedTasks);
-            setPendingVerificationTaskIds(newPendingVerificationTaskIds);
+            setPendingVerificationTaskIds(newPendingVerificationTaskIds); // Set this based on the initial fetch
 
         } catch (err) {
             console.error('Error fetching tasks:', err);
@@ -384,7 +387,7 @@ const HomePage = () => {
                         <DripGrid
                             tasks={tasksToShowForDripGrid}
                             onActionComplete={handleActionComplete}
-                            // onTaskDone={handleTaskDone} // Removed this prop
+                            // onTaskDone={handleTaskDone} // This prop is now truly removed
                             showRewardMessageTaskId={showRewardMessageTaskId}
                             clearRewardMessage={clearRewardMessage}
                             pendingVerificationTaskIds={pendingVerificationTaskIds}

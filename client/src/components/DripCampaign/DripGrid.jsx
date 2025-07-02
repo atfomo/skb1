@@ -4,6 +4,7 @@ import { FaTwitter, FaHeart, FaRetweet, FaComment, FaCheckCircle, FaSpinner, FaR
 import './DripGrid.css';
 
 
+// Removed onTaskDone from props
 const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage, pendingVerificationTaskIds }) => {
     if (!tasks || tasks.length === 0) {
         return (
@@ -30,6 +31,8 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
         }
     };
 
+    // handleDoneClick is removed as there's no DONE button
+
     return (
         <div className="drip-tasks-table-container">
             <div className="drip-table-header">
@@ -50,7 +53,14 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                                         userActionProgress.isRetweeted &&
                                                         userActionProgress.isCommented;
 
-                    const isPendingVerification = pendingVerificationTaskIds.includes(task._id);
+                    // The logic here is key for frontend state:
+                    // A task is pending verification if all individual actions are done,
+                    // AND the backend hasn't marked it as fully completed.
+                    // We also check if it's already in the pendingVerificationTaskIds list.
+                    const isPendingVerification = (allIndividualActionsCompleted && !isDoneByUser) ||
+                                                   pendingVerificationTaskIds.includes(task._id);
+
+                    // showDoneButton is removed as per your request
 
                     const showMessageForThisTask = showRewardMessageTaskId === task._id;
 
@@ -105,11 +115,7 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                     <span className="drip-status-tag drip-status-completed">
                                         <FaCheckCircle className="drip-status-icon" /> Done
                                     </span>
-                                ) : isPendingVerification ? (
-                                    <span className="drip-status-tag drip-status-pending">
-                                        <FaSpinner className="drip-spinner-icon" /> Pending
-                                    </span>
-                                ) : (allIndividualActionsCompleted) ? (
+                                ) : isPendingVerification ? ( // This is the combined logic now
                                     <span className="drip-status-tag drip-status-pending">
                                         <FaSpinner className="drip-spinner-icon" /> Pending
                                     </span>
