@@ -10,6 +10,8 @@ router.get('/available', async (req, res) => {
     const userId = req.user ? req.user.id : null;
     const userIdObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
+    console.log(`[GET /available] Request received. Logged-in userId: ${userId}`);
+
     try {
         const availableTasks = await Task.find({
             status: 'active',
@@ -17,7 +19,7 @@ router.get('/available', async (req, res) => {
         .populate('dripCampaign', 'package_id status end_time unique_participants_count userCampaignProgress tweet_links')
         .populate('creatorId', 'username profilePictureUrl')
         .sort({ createdAt: -1 })
-        .lean(); // <-- ADD .lean() HERE! This ensures plain JS objects, including populated fields.
+        .lean(); // Keep .lean() here. It's generally good practice.
 
         let filteredTasks = availableTasks.filter(task => {
             if (!task.dripCampaign) {
@@ -31,6 +33,9 @@ router.get('/available', async (req, res) => {
             return campaignActive && !campaignEnded;
         });
 
+        console.log(`[GET /available] Found ${filteredTasks.length} active and non-ended tasks after initial filter.`);
+
+
         const tasksWithUserProgress = filteredTasks.map(task => {
             if (!task.dripCampaign) {
                 console.error(`[GET /available] Unexpected null/undefined dripCampaign for task ${task._id} in map. Returning null.`);
@@ -40,14 +45,22 @@ router.get('/available', async (req, res) => {
             let userCompletionEntry = null;
             let userCampaignEntry = null;
 
-            if (userIdObjectId) {
-                // Ensure task.completedBy exists and iterate through it
-                userCompletionEntry = task.completedBy ? task.completedBy.find(entry => entry.userId.equals(userIdObjectId)) : null;
-                userCampaignEntry = task.dripCampaign.userCampaignProgress ? task.dripCampaign.userCampaignProgress.find(entry => entry.userId.equals(userIdObjectId)) : null;
+            if (userIdObjectId) { // Only attempt to find if a user is logged in
+                if (task.completedBy && task.completedBy.length > 0) {
+                    userCompletionEntry = task.completedBy.find(entry => entry.userId.equals(userIdObjectId));
+                    if (userCompletionEntry) {
+                        console.log(`[GET /available] For Task ID: ${task._id}, found userCompletionEntry:`, JSON.stringify(userCompletionEntry));
+                    } else {
+                        console.log(`[GET /available] For Task ID: ${task._id}, userCompletionEntry NOT found for userId: ${userId}`);
+                    }
+                } else {
+                    console.log(`[GET /available] For Task ID: ${task._id}, 'completedBy' array is empty or undefined.`);
+                }
+                userCampaignEntry = task.dripCampaign.userCampaignProgress?.find(entry => entry.userId.equals(userIdObjectId));
+            } else {
+                console.log(`[GET /available] No userId provided, skipping user-specific progress lookup for task ${task._id}.`);
             }
 
-            // Now, userCompletionEntry will be a plain object (because of .lean()),
-            // so its properties will be directly accessible and reliable.
             return {
                 _id: task._id,
                 creatorId: task.creatorId._id,
@@ -64,7 +77,6 @@ router.get('/available', async (req, res) => {
                 retweetLink: `https://x.com/intent/retweet?tweet_id=${task.tweetId}`,
                 commentLink: `https://x.com/intent/tweet?in_reply_to=${task.tweetId}`,
 
-                // These lines are already correct in your code, but will now work reliably
                 isFullyCompletedByUser: userCompletionEntry ? userCompletionEntry.isFullyCompleted : false,
                 userActionProgress: userCompletionEntry ? {
                     isLiked: userCompletionEntry.isLiked,
@@ -75,6 +87,8 @@ router.get('/available', async (req, res) => {
                 campaignTweetCount: task.dripCampaign.tweet_links.length || 0
             };
         }).filter(Boolean); // Filter out any null entries
+
+        console.log(`[GET /available] Sending ${tasksWithUserProgress.length} tasks to frontend. Example of first task's userActionProgress:`, JSON.stringify(tasksWithUserProgress[0]?.userActionProgress));
 
         res.status(200).json(tasksWithUserProgress);
 
