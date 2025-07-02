@@ -6,7 +6,7 @@ const { Task, User, DripCampaign } = require('../services/db'); // Assuming db.j
 const mongoose = require('mongoose');
 
 
-router.get('/available', async (req, res) => {
+router.get('/available', authorize, async (req, res) => {
     const userId = req.user ? req.user.id : null;
     const userIdObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
