@@ -6,21 +6,20 @@ import SparkCampaignGrid from '../../components/SparkCampaignGrid/SparkCampaignG
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaArrowRight, FaSignInAlt, FaUserCircle, FaBuilding } from 'react-icons/fa';
 import { useUser } from '../../UserContext';
-import './HomePage.css'; // Make sure this import is correct
-import { API_BASE_URL } from '../../config'; // Correct import path for API_BASE_URL
+import './HomePage.css';
+import { API_BASE_URL } from '../../config';
 
 const HomePage = () => {
-    const feather = require('feather-icons');
     const [searchTerm, setSearchTerm] = useState('');
     const [tasks, setTasks] = useState([]);
-    const [campaigns, setCampaigns] = useState([]); // Existing campaigns (might be private/other types)
-    const [sparkCampaigns, setSparkCampaigns] = useState([]); // NEW STATE for public spark campaigns
+    const [campaigns, setCampaigns] = useState([]);
+    const [sparkCampaigns, setSparkCampaigns] = useState([]);
     const [loadingTasks, setLoadingTasks] = useState(true);
     const [errorTasks, setErrorTasks] = useState(null);
-    const [loadingCampaigns, setLoadingCampaigns] = useState(true); // For existing campaigns
-    const [errorCampaigns, setErrorCampaigns] = useState(null); // For existing campaigns
-    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true); // NEW LOADING for spark campaigns
-    const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null); // NEW ERROR for spark campaigns
+    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
+    const [errorCampaigns, setErrorCampaigns] = useState(null);
+    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
+    const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
     const [showRewardMessageTaskId, setShowRewardMessageTaskId] = useState(null);
     const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]);
     const { user, loadingUser, hasDashboard } = useUser();
@@ -84,6 +83,7 @@ const HomePage = () => {
                         isCommented: userCompletionEntry.isCommented,
                     } : { isLiked: false, isRetweeted: false, isCommented: false };
 
+                    // Task is pending verification if all individual actions are done but it's not fully completed yet
                     if (areAllIndividualActionsCompleted && !isFullyCompletedByUser) {
                         newPendingVerificationTaskIds.push(task._id);
                     }
@@ -92,7 +92,7 @@ const HomePage = () => {
                         ...task,
                         isFullyCompletedByUser: isFullyCompletedByUser,
                         userActionProgress: userActionProgress,
-                        areAllIndividualActionsCompleted: areAllIndividualActionsCompleted
+                        areAllIndividualActionsCompleted: areAllIndividualActionsCompleted // Kept for logic internal to HomePage if needed
                     };
                 });
 
@@ -106,7 +106,6 @@ const HomePage = () => {
             setLoadingTasks(false);
         }
     }, [user]);
-
 
 
     const fetchCampaigns = useCallback(async () => {
@@ -153,7 +152,6 @@ const HomePage = () => {
         setLoadingSparkCampaigns(true);
         setErrorSparkCampaigns(null);
         try {
-
             const response = await fetch(`${API_BASE_URL}/api/spark-campaigns/public-active`, {
                 method: 'GET',
                 headers: {
@@ -167,7 +165,7 @@ const HomePage = () => {
             }
 
             const data = await response.json();
-            setSparkCampaigns(data); // Set the new state variable
+            setSparkCampaigns(data);
         } catch (err) {
             console.error('Error fetching public spark campaigns:', err);
             setErrorSparkCampaigns(err.message);
@@ -179,14 +177,12 @@ const HomePage = () => {
 
     useEffect(() => {
         fetchTasks();
-        fetchCampaigns(); // Keep this if you have other campaign types
-        fetchSparkCampaigns(); // Call the new fetch function
-    }, [fetchTasks, fetchCampaigns, fetchSparkCampaigns]); // Add fetchSparkCampaigns to dependencies
+        fetchCampaigns();
+        fetchSparkCampaigns();
+    }, [fetchTasks, fetchCampaigns, fetchSparkCampaigns]);
 
 
     const handleActionComplete = async (taskId, actionType) => {
-        
-
         if (!user || !localStorage.getItem('jwtToken')) {
             alert("Please log in to perform this action.");
             navigate('/login');
@@ -217,8 +213,6 @@ const HomePage = () => {
                 throw new Error(data.message || `Failed to mark ${actionType} as done`);
             }
 
-            
-
             setTasks(prevTasks => prevTasks.map(task => {
                 if (task._id === taskId) {
                     const newUserActionProgress = { ...task.userActionProgress };
@@ -227,13 +221,14 @@ const HomePage = () => {
                     if (actionType === 'comment') newUserActionProgress.isCommented = true;
 
                     const updatedAreAllIndividualActionsCompleted = newUserActionProgress.isLiked &&
-                        newUserActionProgress.isRetweeted &&
-                        newUserActionProgress.isCommented;
+                                                        newUserActionProgress.isRetweeted &&
+                                                        newUserActionProgress.isCommented;
 
                     const updatedIsFullyCompletedByUser = data.userCompletionProgress?.isFullyCompleted !== undefined
-                        ? data.userCompletionProgress.isFullyCompleted
-                        : task.isFullyCompletedByUser;
+                                                        ? data.userCompletionProgress.isFullyCompleted
+                                                        : task.isFullyCompletedByUser;
 
+                    // If all individual actions are now complete AND task is not yet fully completed, mark as pending verification
                     if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
                         setPendingVerificationTaskIds(prevIds => {
                             if (!prevIds.includes(taskId)) {
@@ -241,7 +236,13 @@ const HomePage = () => {
                             }
                             return prevIds;
                         });
+                        // Also show reward message if this is the final action that puts it into pending
+                        setShowRewardMessageTaskId(taskId);
+                        setTimeout(() => {
+                            clearRewardMessage();
+                        }, 5000);
                     } else if (updatedIsFullyCompletedByUser) {
+                        // If it becomes fully completed (e.g., by backend verification or previous state)
                         setPendingVerificationTaskIds(prevIds => prevIds.filter(id => id !== taskId));
                     }
 
@@ -261,62 +262,7 @@ const HomePage = () => {
         }
     };
 
-    const handleTaskDone = async (task) => {
-        
-
-        if (!user || !localStorage.getItem('jwtToken')) {
-            alert("Please log in to mark tasks as done.");
-            navigate('/login');
-            return;
-        }
-
-        if (!task.userActionProgress?.isLiked ||
-            !task.userActionProgress?.isRetweeted ||
-            !task.userActionProgress?.isCommented) {
-            alert("Please ensure all actions (like, retweet, comment) are marked before clicking DONE.");
-            return;
-        }
-
-        try {
-            const token = localStorage.getItem('jwtToken');
-            if (!token) throw new Error("Authentication token not found.");
-
-            const response = await fetch(`${API_BASE_URL}/api/tasks/${task._id}/mark-task-fully-complete`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({})
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || `Failed to mark task ${task._id} as fully completed.`);
-            }
-
-            
-
-            setTasks(prevTasks => prevTasks.map(t =>
-                t._id === task._id
-                    ? { ...t, isFullyCompletedByUser: true }
-                    : t
-            ));
-
-            setPendingVerificationTaskIds(prevIds => prevIds.filter(id => id !== task._id));
-
-            setShowRewardMessageTaskId(task._id);
-
-            setTimeout(() => {
-                clearRewardMessage();
-            }, 5000);
-
-        } catch (error) {
-            console.error('Error marking task fully done:', error);
-            alert(`Error marking task done: ${error.message}`);
-        }
-    };
+    // Removed handleTaskDone function as per your request
 
     const clearRewardMessage = useCallback(() => {
         setShowRewardMessageTaskId(null);
@@ -438,7 +384,7 @@ const HomePage = () => {
                         <DripGrid
                             tasks={tasksToShowForDripGrid}
                             onActionComplete={handleActionComplete}
-                            onTaskDone={handleTaskDone}
+                            // onTaskDone={handleTaskDone} // Removed this prop
                             showRewardMessageTaskId={showRewardMessageTaskId}
                             clearRewardMessage={clearRewardMessage}
                             pendingVerificationTaskIds={pendingVerificationTaskIds}
@@ -488,7 +434,6 @@ const HomePage = () => {
                 )}
             </section>
 
-            {}
             <section className="homepage-section public-spark-campaigns-section glassmorphism-card">
                 <h2 className="section-heading"> Spark Campaigns</h2>
                 <p className="section-description">
@@ -500,14 +445,12 @@ const HomePage = () => {
                         <p className="loading-text">Loading public spark campaigns...</p>
                     </div>
                 ) : filteredSparkCampaigns.length > 0 ? (
-
                     <SparkCampaignGrid sparkCampaigns={filteredSparkCampaigns} />
                 ) : (
                     <p className="no-campaigns-message">No public Spark Campaigns available at the moment. Check back soon!</p>
                 )}
             </section>
 
-            {}
             <section className="homepage-section available-campaigns-section glassmorphism-card">
                 <h2 className="section-heading">FOMO Campaigns</h2>
                 <p className="section-description">Discover high-impact campaigns tailored for significant community growth and volume generation.</p>
@@ -517,7 +460,6 @@ const HomePage = () => {
                         <p className="loading-text">Loading campaigns...</p>
                     </div>
                 ) : filteredProjects.length > 0 ? (
-
                     <div className="project-grid-container-tease">
                         <ProjectGrid projects={filteredProjects} />
                         <div className="overlay-tease">

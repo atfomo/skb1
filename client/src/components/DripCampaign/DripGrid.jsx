@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTwitter, FaHeart, FaRetweet, FaComment, FaCheckCircle, FaSpinner, FaRocket, FaTasks } from 'react-icons/fa'; // Added FaRocket, FaTasks
+import { FaTwitter, FaHeart, FaRetweet, FaComment, FaCheckCircle, FaSpinner, FaRocket, FaTasks } from 'react-icons/fa';
 import './DripGrid.css';
 
 
-const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId, clearRewardMessage, pendingVerificationTaskIds }) => {
+const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage, pendingVerificationTaskIds }) => {
     if (!tasks || tasks.length === 0) {
         return (
             <div className="drip-empty-state">
@@ -14,7 +14,6 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                     It looks like there are no immediate social tasks to complete.
                     Check back later, new opportunities drop frequently!
                 </p>
-                {}
                 <Link to="/explore" className="drip-empty-state-action-button">
                     <FaRocket className="btn-icon" /> Explore Campaigns
                 </Link>
@@ -23,26 +22,16 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
     }
 
     const handleIndividualActionClick = async (taskId, actionType, tweetLink) => {
-
         window.open(tweetLink, '_blank', 'noopener noreferrer');
-
         try {
-            
             await onActionComplete(taskId, actionType);
-            
         } catch (error) {
             console.error(`DripGrid: Error reporting action '${actionType}' for task ${taskId}:`, error);
         }
     };
 
-    const handleDoneClick = async (task) => {
-        
-        await onTaskDone(task); // Pass the full task object up to HomePage
-    };
-
     return (
-        <div className="drip-tasks-table-container"> {}
-            {}
+        <div className="drip-tasks-table-container">
             <div className="drip-table-header">
                 <div className="drip-header-cell">Creator</div>
                 <div className="drip-header-cell">Tweet / Campaign</div>
@@ -51,7 +40,6 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                 <div className="drip-header-cell">Status</div>
             </div>
 
-            {}
             <div className="drip-table-body">
                 {tasks.map((task) => {
                     const isNew = task.createdAt && (new Date() - new Date(task.createdAt)) < (24 * 60 * 60 * 1000);
@@ -59,12 +47,10 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                     const userActionProgress = task.userActionProgress || {};
 
                     const allIndividualActionsCompleted = userActionProgress.isLiked &&
-                                                         userActionProgress.isRetweeted &&
-                                                         userActionProgress.isCommented;
+                                                        userActionProgress.isRetweeted &&
+                                                        userActionProgress.isCommented;
 
                     const isPendingVerification = pendingVerificationTaskIds.includes(task._id);
-
-                    const showDoneButton = allIndividualActionsCompleted && !isDoneByUser && !isPendingVerification;
 
                     const showMessageForThisTask = showRewardMessageTaskId === task._id;
 
@@ -73,19 +59,16 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                             key={task._id}
                             className={`drip-table-row ${isNew ? 'drip-new-task' : ''} ${isDoneByUser ? 'drip-completed-row' : ''} ${isPendingVerification ? 'drip-pending-row' : ''}`}
                         >
-                            {}
                             <div className="drip-table-cell drip-creator-info" data-label="Creator:">
                                 <span className="drip-creator-name">{task.creatorName || 'N/A'}</span>
                             </div>
 
-                            {}
                             <div className="drip-table-cell drip-tweet-link-cell" data-label="Campaign:">
                                 <a href={task.tweetLink} target="_blank" rel="noopener noreferrer" title="View Tweet" className="drip-tweet-link">
                                     <FaTwitter className="drip-tweet-icon" /> View Tweet
                                 </a>
                             </div>
 
-                            {}
                             <div className="drip-table-cell drip-action-buttons" data-label="Actions:">
                                 <button
                                     className={`drip-action-btn ${userActionProgress?.isLiked ? 'drip-action-done' : ''}`}
@@ -113,12 +96,10 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                                 </button>
                             </div>
 
-                            {}
                             <div className="drip-table-cell drip-earning-amount" data-label="Earn:">
                                 <span className="earning-value">${task.earningAmount ? task.earningAmount.toFixed(2) : '0.00'}</span>
                             </div>
 
-                            {}
                             <div className="drip-table-cell drip-status-cell" data-label="Status:">
                                 {isDoneByUser ? (
                                     <span className="drip-status-tag drip-status-completed">
@@ -128,13 +109,10 @@ const DripGrid = ({ tasks, onActionComplete, onTaskDone, showRewardMessageTaskId
                                     <span className="drip-status-tag drip-status-pending">
                                         <FaSpinner className="drip-spinner-icon" /> Pending
                                     </span>
-                                ) : showDoneButton ? (
-                                    <button
-                                        className="drip-done-btn"
-                                        onClick={() => handleDoneClick(task)}
-                                    >
-                                        DONE
-                                    </button>
+                                ) : (allIndividualActionsCompleted) ? (
+                                    <span className="drip-status-tag drip-status-pending">
+                                        <FaSpinner className="drip-spinner-icon" /> Pending
+                                    </span>
                                 ) : (
                                     <span className="drip-status-tag drip-status-incomplete">Incomplete</span>
                                 )}
