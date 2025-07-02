@@ -31,8 +31,6 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
         }
     };
 
-    // handleDoneClick is removed as there's no DONE button
-
     return (
         <div className="drip-tasks-table-container">
             <div className="drip-table-header">
@@ -46,21 +44,19 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
             <div className="drip-table-body">
                 {tasks.map((task) => {
                     const isNew = task.createdAt && (new Date() - new Date(task.createdAt)) < (24 * 60 * 60 * 1000);
-                    const isDoneByUser = task.isFullyCompletedByUser;
+                    const isDoneByUser = task.isFullyCompletedByUser; // This comes from the backend's verified status
                     const userActionProgress = task.userActionProgress || {};
 
+                    // This accurately reflects if all individual actions have been marked complete by the user
                     const allIndividualActionsCompleted = userActionProgress.isLiked &&
-                                                        userActionProgress.isRetweeted &&
-                                                        userActionProgress.isCommented;
+                                                          userActionProgress.isRetweeted &&
+                                                          userActionProgress.isCommented;
 
-                    // The logic here is key for frontend state:
-                    // A task is pending verification if all individual actions are done,
-                    // AND the backend hasn't marked it as fully completed.
-                    // We also check if it's already in the pendingVerificationTaskIds list.
+                    // A task is pending verification if all individual actions are done by the user,
+                    // AND the backend hasn't marked it as fully completed,
+                    // OR it's explicitly in the pendingVerificationTaskIds list (from local state).
                     const isPendingVerification = (allIndividualActionsCompleted && !isDoneByUser) ||
-                                                   pendingVerificationTaskIds.includes(task._id);
-
-                    // showDoneButton is removed as per your request
+                                                  pendingVerificationTaskIds.includes(task._id);
 
                     const showMessageForThisTask = showRewardMessageTaskId === task._id;
 
@@ -115,7 +111,7 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                     <span className="drip-status-tag drip-status-completed">
                                         <FaCheckCircle className="drip-status-icon" /> Done
                                     </span>
-                                ) : isPendingVerification ? ( // This is the combined logic now
+                                ) : isPendingVerification ? (
                                     <span className="drip-status-tag drip-status-pending">
                                         <FaSpinner className="drip-spinner-icon" /> Pending
                                     </span>

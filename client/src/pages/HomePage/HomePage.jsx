@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Ensure useState is imported
+import React, { useState, useEffect, useCallback } from 'react';
 import BannerScroller from '../../components/BannerScroller/BannerScroller';
 import ProjectGrid from '../../components/ProjectGrid/ProjectGrid';
 import DripGrid from '../../components/DripCampaign/DripGrid';
@@ -14,7 +14,6 @@ const HomePage = () => {
     const [tasks, setTasks] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
-    // FIX: Added useState() calls here
     const [loadingTasks, setLoadingTasks] = useState(true);
     const [errorTasks, setErrorTasks] = useState(null);
     const [loadingCampaigns, setLoadingCampaigns] = useState(true);
@@ -22,7 +21,7 @@ const HomePage = () => {
     const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
     const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
     const [showRewardMessageTaskId, setShowRewardMessageTaskId] = useState(null);
-    const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]);
+    const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]); // Crucial state for pending display
     const { user, loadingUser, hasDashboard } = useUser();
     const navigate = useNavigate();
 
@@ -64,7 +63,7 @@ const HomePage = () => {
             const data = await response.json();
             const currentUserId = user ? user._id : null;
 
-            const newPendingVerificationTaskIds = [];
+            const newPendingVerificationIds = []; // Temporary array to collect IDs
 
             const processedTasks = data
                 .map(task => {
@@ -84,8 +83,10 @@ const HomePage = () => {
                         isCommented: userCompletionEntry.isCommented,
                     } : { isLiked: false, isRetweeted: false, isCommented: false };
 
+                    // If all actions are done, but the backend hasn't marked it fully completed,
+                    // consider it pending verification for the UI.
                     if (allIndividualActionsCompleted && !isFullyCompletedByUser) {
-                        newPendingVerificationTaskIds.push(task._id);
+                        newPendingVerificationIds.push(task._id);
                     }
 
                     return {
@@ -97,7 +98,7 @@ const HomePage = () => {
                 });
 
             setTasks(processedTasks);
-            setPendingVerificationTaskIds(newPendingVerificationTaskIds);
+            setPendingVerificationTaskIds(newPendingVerificationIds); // Set the state after processing all tasks
 
         } catch (err) {
             console.error('Error fetching tasks:', err);
@@ -213,6 +214,7 @@ const HomePage = () => {
                 throw new Error(data.message || `Failed to mark ${actionType} as done`);
             }
 
+            // Optimistically update the UI state
             setTasks(prevTasks => prevTasks.map(task => {
                 if (task._id === taskId) {
                     const newUserActionProgress = { ...task.userActionProgress };
@@ -221,33 +223,48 @@ const HomePage = () => {
                     if (actionType === 'comment') newUserActionProgress.isCommented = true;
 
                     const updatedAreAllIndividualActionsCompleted = newUserActionProgress.isLiked &&
-                                                        newUserActionProgress.isRetweeted &&
-                                                        newUserActionProgress.isCommented;
+                                                                     newUserActionProgress.isRetweeted &&
+                                                                     newUserActionProgress.isCommented;
 
+                    // Determine the fully completed status. Prioritize backend response if available,
+                    // otherwise, rely on existing state.
+                    // This `data.userCompletionProgress?.isFullyCompleted` assumes your backend
+                    // returns this status in the /mark-action-complete response.
+                    // If not, this will remain 'false' until a full `fetchTasks` refresh.
                     const updatedIsFullyCompletedByUser = data.userCompletionProgress?.isFullyCompleted !== undefined
-                                                        ? data.userCompletionProgress.isFullyCompleted
-                                                        : task.isFullyCompletedByUser;
+                                                                ? data.userCompletionProgress.isFullyCompleted
+                                                                : task.isFullyCompletedByUser;
 
-                    if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
-                        setPendingVerificationTaskIds(prevIds => {
+                    // Update pendingVerificationTaskIds based on the new optimistic state
+                    setPendingVerificationTaskIds(prevIds => {
+                        // If all actions are now completed, and it's NOT fully completed by backend yet, add to pending.
+                        if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
                             if (!prevIds.includes(taskId)) {
                                 return [...prevIds, taskId];
                             }
-                            return prevIds;
-                        });
-                        setShowRewardMessageTaskId(taskId);
-                        setTimeout(() => {
-                            clearRewardMessage();
-                        }, 5000);
-                    } else if (updatedIsFullyCompletedByUser) {
-                        setPendingVerificationTaskIds(prevIds => prevIds.filter(id => id !== taskId));
+                        }
+                        // If it became fully completed, remove it from pending.
+                        else if (updatedIsFullyCompletedByUser) {
+                            return prevIds.filter(id => id !== taskId);
+                        }
+                        return prevIds; // No change needed for pending IDs
+                    });
+
+                    // Show reward message if all actions are completed for the first time
+                    if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
+                         setShowRewardMessageTaskId(taskId);
+                         // Clear the message after 5 seconds
+                         setTimeout(() => {
+                             clearRewardMessage();
+                         }, 5000);
                     }
+
 
                     return {
                         ...task,
                         userActionProgress: newUserActionProgress,
                         areAllIndividualActionsCompleted: updatedAreAllIndividualActionsCompleted,
-                        isFullyCompletedByUser: updatedIsFullyCompletedByUser
+                        isFullyCompletedByUser: updatedIsFullyCompletedByUser // This reflects current known status
                     };
                 }
                 return task;
@@ -263,12 +280,12 @@ const HomePage = () => {
         setShowRewardMessageTaskId(null);
     }, []);
 
+    // Filters for search functionality
     const filteredBySearchTasks = tasks.filter(task =>
         (task.creatorName && task.creatorName.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (task.tweetLink && task.tweetLink.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (task._id && task._id.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-
 
     const filteredSparkCampaigns = sparkCampaigns.filter(campaign =>
         (campaign.name && campaign.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -277,7 +294,6 @@ const HomePage = () => {
         (campaign._id && campaign._id.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-
     const filteredProjects = campaigns.filter(project =>
         project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -285,7 +301,7 @@ const HomePage = () => {
         (project.uniqueId && project.uniqueId.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-
+    // Logic for showing incomplete tasks or all tasks with pagination
     const incompleteFilteredTasks = filteredBySearchTasks.filter(task => !task.isFullyCompletedByUser);
 
     const tasksToShowForDripGrid = showAllTasks
@@ -306,7 +322,7 @@ const HomePage = () => {
         setCurrentPage(1);
     };
 
-
+    // Loading and Error States
     if (loadingUser || loadingTasks || loadingCampaigns || loadingSparkCampaigns) {
         return (
             <div className="homepage-loading-overlay">
@@ -375,6 +391,10 @@ const HomePage = () => {
                     />
                 </div>
                 <div className="drip-grid-container">
+                    {/* Console logs for debugging the data passed to DripGrid */}
+                    {/* console.log("Tasks being passed to DripGrid:", tasksToShowForDripGrid) */}
+                    {/* console.log("Pending verification IDs passed to DripGrid:", pendingVerificationTaskIds) */}
+
                     {tasksToShowForDripGrid.length > 0 ? (
                         <DripGrid
                             tasks={tasksToShowForDripGrid}
@@ -382,7 +402,7 @@ const HomePage = () => {
                             showRewardMessageTaskId={showRewardMessageTaskId}
                             clearRewardMessage={clearRewardMessage}
                             pendingVerificationTaskIds={pendingVerificationTaskIds}
-                            currentUser={user}
+                            // currentUser={user} // This prop is not used in DripGrid, so it can be removed
                         />
                     ) : (
                         <p className="no-tasks-message">No drip tasks available. {user ? "Check back later!" : "Please log in to see available tasks!"}</p>
