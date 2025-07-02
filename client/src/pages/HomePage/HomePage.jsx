@@ -1,3 +1,5 @@
+// HomePage.jsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import BannerScroller from '../../components/BannerScroller/BannerScroller';
 import ProjectGrid from '../../components/ProjectGrid/ProjectGrid';
@@ -16,12 +18,12 @@ const HomePage = () => {
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
     const [loadingTasks, setLoadingTasks] = useState(true);
     const [errorTasks, setErrorTasks] = useState(null);
-    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
+    const [loadingCampaigns, setLoadingCampaigns] = (true);
     const [errorCampaigns, setErrorCampaigns] = useState(null);
     const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
     const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
     const [showRewardMessageTaskId, setShowRewardMessageTaskId] = useState(null);
-    const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]); // Crucial state for pending display
+    const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]);
     const { user, loadingUser, hasDashboard } = useUser();
     const navigate = useNavigate();
 
@@ -51,7 +53,7 @@ const HomePage = () => {
             if (!response.ok && response.status === 401 && !token) {
                 console.warn("Unauthorized to fetch tasks without a token. Displaying no tasks for logged-out users.");
                 setTasks([]);
-                setPendingVerificationTaskIds([]); // Ensure it's empty if unauthorized
+                setPendingVerificationTaskIds([]);
                 setLoadingTasks(false);
                 return;
             }
@@ -63,7 +65,7 @@ const HomePage = () => {
             const data = await response.json();
             const currentUserId = user ? user._id : null;
 
-            const newPendingVerificationIds = []; // Temporary array to collect IDs
+            const newPendingVerificationIds = [];
 
             const processedTasks = data
                 .map(task => {
@@ -83,8 +85,6 @@ const HomePage = () => {
                         isCommented: userCompletionEntry.isCommented,
                     } : { isLiked: false, isRetweeted: false, isCommented: false };
 
-                    // If all actions are done, but the backend hasn't marked it fully completed,
-                    // consider it pending verification for the UI.
                     if (allIndividualActionsCompleted && !isFullyCompletedByUser) {
                         newPendingVerificationIds.push(task._id);
                     }
@@ -97,8 +97,11 @@ const HomePage = () => {
                     };
                 });
 
-            setTasks(processedTasks);
-            setPendingVerificationTaskIds(newPendingVerificationIds); // Set the state after processing all tasks
+            // Filter out tasks that are already fully completed by the user
+            const tasksToDisplay = processedTasks.filter(task => !task.isFullyCompletedByUser);
+
+            setTasks(tasksToDisplay); // Set the filtered tasks
+            setPendingVerificationTaskIds(newPendingVerificationIds);
 
         } catch (err) {
             console.error('Error fetching tasks:', err);
@@ -214,61 +217,59 @@ const HomePage = () => {
                 throw new Error(data.message || `Failed to mark ${actionType} as done`);
             }
 
-            // Optimistically update the UI state
-            setTasks(prevTasks => prevTasks.map(task => {
-                if (task._id === taskId) {
-                    const newUserActionProgress = { ...task.userActionProgress };
-                    if (actionType === 'like') newUserActionProgress.isLiked = true;
-                    if (actionType === 'retweet') newUserActionProgress.isRetweeted = true;
-                    if (actionType === 'comment') newUserActionProgress.isCommented = true;
+            // --- Crucial Update Logic ---
+            setTasks(prevTasks => {
+                let updatedTasks = prevTasks.map(task => {
+                    if (task._id === taskId) {
+                        const newUserActionProgress = { ...task.userActionProgress };
+                        if (actionType === 'like') newUserActionProgress.isLiked = true;
+                        if (actionType === 'retweet') newUserActionProgress.isRetweeted = true;
+                        if (actionType === 'comment') newUserActionProgress.isCommented = true;
 
-                    const updatedAreAllIndividualActionsCompleted = newUserActionProgress.isLiked &&
-                                                                     newUserActionProgress.isRetweeted &&
-                                                                     newUserActionProgress.isCommented;
+                        const updatedAreAllIndividualActionsCompleted = newUserActionProgress.isLiked &&
+                                                                       newUserActionProgress.isRetweeted &&
+                                                                       newUserActionProgress.isCommented;
 
-                    // Determine the fully completed status. Prioritize backend response if available,
-                    // otherwise, rely on existing state.
-                    // This `data.userCompletionProgress?.isFullyCompleted` assumes your backend
-                    // returns this status in the /mark-action-complete response.
-                    // If not, this will remain 'false' until a full `fetchTasks` refresh.
-                    const updatedIsFullyCompletedByUser = data.userCompletionProgress?.isFullyCompleted !== undefined
+                        // Use the backend's `isFullyCompleted` status if provided,
+                        // otherwise, infer it based on all individual actions being completed.
+                        const updatedIsFullyCompletedByUser = data.userCompletionProgress?.isFullyCompleted !== undefined
                                                                 ? data.userCompletionProgress.isFullyCompleted
-                                                                : task.isFullyCompletedByUser;
+                                                                : updatedAreAllIndividualActionsCompleted; // Fallback if backend doesn't send it yet
 
-                    // Update pendingVerificationTaskIds based on the new optimistic state
-                    setPendingVerificationTaskIds(prevIds => {
-                        // If all actions are now completed, and it's NOT fully completed by backend yet, add to pending.
-                        if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
-                            if (!prevIds.includes(taskId)) {
-                                return [...prevIds, taskId];
+                        // Update pendingVerificationTaskIds based on the new optimistic state
+                        setPendingVerificationTaskIds(prevIds => {
+                            if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
+                                // If all actions are done, and NOT fully completed by backend yet, add to pending.
+                                return prevIds.includes(taskId) ? prevIds : [...prevIds, taskId];
+                            } else if (updatedIsFullyCompletedByUser) {
+                                // If it became fully completed, remove it from pending.
+                                return prevIds.filter(id => id !== taskId);
                             }
-                        }
-                        // If it became fully completed, remove it from pending.
-                        else if (updatedIsFullyCompletedByUser) {
-                            return prevIds.filter(id => id !== taskId);
-                        }
-                        return prevIds; // No change needed for pending IDs
-                    });
+                            return prevIds; // No change needed for pending IDs
+                        });
 
-                    // Show reward message if all actions are completed for the first time
-                    if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
-                         setShowRewardMessageTaskId(taskId);
-                         // Clear the message after 5 seconds
-                         setTimeout(() => {
-                             clearRewardMessage();
-                         }, 5000);
+                        // Show reward message if all actions are completed for the first time
+                        if (updatedAreAllIndividualActionsCompleted && !task.areAllIndividualActionsCompleted) { // Only show if it JUST became all actions completed
+                            setShowRewardMessageTaskId(taskId);
+                            // Clear the message after 5 seconds
+                            setTimeout(() => {
+                                clearRewardMessage();
+                            }, 5000);
+                        }
+
+                        return {
+                            ...task,
+                            userActionProgress: newUserActionProgress,
+                            areAllIndividualActionsCompleted: updatedAreAllIndividualActionsCompleted,
+                            isFullyCompletedByUser: updatedIsFullyCompletedByUser
+                        };
                     }
+                    return task;
+                });
 
-
-                    return {
-                        ...task,
-                        userActionProgress: newUserActionProgress,
-                        areAllIndividualActionsCompleted: updatedAreAllIndividualActionsCompleted,
-                        isFullyCompletedByUser: updatedIsFullyCompletedByUser // This reflects current known status
-                    };
-                }
-                return task;
-            }));
+                // AFTER updating the specific task, filter out fully completed tasks
+                return updatedTasks.filter(task => !task.isFullyCompletedByUser);
+            });
 
         } catch (error) {
             console.error('Error marking individual action done:', error);
@@ -280,7 +281,6 @@ const HomePage = () => {
         setShowRewardMessageTaskId(null);
     }, []);
 
-    // Filters for search functionality
     const filteredBySearchTasks = tasks.filter(task =>
         (task.creatorName && task.creatorName.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (task.tweetLink && task.tweetLink.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -302,11 +302,13 @@ const HomePage = () => {
     );
 
     // Logic for showing incomplete tasks or all tasks with pagination
-    const incompleteFilteredTasks = filteredBySearchTasks.filter(task => !task.isFullyCompletedByUser);
+    // Note: Since `tasks` state now only holds incomplete tasks,
+    // `incompleteFilteredTasks` will effectively be `filteredBySearchTasks`.
+    const incompleteFilteredTasks = filteredBySearchTasks; // This is now redundant, can simplify if desired
 
     const tasksToShowForDripGrid = showAllTasks
         ? filteredBySearchTasks.slice((currentPage - 1) * tasksPerPage, currentPage * tasksPerPage)
-        : incompleteFilteredTasks.slice(0, 10);
+        : incompleteFilteredTasks.slice(0, 10); // Still show only 10 if not viewing all
 
     const totalPages = Math.ceil(filteredBySearchTasks.length / tasksPerPage);
 
@@ -322,7 +324,6 @@ const HomePage = () => {
         setCurrentPage(1);
     };
 
-    // Loading and Error States
     if (loadingUser || loadingTasks || loadingCampaigns || loadingSparkCampaigns) {
         return (
             <div className="homepage-loading-overlay">
@@ -391,10 +392,6 @@ const HomePage = () => {
                     />
                 </div>
                 <div className="drip-grid-container">
-                    {/* Console logs for debugging the data passed to DripGrid */}
-                    {/* console.log("Tasks being passed to DripGrid:", tasksToShowForDripGrid) */}
-                    {/* console.log("Pending verification IDs passed to DripGrid:", pendingVerificationTaskIds) */}
-
                     {tasksToShowForDripGrid.length > 0 ? (
                         <DripGrid
                             tasks={tasksToShowForDripGrid}
@@ -402,7 +399,6 @@ const HomePage = () => {
                             showRewardMessageTaskId={showRewardMessageTaskId}
                             clearRewardMessage={clearRewardMessage}
                             pendingVerificationTaskIds={pendingVerificationTaskIds}
-                            // currentUser={user} // This prop is not used in DripGrid, so it can be removed
                         />
                     ) : (
                         <p className="no-tasks-message">No drip tasks available. {user ? "Check back later!" : "Please log in to see available tasks!"}</p>
