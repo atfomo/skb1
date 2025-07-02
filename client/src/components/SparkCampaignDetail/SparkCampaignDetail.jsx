@@ -277,10 +277,10 @@ const SparkCampaignDetail = () => {
                                 Authentic Engagement Only: Participate genuinely. Spamming, using bots, or artificial engagement is strictly prohibited and will result in lost earnings and account suspension.
                             </li>
                             <li>
-                                Campaign End Conditions: A campaign ends when its set duration runs out (e.g., 24 hours) **OR** the entire reward pool is exhausted, whichever happens first.
+                                Campaign End Conditions: A campaign ends when its set duration runs out (e.g., 24 hours) OR the entire reward pool is exhausted, whichever happens first.
                             </li>
                             <li>
-                                Real-time Earnings: Your earnings are tracked automatically and updated in real-time on your @FOMO dashboard or you can easily check by typing `/myrewards` in the bot.
+                                Real-time Earnings: Your earnings are tracked automatically and updated in real-time on your @FOMO dashboard or you can easily check by typing `/mybalance` in the bot.
                             </li>
                             <li>
                                 Telegram Group Etiquette: Always follow the rules of the Telegram group you join. Be respectful and constructive.

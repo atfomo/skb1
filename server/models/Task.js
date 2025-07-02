@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
@@ -43,16 +42,16 @@ const TaskSchema = new mongoose.Schema({
         isRetweeted: { type: Boolean, default: false },
         isCommented: { type: Boolean, default: false },
         isFullyCompleted: { type: Boolean, default: false }, // User completed all actions
+        isPending: { type: Boolean, default: false }, // <-- ADD THIS LINE
         completedAt: {
             type: Date,
             default: null
         },
-        isFraudulent: { type: Boolean, default: false }, // <-- ADD THIS LINE
-        isVerified: { type: Boolean, default: false },   // <-- ADD THIS LINE
-        fraudReason: { type: String, default: null }, // Optional: to store the reason if marked fraudulent
+        isFraudulent: { type: Boolean, default: false },
+        isVerified: { type: Boolean, default: false },
+        fraudReason: { type: String, default: null },
     }],
-}, { _id: true }); // Ensure subdocuments get their own _id, important for distinguishing entries in completedBy
-
+}, { _id: true });
 
 TaskSchema.index({ dripCampaign: 1, tweetId: 1, actionType: 1 }, { unique: true });
 

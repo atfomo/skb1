@@ -50,7 +50,6 @@ const DripTaskSchema = new mongoose.Schema({
         isLiked: { type: Boolean, default: false },
         isRetweeted: { type: Boolean, default: false },
         isCommented: { type: Boolean, default: false },
-
         isFullyCompleted: { type: Boolean, default: false },
         completedAt: { // Timestamp when THIS user FULLY completed the task
             type: Date,

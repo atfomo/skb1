@@ -2,7 +2,7 @@ import React from 'react';
 import DripTaskItem from './DripTaskItem';
 import './DripTaskList.css';
 
-const DripTaskList = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage, pendingVerificationTaskIds }) => {
+const DripTaskList = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage }) => { // Removed pendingVerificationTaskIds
     if (!tasks || tasks.length === 0) {
         return (
             <div className="drip-list-empty-state-message">
@@ -29,7 +29,6 @@ const DripTaskList = ({ tasks, onActionComplete, showRewardMessageTaskId, clearR
                         onActionComplete={onActionComplete}
                         showRewardMessageTaskId={showRewardMessageTaskId} 
                         clearRewardMessage={clearRewardMessage} 
-                        pendingVerificationTaskIds={pendingVerificationTaskIds} 
                     />
                 ))}
             </div>

@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaTwitter, FaHeart, FaRetweet, FaComment, FaCheckCircle, FaSpinner, FaRocket, FaTasks } from 'react-icons/fa';
 import './DripGrid.css';
 
-
-// Removed onTaskDone from props
-const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage, pendingVerificationTaskIds }) => {
+const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewardMessage }) => { // Removed pendingVerificationTaskIds
     if (!tasks || tasks.length === 0) {
         return (
             <div className="drip-empty-state">
@@ -31,6 +29,14 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
         }
     };
 
+    const handleMarkAsDoneClick = async (taskId) => {
+        try {
+            await onActionComplete(taskId, 'mark-fully-complete');
+        } catch (error) {
+            console.error(`DripGrid: Error marking task ${taskId} as fully complete:`, error);
+        }
+    };
+
     return (
         <div className="drip-tasks-table-container">
             <div className="drip-table-header">
@@ -44,7 +50,12 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
             <div className="drip-table-body">
                 {tasks.map((task) => {
                     const isNew = task.createdAt && (new Date() - new Date(task.createdAt)) < (24 * 60 * 60 * 1000);
-                    const isDoneByUser = task.isFullyCompletedByUser; // This comes from the backend's verified status
+                    
+                    // Use the flags directly from the task object (provided by backend)
+                    const isFullyCompletedByUser = task.isFullyCompletedByUser;
+                    const isPendingByUser = task.isPendingByUser;
+                    const isVerifiedByUser = task.isVerifiedByUser;
+                    
                     const userActionProgress = task.userActionProgress || {};
 
                     // This accurately reflects if all individual actions have been marked complete by the user
@@ -52,20 +63,22 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                                           userActionProgress.isRetweeted &&
                                                           userActionProgress.isCommented;
 
-                    // A task is pending verification if all individual actions are done by the user,
-                    // AND the backend hasn't marked it as fully completed,
-                    // OR it's explicitly in the pendingVerificationTaskIds list (from local state).
-                    const isPendingVerification = (allIndividualActionsCompleted && !isDoneByUser) ||
-                                                  pendingVerificationTaskIds.includes(task._id);
+                    // Determine if the "Mark as DONE" button should be shown
+                    const showMarkAsDoneButton = allIndividualActionsCompleted && !isFullyCompletedByUser && !isPendingByUser && !isVerifiedByUser;
 
                     const showMessageForThisTask = showRewardMessageTaskId === task._id;
 
                     return (
                         <div
                             key={task._id}
-                            className={`drip-table-row ${isNew ? 'drip-new-task' : ''} ${isDoneByUser ? 'drip-completed-row' : ''} ${isPendingVerification ? 'drip-pending-row' : ''}`}
+                            className={`drip-table-row 
+                                ${isNew ? 'drip-new-task' : ''} 
+                                ${isVerifiedByUser ? 'drip-completed-row' : ''} 
+                                ${isPendingByUser ? 'drip-pending-row' : ''}
+                            `}
                         >
                             <div className="drip-table-cell drip-creator-info" data-label="Creator:">
+                                {task.creatorLogo && <img src={task.creatorLogo} alt={task.creatorName} className="drip-creator-avatar" />} {/* Added creatorLogo */}
                                 <span className="drip-creator-name">{task.creatorName || 'N/A'}</span>
                             </div>
 
@@ -80,7 +93,8 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                     className={`drip-action-btn ${userActionProgress?.isLiked ? 'drip-action-done' : ''}`}
                                     onClick={() => handleIndividualActionClick(task._id, 'like', task.tweetLink)}
                                     title={userActionProgress?.isLiked ? "Liked" : "Like this tweet"}
-                                    disabled={userActionProgress?.isLiked || isDoneByUser || isPendingVerification}
+                                    // Disable if already liked, or if the task is fully completed, pending, or verified
+                                    disabled={userActionProgress?.isLiked || isFullyCompletedByUser || isPendingByUser || isVerifiedByUser}
                                 >
                                     <FaHeart />
                                 </button>
@@ -88,7 +102,8 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                     className={`drip-action-btn ${userActionProgress?.isRetweeted ? 'drip-action-done' : ''}`}
                                     onClick={() => handleIndividualActionClick(task._id, 'retweet', task.tweetLink)}
                                     title={userActionProgress?.isRetweeted ? "Retweeted" : "Retweet this tweet"}
-                                    disabled={userActionProgress?.isRetweeted || isDoneByUser || isPendingVerification}
+                                    // Disable if already retweeted, or if the task is fully completed, pending, or verified
+                                    disabled={userActionProgress?.isRetweeted || isFullyCompletedByUser || isPendingByUser || isVerifiedByUser}
                                 >
                                     <FaRetweet />
                                 </button>
@@ -96,7 +111,8 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                                     className={`drip-action-btn ${userActionProgress?.isCommented ? 'drip-action-done' : ''}`}
                                     onClick={() => handleIndividualActionClick(task._id, 'comment', task.tweetLink)}
                                     title={userActionProgress?.isCommented ? "Commented" : "Comment on this tweet"}
-                                    disabled={userActionProgress?.isCommented || isDoneByUser || isPendingVerification}
+                                    // Disable if already commented, or if the task is fully completed, pending, or verified
+                                    disabled={userActionProgress?.isCommented || isFullyCompletedByUser || isPendingByUser || isVerifiedByUser}
                                 >
                                     <FaComment />
                                 </button>
@@ -107,21 +123,29 @@ const DripGrid = ({ tasks, onActionComplete, showRewardMessageTaskId, clearRewar
                             </div>
 
                             <div className="drip-table-cell drip-status-cell" data-label="Status:">
-                                {isDoneByUser ? (
-                                    <span className="drip-status-tag drip-status-completed">
-                                        <FaCheckCircle className="drip-status-icon" /> Done
+                                {isVerifiedByUser ? ( // Prioritize 'Verified' status
+                                    <span className="drip-status-tag drip-status-verified">
+                                        <FaCheckCircle className="drip-status-icon" /> Verified
                                     </span>
-                                ) : isPendingVerification ? (
+                                ) : isPendingByUser ? ( // Then 'Pending'
                                     <span className="drip-status-tag drip-status-pending">
                                         <FaSpinner className="drip-spinner-icon" /> Pending
                                     </span>
-                                ) : (
+                                ) : showMarkAsDoneButton ? ( // Then 'Mark as DONE' button
+                                    <button
+                                        className="drip-status-tag drip-status-mark-done"
+                                        onClick={() => handleMarkAsDoneClick(task._id)}
+                                    >
+                                        Mark as DONE
+                                    </button>
+                                ) : ( // Otherwise, 'Incomplete'
                                     <span className="drip-status-tag drip-status-incomplete">Incomplete</span>
                                 )}
 
-                                {showMessageForThisTask && (
+                                {/* Reward message for pending tasks */}
+                                {showMessageForThisTask && isPendingByUser && (
                                     <div className="drip-reward-message-popup">
-                                        Your reward will be distributed after the Campaign Ends.
+                                        Your reward will be distributed after the Campaign Ends and your submission has been verified.
                                         <button onClick={clearRewardMessage} className="drip-close-message-btn">X</button>
                                     </div>
                                 )}
