@@ -1,9 +1,4 @@
-
 const mongoose = require('mongoose');
-
-
-
-
 
 const sparkCampaignSchema = new mongoose.Schema({
     creatorId: {
@@ -20,8 +15,6 @@ const sparkCampaignSchema = new mongoose.Schema({
         index: true,
     },
 
-
-
     name: {
         type: String,
         required: true,
@@ -32,7 +25,7 @@ const sparkCampaignSchema = new mongoose.Schema({
 
     bannerImageUrl: {
         type: String,
-        required: true, // Assuming a banner is always required
+        required: true, 
         trim: true,
     },
 
@@ -40,9 +33,9 @@ const sparkCampaignSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        match: /^(https?:\/\/)?(www\.)?t\.me\/[a-zA-Z0-9_]+(\/[a-zA-Z0-9_]+)?\/?$/
+        match: /^(https?:\/\/)?(www\.)?t\.me\/(?:[a-zA-Z0-9_]+|joinchat\/[a-zA-Z0-9_-]+|\+[a-zA-Z0-9_-]+)\/?$/
     },
-    telegramChatId: { // Renamed from telegramGroupId for consistency
+    telegramChatId: { 
         type: String,
         unique: true,
         sparse: true,
@@ -131,15 +124,7 @@ const sparkCampaignSchema = new mongoose.Schema({
     messageCooldownSeconds: { type: Number, default: 60 },
 }, { timestamps: true });
 
-
-
 sparkCampaignSchema.pre('save', function(next) {
-    
-    
-    
-    
-    
-
     if (this.isNew || this.isModified('budget')) {
         const effectiveBudget = (typeof this.budget === 'number' && !isNaN(this.budget) && this.budget >= 1) ? this.budget : 0;
 
@@ -151,24 +136,10 @@ sparkCampaignSchema.pre('save', function(next) {
         } else if (this.isModified('budget')) {
             this.currentRewardPoolBalance = this.userRewardPool;
         }
-
-        
-        
-        
-    } else {
-        
     }
-
-    
-    
-    
-    
     next();
 });
 
 const SparkCampaign = mongoose.model('SparkCampaign', sparkCampaignSchema);
-
-
-
 
 module.exports = SparkCampaign;
