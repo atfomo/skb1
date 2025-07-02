@@ -72,7 +72,7 @@ async function setBotCommands() {
     try {
         await bot.setMyCommands([
             { command: 'start', description: 'Start interaction or link account' },
-            { command: 'add', description: 'Link this group to a campaign (Group chat only)' },
+            { command: 'add', description: 'Link this group to a campaign, /add (campaign id)' },
             { command: 'mybalance', description: 'Check your earnings (Private chat only)' }
             // Add other commands as you introduce them
         ]);
@@ -135,33 +135,37 @@ async function sendToBackendForReactionTracking(data) {
 
 
 
-async function sendChatIdToBackend(campaignId, telegramChatId, telegramGroupLink = null) {
+async function sendChatIdToBackend(campaignId, telegramChatId, telegramUserId, telegramGroupLink = null) { // <<< ADDED telegramUserId parameter
     try {
         const requestOptions = {
             headers: {
                 'Content-Type': 'application/json',
-                'x-bot-secret': SECRET_BOT_API_KEY // Crucial for bot authentication
+                'x-bot-secret': SECRET_BOT_API_KEY
             }
         };
-        if (agent) { // Only use agent if it's defined (i.e., not in production)
+        if (agent) {
             requestOptions.httpsAgent = agent;
         }
 
         const response = await axios.post(LINK_CAMPAIGN_GROUP_API_URL, {
             campaignId,
             telegramChatId,
+            telegramUserId, // <<< INCLUDE THIS IN THE PAYLOAD
             telegramGroupLink
         }, requestOptions);
-        
-        return true;
+
+        // It's good practice to return the backend's message for better user feedback
+        return { success: true, message: response.data.message }; 
     } catch (error) {
         console.error(`[Bot] Error sending chat ID ${telegramChatId} for campaign ${campaignId} to backend:`);
         console.error(`\tError Message: ${error.message}`);
         if (error.response) {
             console.error(`\tBackend Response Status: ${error.response.status}`);
             console.error(`\tBackend Response Data:`, error.response.data);
+            // Return the specific backend error message
+            return { success: false, message: error.response.data.message || 'An unexpected error occurred on the server.' }; 
         }
-        return false;
+        return { success: false, message: 'An unexpected error occurred. Please try again later.' };
     }
 }
 
@@ -257,14 +261,14 @@ bot.onText(/\/start$/, (msg) => {
 // New command: /add
 bot.onText(/\/add (.+)/, async (msg, match) => {
     const chatId = msg.chat.id.toString();
-    const args = match[1].split(' '); // Get arguments after the command
+    const args = match[1].split(' ');
+    const telegramUserId = String(msg.from.id); // <<< GET THE USER'S TELEGRAM ID
 
     if (msg.chat.type !== 'group' && msg.chat.type !== 'supergroup') {
         return bot.sendMessage(chatId, 'This command can only be used inside a Telegram group that you want to link to a campaign.');
     }
 
     if (args.length !== 1) {
-        // Update usage message
         return bot.sendMessage(chatId, 'Usage: `/add <campaign_id>`\nExample: `/add 685cebcf3a5881b2dde705a9`');
     }
 
@@ -274,18 +278,36 @@ bot.onText(/\/add (.+)/, async (msg, match) => {
         return bot.sendMessage(chatId, 'Invalid campaign ID format. Please provide a valid 24-character hexadecimal ID.');
     }
 
-    let telegramGroupLink = null; // Default to null
-
+    let telegramGroupLink = null;
     if (msg.chat.username) {
         telegramGroupLink = `https://t.me/${msg.chat.username}`;
+    } else {
+        // Attempt to get an invite link if the group doesn't have a username
+        // This requires the bot to be an administrator in the group.
+        try {
+            const chat = await bot.getChat(chatId);
+            if (chat.invite_link) {
+                telegramGroupLink = chat.invite_link;
+            } else if (chat.type === 'supergroup' || chat.type === 'group') {
+                // Try to export an invite link if none exists and bot has permissions
+                const inviteLink = await bot.exportChatInviteLink(chatId);
+                telegramGroupLink = inviteLink;
+            }
+        } catch (error) {
+            console.warn(`[Bot] Could not get or create invite link for chat ${chatId}:`, error.message);
+            // Continue without link if unable to get one
+        }
     }
 
-    const success = await sendChatIdToBackend(campaignId, chatId, telegramGroupLink);
+
+    // Pass the telegramUserId to the backend along with other data
+    const { success, message } = await sendChatIdToBackend(campaignId, chatId, telegramUserId, telegramGroupLink); // <<< PASS telegramUserId AND CAPTURE MESSAGE
 
     if (success) {
         bot.sendMessage(chatId, `✅ This group (Chat ID: \`${chatId}\`) has been successfully linked to campaign ID: \`${campaignId}\`. Messages will now be tracked!`, { parse_mode: 'Markdown' });
     } else {
-        bot.sendMessage(chatId, `❌ Failed to link this group (Chat ID: \`${chatId}\`) to campaign ID: \`${campaignId}\`. Please ensure the Campaign ID is correct, the bot is an admin in this group, and there are no conflicts.`, { parse_mode: 'Markdown' });
+        // Use the specific error message from the backend for better feedback
+        bot.sendMessage(chatId, `❌ Failed to link this group to campaign: ${message || 'An unknown error occurred. Please check the Campaign ID and ensure you are the campaign creator.'}`, { parse_mode: 'Markdown' });
     }
 });
 
@@ -332,13 +354,7 @@ bot.onText(/\/mybalance(?: (.+))?/, async (msg, match) => {
             }
 
             earningsData.details.forEach(detail => {
-                replyMessage += `- Total: *$${detail.totalEarnings.toFixed(2)} ${detail.currency}*\n`;
-                if (detail.totalMessages > 0) {
-                    replyMessage += `  - Messages: ${detail.totalMessages}\n`;
-                }
-                if (detail.totalReactions > 0) {
-                    replyMessage += `  - Reactions: ${detail.totalReactions}\n`;
-                }
+                replyMessage += `- Your Balance: *$${detail.totalEarnings.toFixed(2)} ${detail.currency}*\n`;
             });
 
             replyMessage += `\nKeep up the great work! 🎉`;
