@@ -431,8 +431,8 @@ const CreatorDashboard = () => {
                 website: updatedData.socials?.website || "",
                 discord: updatedData.socials?.discord || "",
 
-                previewLogo: updatedData.logo || "https://placehold.co/100x100/1a1a1a/00e676?text=LOGO", // Use directly
-                previewBanner: updatedData.banner || "https://placehold.co/1200x250/1a1a1a/00e676?text=BANNER", // Use directly
+                previewLogo: updatedData.logo || "https://placehold.co/100x100/1a1a1a/e64a19?text=LOGO", // Use directly
+                previewBanner: updatedData.banner || "https://placehold.co/1200x250/1a1a1a/e64a19?text=BANNER", // Use directly
 
                 logo: null, // Reset file objects
                 banner: null, // Reset file objects

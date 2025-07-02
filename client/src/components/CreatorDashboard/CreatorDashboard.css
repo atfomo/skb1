@@ -655,7 +655,7 @@ body {
 }
 
 .no-campaigns-message .create-campaign-link {
-    color: #FF6F00;
+    color: #e64a19;
     text-decoration: none;
     font-weight: 600;
     margin-left: 5px;
@@ -663,7 +663,7 @@ body {
 }
 
 .no-campaigns-message .create-campaign-link:hover {
-    color: #FF6F00;
+    color: #ff5826;
     text-decoration: underline;
 }
 

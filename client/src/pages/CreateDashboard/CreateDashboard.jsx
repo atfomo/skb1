@@ -247,7 +247,7 @@ const CreateDashboard = () => {
                                 type="text"
                                 value={formData.username}
                                 onChange={handleChange}
-                                placeholder="e.g., quantumleap (for your dashboard URL)"
+                                placeholder="e.g., quantumleap / doge_coin"
                                 required
                                 className="form-input"
                             />

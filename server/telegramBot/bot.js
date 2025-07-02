@@ -68,9 +68,21 @@ const bot = new TelegramBot(TOKEN, {
 });
 
 
+async function setBotCommands() {
+    try {
+        await bot.setMyCommands([
+            { command: 'start', description: 'Start interaction or link account' },
+            { command: 'add', description: 'Link this group to a campaign (Group chat only)' },
+            { command: 'mybalance', description: 'Check your earnings (Private chat only)' }
+            // Add other commands as you introduce them
+        ]);
+        console.log('Telegram bot commands set successfully.');
+    } catch (error) {
+        console.error('Failed to set Telegram bot commands:', error);
+    }
+}
 
-
-
+setBotCommands();
 
 async function sendToBackendForTracking(data) {
     try {
@@ -242,21 +254,21 @@ bot.onText(/\/start$/, (msg) => {
 });
 
 
-bot.onText(/\/linkcampaign (.+)/, async (msg, match) => {
+// New command: /add
+bot.onText(/\/add (.+)/, async (msg, match) => {
     const chatId = msg.chat.id.toString();
     const args = match[1].split(' '); // Get arguments after the command
-
 
     if (msg.chat.type !== 'group' && msg.chat.type !== 'supergroup') {
         return bot.sendMessage(chatId, 'This command can only be used inside a Telegram group that you want to link to a campaign.');
     }
 
     if (args.length !== 1) {
-        return bot.sendMessage(chatId, 'Usage: `/linkcampaign <campaign_id>`\nExample: `/linkcampaign 685cebcf3a5881b2dde705a9`');
+        // Update usage message
+        return bot.sendMessage(chatId, 'Usage: `/add <campaign_id>`\nExample: `/add 685cebcf3a5881b2dde705a9`');
     }
 
     const campaignId = args[0].trim();
-
 
     if (!/^[0-9a-fA-F]{24}$/.test(campaignId)) {
         return bot.sendMessage(chatId, 'Invalid campaign ID format. Please provide a valid 24-character hexadecimal ID.');
@@ -264,12 +276,10 @@ bot.onText(/\/linkcampaign (.+)/, async (msg, match) => {
 
     let telegramGroupLink = null; // Default to null
 
-
     if (msg.chat.username) {
         telegramGroupLink = `https://t.me/${msg.chat.username}`;
     }
 
-    
     const success = await sendChatIdToBackend(campaignId, chatId, telegramGroupLink);
 
     if (success) {
@@ -280,26 +290,22 @@ bot.onText(/\/linkcampaign (.+)/, async (msg, match) => {
 });
 
 
-
-
-bot.onText(/\/myrewards(?: (.+))?/, async (msg, match) => {
+bot.onText(/\/mybalance(?: (.+))?/, async (msg, match) => {
     const chatId = msg.chat.id;
     const telegramUserId = String(msg.from.id); // Get the Telegram user ID
     const optionalCampaignId = match[1] ? match[1].trim() : null; // Capture optional campaign ID
 
-
     if (msg.chat.type !== 'private') {
-        return bot.sendMessage(chatId, 'Please use the `/myrewards` command in a private chat with me for your privacy.');
+        // Update message for private chat
+        return bot.sendMessage(chatId, 'Please use the `/mybalance` command in a private chat with me for your privacy.');
     }
-
-    
 
     try {
         let apiUrl = `${GET_USER_EARNINGS_API_URL}?telegramUserId=${telegramUserId}`;
         if (optionalCampaignId) {
-
+            // Update usage message
             if (!/^[0-9a-fA-F]{24}$/.test(optionalCampaignId)) {
-                return bot.sendMessage(chatId, 'Invalid campaign ID format. Please provide a valid 24-character hexadecimal ID after `/myrewards`.');
+                return bot.sendMessage(chatId, 'Invalid campaign ID format. Please provide a valid 24-character hexadecimal ID after `/mybalance`.');
             }
             apiUrl += `&campaignId=${optionalCampaignId}`;
         }
@@ -328,10 +334,10 @@ bot.onText(/\/myrewards(?: (.+))?/, async (msg, match) => {
             earningsData.details.forEach(detail => {
                 replyMessage += `- Total: *$${detail.totalEarnings.toFixed(2)} ${detail.currency}*\n`;
                 if (detail.totalMessages > 0) {
-                    replyMessage += `  - Messages: ${detail.totalMessages}\n`;
+                    replyMessage += `  - Messages: ${detail.totalMessages}\n`;
                 }
                 if (detail.totalReactions > 0) {
-                    replyMessage += `  - Reactions: ${detail.totalReactions}\n`;
+                    replyMessage += `  - Reactions: ${detail.totalReactions}\n`;
                 }
             });
 
