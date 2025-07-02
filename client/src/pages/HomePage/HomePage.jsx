@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Ensure useState is imported
 import BannerScroller from '../../components/BannerScroller/BannerScroller';
 import ProjectGrid from '../../components/ProjectGrid/ProjectGrid';
 import DripGrid from '../../components/DripCampaign/DripGrid';
@@ -14,12 +14,13 @@ const HomePage = () => {
     const [tasks, setTasks] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [sparkCampaigns, setSparkCampaigns] = useState([]);
-    const [loadingTasks, setLoadingTasks] = true;
-    const [errorTasks, setErrorTasks] = null;
-    const [loadingCampaigns, setLoadingCampaigns] = true;
-    const [errorCampaigns, setErrorCampaigns] = null;
-    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = true;
-    const [errorSparkCampaigns, setErrorSparkCampaigns] = null;
+    // FIX: Added useState() calls here
+    const [loadingTasks, setLoadingTasks] = useState(true);
+    const [errorTasks, setErrorTasks] = useState(null);
+    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
+    const [errorCampaigns, setErrorCampaigns] = useState(null);
+    const [loadingSparkCampaigns, setLoadingSparkCampaigns] = useState(true);
+    const [errorSparkCampaigns, setErrorSparkCampaigns] = useState(null);
     const [showRewardMessageTaskId, setShowRewardMessageTaskId] = useState(null);
     const [pendingVerificationTaskIds, setPendingVerificationTaskIds] = useState([]);
     const { user, loadingUser, hasDashboard } = useUser();
@@ -83,10 +84,6 @@ const HomePage = () => {
                         isCommented: userCompletionEntry.isCommented,
                     } : { isLiked: false, isRetweeted: false, isCommented: false };
 
-                    // THIS IS THE KEY LOGIC ON INITIAL LOAD/REFRESH
-                    // A task should be in pending verification if:
-                    // 1. All individual actions are completed by the user (as per backend data).
-                    // 2. The backend has NOT yet marked it as fully completed (isFullyCompleted: false).
                     if (allIndividualActionsCompleted && !isFullyCompletedByUser) {
                         newPendingVerificationTaskIds.push(task._id);
                     }
@@ -95,12 +92,12 @@ const HomePage = () => {
                         ...task,
                         isFullyCompletedByUser: isFullyCompletedByUser,
                         userActionProgress: userActionProgress,
-                        areAllIndividualActionsCompleted: allIndividualActionsCompleted // Kept for logic internal to HomePage if needed
+                        areAllIndividualActionsCompleted: allIndividualActionsCompleted
                     };
                 });
 
             setTasks(processedTasks);
-            setPendingVerificationTaskIds(newPendingVerificationTaskIds); // Set this based on the initial fetch
+            setPendingVerificationTaskIds(newPendingVerificationTaskIds);
 
         } catch (err) {
             console.error('Error fetching tasks:', err);
@@ -231,7 +228,6 @@ const HomePage = () => {
                                                         ? data.userCompletionProgress.isFullyCompleted
                                                         : task.isFullyCompletedByUser;
 
-                    // If all individual actions are now complete AND task is not yet fully completed, mark as pending verification
                     if (updatedAreAllIndividualActionsCompleted && !updatedIsFullyCompletedByUser) {
                         setPendingVerificationTaskIds(prevIds => {
                             if (!prevIds.includes(taskId)) {
@@ -239,13 +235,11 @@ const HomePage = () => {
                             }
                             return prevIds;
                         });
-                        // Also show reward message if this is the final action that puts it into pending
                         setShowRewardMessageTaskId(taskId);
                         setTimeout(() => {
                             clearRewardMessage();
                         }, 5000);
                     } else if (updatedIsFullyCompletedByUser) {
-                        // If it becomes fully completed (e.g., by backend verification or previous state)
                         setPendingVerificationTaskIds(prevIds => prevIds.filter(id => id !== taskId));
                     }
 
@@ -264,8 +258,6 @@ const HomePage = () => {
             alert(`Error completing action: ${error.message}`);
         }
     };
-
-    // Removed handleTaskDone function as per your request
 
     const clearRewardMessage = useCallback(() => {
         setShowRewardMessageTaskId(null);
@@ -387,7 +379,6 @@ const HomePage = () => {
                         <DripGrid
                             tasks={tasksToShowForDripGrid}
                             onActionComplete={handleActionComplete}
-                            // onTaskDone={handleTaskDone} // This prop is now truly removed
                             showRewardMessageTaskId={showRewardMessageTaskId}
                             clearRewardMessage={clearRewardMessage}
                             pendingVerificationTaskIds={pendingVerificationTaskIds}
