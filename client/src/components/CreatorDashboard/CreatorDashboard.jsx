@@ -495,11 +495,10 @@ const CreatorDashboard = () => {
             });
 
             setAddTweetForm({ campaignId: null, newTweetLink: '', showForm: false, formError: null, formLoading: false });
-            showAlertDialog({
-                title: "Tweet Added",
-                message: response.data.message || "Tweet added successfully!",
-                type: "success"
-            });
+            showAlertDialog(
+                "Tweet Added", 
+                response.data.message || "Tweet added successfully!"
+            );
             
 
         } catch (err) {
