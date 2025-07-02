@@ -77,9 +77,10 @@ router.get('/available', authorize, async (req, res) => {
                 retweetLink: `https://x.com/intent/retweet?tweet_id=${task.tweetId}`,
                 commentLink: `https://x.com/intent/tweet?in_reply_to=${task.tweetId}`,
 
+                // These flags are now correctly populated from the database
                 isFullyCompletedByUser: userCompletionEntry ? userCompletionEntry.isFullyCompleted : false,
-                isPendingByUser: userCompletionEntry ? userCompletionEntry.isPending : false, // ADDED
-                isVerifiedByUser: userCompletionEntry ? userCompletionEntry.isVerified : false, // ADDED
+                isPendingByUser: userCompletionEntry ? userCompletionEntry.isPending : false,
+                isVerifiedByUser: userCompletionEntry ? userCompletionEntry.isVerified : false,
                 userActionProgress: userCompletionEntry ? {
                     isLiked: userCompletionEntry.isLiked,
                     isRetweeted: userCompletionEntry.isRetweeted,
@@ -176,19 +177,19 @@ router.post('/:taskId/mark-action-complete', authorize, checkUserStatus, async (
                 } else {
                     console.error(`[POST /mark-action-complete] CRITICAL: Existing user entry found, action ${actionType} is FALSE, but findOneAndUpdate returned NULL.`);
                     console.error(`[POST /mark-action-complete] Debug details:`);
-                    console.error(`  Requested taskId: ${taskId}`);
-                    console.error(`  Requested actionType: ${actionType}`);
-                    console.error(`  Derived actionFieldName: ${actionFieldName}`);
-                    console.error(`  userId from auth: ${userId}`);
-                    console.error(`  userIdObjectId (converted): ${userIdObjectId.toString()}`);
-                    console.error(`  Existing Task ID: ${existingTask._id.toString()}`);
-                    console.error(`  Existing Task Status: ${existingTask.status}`);
+                    console.error(`   Requested taskId: ${taskId}`);
+                    console.error(`   Requested actionType: ${actionType}`);
+                    console.error(`   Derived actionFieldName: ${actionFieldName}`);
+                    console.error(`   userId from auth: ${userId}`);
+                    console.error(`   userIdObjectId (converted): ${userIdObjectId.toString()}`);
+                    console.error(`   Existing Task ID: ${existingTask._id.toString()}`);
+                    console.error(`   Existing Task Status: ${existingTask.status}`);
                     const debugEntry = existingTask.completedBy.find(entry => entry.userId.equals(userIdObjectId));
                     if (debugEntry) {
-                        console.error(`  Specific 'completedBy' entry for user: ${JSON.stringify(debugEntry)}`);
-                        console.error(`  Value of ${actionFieldName} in existing entry: ${debugEntry[actionFieldName]}`);
+                        console.error(`   Specific 'completedBy' entry for user: ${JSON.stringify(debugEntry)}`);
+                        console.error(`   Value of ${actionFieldName} in existing entry: ${debugEntry[actionFieldName]}`);
                     } else {
-                        console.error(`  User's 'completedBy' entry was NOT found in the 'existingTask' fetched immediately after findOneAndUpdate failed.`);
+                        console.error(`   User's 'completedBy' entry was NOT found in the 'existingTask' fetched immediately after findOneAndUpdate failed.`);
                     }
                     return res.status(500).json({ message: 'Internal server error: Failed to update existing action. Please contact support.' });
                 }
@@ -288,23 +289,24 @@ router.post('/:taskId/mark-task-fully-complete', authorize, checkUserStatus, asy
             return res.status(400).json({ message: 'Please complete all individual actions (like, retweet, comment) before marking as DONE.' });
         }
 
-        // Check if already fully completed (and thus likely pending or verified)
-        if (userCompletionEntry.isFullyCompleted) {
-            console.log(`[POST /mark-task-fully-complete] Task ${taskId} already marked as fully completed by user ${userId}.`);
+        // Check if already pending or verified (meaning it's already been submitted)
+        if (userCompletionEntry.isPending || userCompletionEntry.isVerified) {
+            console.log(`[POST /mark-task-fully-complete] Task ${taskId} already submitted (pending or verified) by user ${userId}.`);
             return res.status(200).json({
-                message: 'Task already marked as fully completed by you.',
+                message: 'Task already submitted for verification by you.',
                 taskId: taskId,
                 userCompletionProgress: userCompletionEntry
             });
         }
 
-        // Set isFullyCompleted and isPending to true
+        // --- CRITICAL CHANGE HERE ---
+        // When user marks as DONE, it becomes PENDING, not fully completed yet.
         const updatedTask = await Task.findOneAndUpdate(
             { _id: new mongoose.Types.ObjectId(taskId), 'completedBy.userId': userIdObjectId },
             {
                 $set: {
-                    'completedBy.$.isFullyCompleted': true,
-                    'completedBy.$.isPending': true, // <-- SET IS_PENDING TO TRUE HERE
+                    'completedBy.$.isFullyCompleted': false, // Set to FALSE here. Only admin verification sets it to TRUE.
+                    'completedBy.$.isPending': true,         // Set to TRUE here. User has submitted for review.
                     'completedBy.$.completedAt': new Date()
                 },
                 $inc: { participationCount: 1 } // Increment task's participationCount for this specific task
@@ -313,7 +315,7 @@ router.post('/:taskId/mark-task-fully-complete', authorize, checkUserStatus, asy
         );
 
         if (!updatedTask) {
-             console.error(`[POST /mark-task-fully-complete] FAILED to set 'isFullyCompleted' flag for task ${taskId} by user ${userId}.`);
+             console.error(`[POST /mark-task-fully-complete] FAILED to update flags for task ${taskId} by user ${userId}.`);
              return res.status(500).json({ message: 'Internal server error: Failed to update task completion status.' });
         }
         userCompletionEntry = updatedTask.completedBy.find(entry => entry.userId.equals(userIdObjectId)); // Get the updated entry
@@ -440,18 +442,20 @@ router.post('/payout-verified-task', async (req, res) => { // For testing, no ad
 
         const userCompletionEntry = task.completedBy[userCompletionEntryIndex];
 
-        if (!userCompletionEntry.isFullyCompleted) {
-             console.warn(`[POST /payout-verified-task] Task ${dripEngagementRecordId} not yet marked as fully completed for user ${userId}. Payout skipped.`);
-             return res.status(400).json({ message: 'Task not fully completed by user, cannot disburse earnings.' });
+        // This check needs to be updated. It should be checking if it's pending, not if it's fully completed.
+        // A task that is "fully completed" (from the user's perspective) but not yet verified
+        // should have isPending: true and isFullyCompleted: false.
+        // So, the condition should be: if (!userCompletionEntry.isPending) { ... }
+        // However, the admin endpoint should only verify tasks that are pending *and* not yet verified/fraudulent.
+        if (!userCompletionEntry.isPending || userCompletionEntry.isVerified || userCompletionEntry.isFraudulent) {
+             console.warn(`[POST /payout-verified-task] Task ${dripEngagementRecordId} not in a verifiable state for user ${userId}. Payout skipped.`);
+             let message = 'Task not in a verifiable state.';
+             if (userCompletionEntry.isVerified) message = 'Task already verified.';
+             if (userCompletionEntry.isFraudulent) message = 'Task marked as fraudulent.';
+             if (!userCompletionEntry.isPending) message = 'Task not submitted for verification.';
+             return res.status(400).json({ message: message });
         }
-        if (userCompletionEntry.isVerified) {
-            console.warn(`[POST /payout-verified-task] Task ${dripEngagementRecordId} already verified for user ${userId}. Payout skipped.`);
-            return res.status(409).json({ message: 'Task already verified and paid out for this user.' });
-        }
-        if (userCompletionEntry.isFraudulent) {
-             console.warn(`[POST /payout-verified-task] Task ${dripEngagementRecordId} marked as fraudulent for user ${userId}. Payout skipped.`);
-             return res.status(403).json({ message: 'Task marked as fraudulent, cannot disburse earnings.' });
-        }
+
 
         // Update the task entry to mark it as verified and no longer pending
         const updateResult = await Task.updateOne(
@@ -459,7 +463,8 @@ router.post('/payout-verified-task', async (req, res) => { // For testing, no ad
             {
                 $set: {
                     'completedBy.$.isVerified': true,
-                    'completedBy.$.isPending': false // Set isPending to false upon verification/payout
+                    'completedBy.$.isPending': false, // Set isPending to false upon verification/payout
+                    'completedBy.$.isFullyCompleted': true // Admin verification makes it truly fully completed
                 }
             }
         );
