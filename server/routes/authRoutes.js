@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
 
             walletAddress: null,
             xUsername: null,
-            telegramUserId: null, // Critical: Ensure this is null for web registrations
+ //         telegramUserId: null, // Critical: Ensure this is null for web registrations
             telegramUsername: null,
             telegramFirstName: null,
             telegramLastName: null,
