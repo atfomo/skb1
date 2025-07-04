@@ -595,7 +595,7 @@ const CreatorDashboard = () => {
                                 className="banner-upload-input"
                             />
                             <label htmlFor="banner-upload" className="banner-upload-label-two">
-                                <FaCamera className="banner-upload-icon" /> Change Banner
+                                <FaCamera className="banner-upload-icon" /> Change Banner (Max 2MB)
                             </label>
                         </>
                     )}
