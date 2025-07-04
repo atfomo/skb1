@@ -10,9 +10,9 @@ import { API_BASE_URL } from '../../config';
 
 
 const DRIP_PACKAGES = [
-    { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 1199 },
-    { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1999 },
-    { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 3499 },
+    { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 899 },
+    { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1499 },
+    { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 2499 },
 
 ];
 

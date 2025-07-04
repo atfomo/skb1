@@ -7,9 +7,9 @@ const { DripCampaign, Task, User } = require('../services/db'); // Destructure m
 
 
 const DRIP_PACKAGES = [
-    { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 1199, description: '...' },
-    { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1999, description: '...' },
-    { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 3499, description: '...' },
+    { id: 'ignition', name: 'Ignition Drip', durationHours: 12, priceUSD: 899, description: '...' },
+    { id: 'boost', name: 'Boost Drip', durationHours: 24, priceUSD: 1499, description: '...' },
+    { id: 'surge', name: 'Surge Drip', durationHours: 48, priceUSD: 2499, description: '...' },
 ];
 
 
