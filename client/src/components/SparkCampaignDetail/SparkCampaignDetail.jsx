@@ -146,7 +146,7 @@ const SparkCampaignDetail = () => {
             <div className={`${styles.statusScreen} ${styles.loadingScreen}`}>
                 <FaSpinner className={styles.spinner} />
                 <h2 className={styles.statusTitle}>Loading Campaign...</h2>
-                <p className={styles.statusText}>Fetching details for Spark Campaign ID: {campaignId}</p>
+                <p className={styles.statusText}>Fetching details</p>
             </div>
         );
     }
