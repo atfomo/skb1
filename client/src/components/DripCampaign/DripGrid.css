@@ -1,0 +1,550 @@
+
+
+
+
+
+:root {
+    --background-dark-primary: #0d111c;
+    --background-dark-glass: rgba(17, 16, 15, 0.7);
+    --background-dark-glass-alt: rgba(28, 32, 45, 0.7); 
+     --background-dark-input: rgba(0, 0, 0, 0.4);
+
+    --text-primary-light: #e0e0e0;
+    --text-secondary-light: #c0c0c0;
+    --text-dimmed-light: #A0A0A0;
+    --text-faded-light: #B0B0B0;
+    --text-dark-on-orange: #0d111c; 
+
+    --brand-red-orange: #EC1708;
+    --brand-peach-orange: #FF5858;
+    --brand-dark-orange: #ff3c00;
+
+    --brand-red-orange-rgb: 236, 23, 8;
+    --brand-peach-orange-rgb: 255, 88, 88;
+
+    --social-twitter: #1DA1F2;
+    --social-twitter-light: #00BFFF;
+    --social-twitter-rgb: 29, 161, 242;
+
+    --status-completed-bg: rgba(40, 167, 69, 0.2);
+    --status-completed-border: rgba(40, 167, 69, 0.4);
+    --status-completed-text: #28a745;
+
+    --status-pending-bg: rgba(255, 165, 0, 0.2);
+    --status-pending-border: rgba(255, 165, 0, 0.4);
+    --status-pending-text: #FFA500;
+
+    --status-incomplete-bg: rgba(255, 38, 0, 0.2);
+    --status-incomplete-border: rgba(248, 105, 61, 0.4);
+    --status-incomplete-text: #E64A19; 
+
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-deep: rgba(0, 0, 0, 0.6);
+    --shadow-orange-glow-light: rgba(var(--brand-red-orange-rgb), 0.2);
+    --shadow-orange-glow-medium: rgba(var(--brand-red-orange-rgb), 0.4);
+    --shadow-orange-glow-deep: rgba(var(--brand-red-orange-rgb), 0.6);
+    --shadow-twitter-glow: rgba(var(--social-twitter-rgb), 0.5);
+
+    --border-subtle-light: rgba(255, 255, 255, 0.1);
+    --border-subtle-medium: rgba(255, 255, 255, 0.15);
+    --border-brand-orange: #FF6F00;
+}
+
+
+
+.drip-tasks-table-container {
+    background-color: var(--background-dark-glass); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-subtle-light);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px var(--shadow-medium);
+    padding: 25px;
+    color: var(--text-primary-light);
+    font-family: 'Inter', sans-serif; 
+    overflow-x: auto; 
+}
+
+
+.drip-table-header {
+    display: grid;
+    grid-template-columns: 0.2fr 1.4fr 1.0fr 0.6fr 0.6fr; 
+    gap: 20px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: rgb(28 28 28 / 61%); 
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1em;
+    color: var(--text-primary-light); 
+    border-bottom: 1px solid var(--border-subtle-light);
+}
+
+.drip-header-cell {
+    text-align: center;
+    padding-right: 10px;
+}
+
+
+.drip-table-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.drip-table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.5fr 2fr 0.8fr 1.2fr; 
+    gap: 20px;
+    align-items: center;
+    padding: 18px 20px;
+    border-radius: 12px; 
+    margin-bottom: 10px;
+    
+    background-color: rgba(17, 16, 15, 0.5); 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease-in-out;
+    position: relative; 
+}
+
+.drip-table-row:hover {
+    background-color: rgb(15, 15, 15); 
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-light);
+}
+
+
+.drip-new-task {
+    animation: pulseBorder 1.5s infinite alternate; 
+}
+
+@keyframes pulseBorder {
+    0% { border-color: #ff6333, 0.5; }
+    100% { border-color: #3b190e, 0.2; } 
+}
+
+.drip-completed-row {
+    opacity: 0.8; 
+    background-color: rgba(40, 50, 45, 0.5); 
+    border: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+.drip-pending-row {
+    background-color: rgba(var(--brand-peach-orange-rgb), 0.1); 
+    border: 1px solid rgba(var(--brand-peach-orange-rgb), 0.3); 
+}
+
+.drip-table-cell {
+    padding: 0 10px;
+    font-size: 0.95em;
+    color: var(--text-secondary-light); 
+    word-break: break-word; 
+}
+
+
+.drip-creator-info {
+    font-weight: 600;
+    color: var(--text-primary-light);
+}
+
+
+.drip-tweet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--social-twitter); 
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.drip-tweet-link:hover {
+    color: var(--social-twitter-light); 
+    transform: translateX(3px);
+}
+
+.drip-tweet-icon {
+    font-size: 1.2em;
+}
+
+
+.drip-action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.drip-action-btn {
+    background: rgba(255, 255, 255, 0.1); 
+    border: 1px solid var(--border-subtle-medium);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    color: var(--text-secondary-light);
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex: 1; 
+}
+
+.drip-action-btn:hover:not(:disabled) {
+    background: #E64A19, 0.1; 
+    color: #ff3c00; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--shadow-orange-glow-light); 
+}
+
+.drip-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.drip-action-done {
+    background: linear-gradient(45deg, #E64A19, #ff3c00); 
+    border-color: var(--brand-red-orange);
+    color: #4c4c4c; 
+    box-shadow: 0 4px 10px var(--shadow-orange-glow-medium);
+}
+
+
+.drip-earning-amount {
+    font-weight: 700;
+    font-size: 1.15em;
+    text-align: center;
+}
+
+.earning-value {
+    background-image: linear-gradient(45deg, #E64A19, #ff3c00); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; 
+    text-shadow: 0 0 8px var(--shadow-orange-glow-light);
+}
+
+
+.drip-status-cell {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative; 
+}
+
+.drip-done-btn {
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--text-dark-on-orange); 
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px var(--shadow-orange-glow-medium);
+    min-width: 100px; 
+}
+
+.drip-done-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--shadow-orange-glow-deep);
+}
+
+.drip-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    white-space: nowrap; 
+}
+
+.drip-status-completed {
+    background-color: var(--status-completed-bg); 
+    border: 1px solid var(--status-completed-border);
+    color: var(--status-completed-text);
+}
+
+.drip-status-pending {
+    background-color: var(--status-pending-bg); 
+    border: 1px solid var(--status-pending-border);
+    color: var(--status-pending-text);
+}
+
+.drip-status-incomplete {
+    background-color: var(--status-incomplete-bg); 
+    border: 1px solid var(--status-incomplete-border);
+    color: var(--status-incomplete-text); 
+}
+
+.drip-status-icon {
+    font-size: 1.1em;
+}
+
+.drip-spinner-icon {
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.drip-new-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--text-dark-on-orange); 
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.7em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px var(--shadow-orange-glow-light);
+    z-index: 10; 
+}
+
+
+.drip-reward-message-popup {
+    position: absolute;
+    bottom: calc(100% + 10px); 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--background-dark-glass-alt); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-subtle-light);
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 0.9em;
+    color: var(--text-primary-light);
+    white-space: normal; 
+    text-align: center;
+    box-shadow: 0 5px 20px var(--shadow-medium);
+    z-index: 20; 
+    min-width: 250px;
+    max-width: 300px;
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+.drip-close-message-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: var(--text-secondary-light);
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s ease;
+}
+
+.drip-close-message-btn:hover {
+    color: var(--brand-red-orange); 
+}
+
+
+.drip-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background-color: var(--background-dark-glass-alt); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle-light);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px var(--shadow-deep);
+    color: var(--text-secondary-light);
+    min-height: 300px;
+}
+
+.drip-empty-state-icon {
+    font-size: 4.5em;
+    color: var(--brand-red-orange); 
+    margin-bottom: 25px;
+    text-shadow: 0 0 20px var(--shadow-orange-glow-medium); 
+}
+
+.drip-empty-state-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--text-primary-light);
+    margin-bottom: 15px;
+    text-shadow: 0 2px 5px var(--shadow-light);
+}
+
+.drip-empty-state-message {
+    font-size: 1.1em;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: var(--text-faded-light);
+}
+
+.drip-empty-state-action-button {
+    padding: 14px 30px;
+    background: linear-gradient(45deg, var(--brand-red-orange), var(--brand-peach-orange)); 
+    color: var(--text-dark-on-orange);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.05em;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 25px var(--shadow-orange-glow-medium);
+    transition: all 0.3s ease;
+}
+
+.drip-empty-state-action-button:hover {
+    background: linear-gradient(45deg, var(--brand-peach-orange), var(--brand-red-orange));
+    box-shadow: 0 10px 30px var(--shadow-orange-glow-deep);
+    transform: translateY(-3px);
+}
+
+.drip-empty-state-action-button .btn-icon {
+    font-size: 1.2em;
+}
+
+
+@media (max-width: 768px) {
+    .drip-tasks-table-container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .drip-table-header {
+        display: none; 
+    }
+
+    .drip-table-row {
+        grid-template-columns: 1fr; 
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px var(--shadow-light);
+        border: 1px solid var(--border-subtle-light);
+    }
+
+    .drip-table-cell {
+        padding: 8px 0; 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; 
+        position: relative;
+    }
+
+    .drip-table-cell::before {
+        content: attr(data-label); 
+        font-weight: 700;
+        color: var(--text-dimmed-light); 
+        font-size: 0.8em;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .drip-action-buttons {
+        flex-wrap: wrap; 
+        justify-content: center;
+        width: 100%;
+        gap: 8px; 
+    }
+
+    .drip-action-btn {
+        flex: 1 1 auto; 
+        min-width: 80px;
+        max-width: 120px;
+        padding: 8px 10px;
+        font-size: 1em;
+    }
+    
+    .drip-status-cell {
+        flex-direction: row; 
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding-top: 15px; 
+    }
+
+    .drip-done-btn {
+        width: 100%; 
+        max-width: 200px;
+        padding: 12px;
+    }
+
+    .drip-status-tag {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+
+    .drip-new-badge {
+        top: 10px;
+        right: 10px;
+        font-size: 0.65em;
+        padding: 3px 6px;
+    }
+
+    .drip-reward-message-popup {
+        bottom: unset; 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); 
+        min-width: 90%;
+        max-width: 90%;
+        padding: 15px;
+        font-size: 0.85em;
+    }
+
+    .drip-close-message-btn {
+        font-size: 1em;
+        top: 8px;
+        right: 8px;
+    }
+
+    .drip-empty-state {
+        padding: 40px 15px;
+        border-radius: 15px;
+    }
+
+    .drip-empty-state-icon {
+        font-size: 3.5em;
+        margin-bottom: 20px;
+    }
+
+    .drip-empty-state-title {
+        font-size: 1.6em;
+    }
+
+    .drip-empty-state-message {
+        font-size: 1em;
+    }
+
+    .drip-empty-state-action-button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}

@@ -1,0 +1,201 @@
+
+
+
+.banner-scroller-section {
+    background-color: rgba(20, 20, 20, 0.5); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+    padding: 30px; 
+    margin-top: 30px; 
+    overflow: hidden; 
+}
+
+.banner-scroller-heading {
+    color: #FF6F00; 
+    font-size: 2.2em; 
+    font-weight: 700;
+    margin-bottom: 25px; 
+    text-align: center; 
+    text-shadow: 0 0 8px rgba(255, 110, 0, 0.3); 
+}
+
+
+.banner-scroller-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px; 
+    overflow: hidden; 
+    border-radius: 10px; 
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
+:root {
+    --banner-item-display-width: 50vw; 
+    --banner-gap: 20px; 
+    --banner-total-visible-width: calc(var(--banner-item-display-width) + var(--banner-gap));
+    
+    
+}
+
+
+
+
+.banner-scroller-inner {
+    display: flex; 
+    width: max-content; 
+    animation: autoScroll var(--animation-duration, 30s) linear infinite; 
+    animation-play-state: running; 
+}
+
+
+/* This is now a direct child of .banner-scroller-inner.
+   It contains ALL banners (original + duplicates). */
+.banner-items-container {
+    display: flex; 
+    
+}
+
+
+
+.banner-item-link {
+    flex-shrink: 0; 
+    width: var(--banner-item-display-width); 
+    margin-right: var(--banner-gap); 
+    text-decoration: none; 
+    display: block; 
+}
+
+
+.banner-card {
+    position: relative;
+    width: 100%;
+    
+    padding-bottom: calc(var(--banner-item-display-width) * 0.5625); 
+    background-color: rgba(255, 255, 255, 0.08); 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.banner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.banner-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    filter: brightness(0.8); 
+    transition: filter 0.3s ease;
+}
+
+.banner-card:hover .banner-card-image {
+    filter: brightness(0.9); 
+}
+
+
+.banner-content-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); 
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.banner-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin: 0;
+    background-image: linear-gradient(45deg, #FF6F00, #FFBB00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; 
+    text-shadow: 0 0 8px rgba(255, 110, 0, 0.3);
+}
+
+
+@keyframes autoScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        
+        
+        
+        transform: translateX(calc( -1 * var(--banner-count, 10) * (var(--banner-item-display-width) + var(--banner-gap)) ));
+        
+    }
+}
+
+
+.banner-scroller-wrapper:hover .banner-scroller-inner { 
+    animation-play-state: paused;
+}
+
+
+@media (max-width: 1024px) {
+    :root {
+        --banner-item-display-width: 60vw;
+        --banner-gap: 15px;
+    }
+    .banner-title {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner-scroller-section {
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .banner-scroller-heading {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    :root {
+        --banner-item-display-width: 90vw; 
+        --banner-gap: 10px;
+    }
+    
+    .banner-title {
+        font-size: 1.3em;
+    }
+    .banner-content-overlay {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner-scroller-section {
+        padding: 15px;
+    }
+    .banner-scroller-heading {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    :root {
+        --banner-item-display-width: 95vw; 
+        --banner-gap: 8px;
+    }
+    .banner-title {
+        font-size: 1.1em;
+    }
+    .banner-content-overlay {
+        padding: 10px;
+    }
+}

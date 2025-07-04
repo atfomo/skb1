@@ -1,0 +1,46 @@
+
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+
+/* * {
+    box-sizing: border-box;
+} */
+
+
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
+}
+
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  
+  
+  100% {
+    transform: translateX(-66.66%); 
+  }
+}
+
+
+.animate-scroll-banner {
+  animation: scroll-left 20s linear infinite; 
+}
+
+
+
+body {
+    line-height: 1.6;
+}
