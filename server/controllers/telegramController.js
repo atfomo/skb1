@@ -3,7 +3,7 @@
 const User = require('../models/User');
 const TelegramVerification = require('../models/TelegramVerification');
 const generateRandomCode = require('../utils/generateRandomCode');
-const SparkCampaign = require('../models/SparkCampaign'); // Make sure this is imported!
+const SparkCampaign = require('../models/SparkCampaign');
 const UserCampaignParticipation = require('../models/UserCampaignParticipation');
 const mongoose = require('mongoose'); // Import mongoose for ObjectId validation
 
@@ -53,7 +53,7 @@ exports.initiateVerification = async (req, res) => {
         const newVerification = new TelegramVerification({
             userId,
             verificationCode,
-            telegramUsername: cleanUsername,
+            telegramUsername: cleanUsername, // This stores the username *entered by the user on the website*
             expiresAt
         });
         await newVerification.save();
@@ -80,8 +80,9 @@ exports.completeVerification = async (req, res) => {
 
     const { verificationCode, telegramUserId, telegramUsername, telegramFirstName, telegramLastName, telegramPhotoUrl } = req.body;
 
-    if (!verificationCode || !telegramUserId || !telegramUsername) {
-        return res.status(400).json({ message: "Missing required verification data." });
+    // --- MODIFIED: Removed telegramUsername from required fields here ---
+    if (!verificationCode || !telegramUserId) {
+        return res.status(400).json({ message: "Missing required verification data (code or Telegram User ID)." });
     }
 
     try {
@@ -96,10 +97,12 @@ exports.completeVerification = async (req, res) => {
             return res.status(400).json({ message: "Verification code has expired. Please try again." });
         }
 
-        if (pendingVerification.telegramUsername.toLowerCase() !== telegramUsername.toLowerCase()) {
-            console.warn(`Telegram username mismatch for code ${verificationCode}. Expected: ${pendingVerification.telegramUsername}, Received: ${telegramUsername}`);
-            return res.status(400).json({ message: "Telegram username mismatch. Please ensure you entered the correct username on the website." });
-        }
+        // --- REMOVED THE PROBLEM LINE ---
+        // The previous line that caused the "Telegram username mismatch" error has been removed:
+        // if (pendingVerification.telegramUsername.toLowerCase() !== telegramUsername.toLowerCase()) { ... }
+        // We now trust the telegramUsername provided by the bot as the current one.
+        // --- END REMOVED BLOCK ---
+
 
         const user = await User.findById(pendingVerification.userId);
         if (!user) {
@@ -107,25 +110,41 @@ exports.completeVerification = async (req, res) => {
             return res.status(404).json({ message: "Associated user not found." });
         }
 
-        const existingTelegramUser = await User.findOne({ telegramUserId: telegramUserId });
-        if (existingTelegramUser && existingTelegramUser._id.toString() !== user._id.toString()) {
-            const existingTelegramUsernameUser = await User.findOne({ telegramUsername: telegramUsername });
-            if (existingTelegramUsernameUser && existingTelegramUsernameUser._id.toString() !== user._id.toString()) {
-                console.warn(`Attempt to link already used Telegram username: @${telegramUsername} to user ${user._id}. Already linked to ${existingTelegramUsernameUser._id}`);
-                return res.status(409).json({ message: "This Telegram username is already linked to another FOMO account." });
-            }
-            console.warn(`Attempt to link already used Telegram ID: ${telegramUserId} to user ${user._id}. Already linked to ${existingTelegramUser._id}`);
-            return res.status(409).json({ message: "This Telegram account is already linked to another FOMO user." });
+        // --- BEGIN: Crucial logic for handling existing Telegram links using telegramUserId ---
+        const existingTelegramUserById = await User.findOne({ telegramUserId: telegramUserId });
+        if (existingTelegramUserById && existingTelegramUserById._id.toString() !== user._id.toString()) {
+            // This Telegram User ID is already linked to a DIFFERENT FOMO account.
+            // This is a strong and valid error.
+            console.warn(`Attempt to link already used Telegram ID: ${telegramUserId} to user ${user._id}. Already linked to ${existingTelegramUserById._id}`);
+            return res.status(409).json({ message: "This Telegram account (ID) is already linked to another FOMO user." });
         }
         
+        // Optional/Nuanced: Check if the *newly provided* username from Telegram is already linked to another user.
+        // This check is less critical than the telegramUserId check, as usernames can change.
+        // It's generally safer to prioritize telegramUserId for unique account linkage.
+        // If you keep this check, consider its implications if Telegram users frequently change usernames.
+        /*
+        if (telegramUsername) { // Only check if a username is actually provided by Telegram
+            const existingTelegramUserByUsername = await User.findOne({ telegramUsername: telegramUsername });
+            if (existingTelegramUserByUsername && existingTelegramUserByUsername._id.toString() !== user._id.toString() && existingTelegramUserByUsername.telegramUserId !== telegramUserId) {
+                console.warn(`Attempt to link already used Telegram username: @${telegramUsername} to user ${user._id}. Already linked to ${existingTelegramUserByUsername._id}`);
+                return res.status(409).json({ message: "This Telegram username is already linked to another FOMO account." });
+            }
+        }
+        */
+        // --- END: Logic for handling existing Telegram links ---
+
+
+        // --- CRUCIAL CHANGE: ALWAYS UPDATE with the latest data from the bot ---
+        // This ensures the user's profile in your database reflects their current Telegram details.
         user.telegramUserId = telegramUserId;
-        user.telegramUsername = telegramUsername;
+        user.telegramUsername = telegramUsername; // Store the current username from Telegram
         user.telegramFirstName = telegramFirstName;
         user.telegramLastName = telegramLastName;
         user.telegramPhotoUrl = telegramPhotoUrl;
 
-        await user.save();
-        await TelegramVerification.deleteOne({ _id: pendingVerification._id });
+        await user.save(); // Save the updated user document
+        await TelegramVerification.deleteOne({ _id: pendingVerification._id }); // Delete the used verification code
         
         res.status(200).json({ message: "Telegram account linked successfully!" });
 
@@ -153,6 +172,7 @@ exports.trackMessage = async (req, res) => {
     try {
         const user = await User.findOne({ telegramUserId: telegramUserId });
         if (!user) {
+            // It's okay if a user sends a message but isn't linked; just don't track for rewards
             return res.status(200).json({ message: "Telegram ID not linked to a FOMO account. Message not tracked for rewards." });
         }
 
