@@ -255,6 +255,7 @@ body {
 .action-button {
     padding: 12px 22px;
     border: none;
+    margin-bottom: 20px;
     border-radius: 10px;
     cursor: pointer;
     font-size: 0.95em;
