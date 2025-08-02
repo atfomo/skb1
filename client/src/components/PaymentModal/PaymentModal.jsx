@@ -9,7 +9,8 @@ const PaymentModal = ({
     campaignName, 
     campaignData,
     onPaymentSuccess,
-    solanaAddress = "9iEVrZhfEMYr8u58MZgYhE2vpkgSSBc2t3RWBWArGjAR" // Default Solana address
+    solanaAddress = "9iEVrZhfEMYr8u58MZgYhE2vpkgSSBc2t3RWBWArGjAR", // Default Solana address
+    apiEndpoint = "/api/spark-campaigns/verify-payment" // Default API endpoint
 }) => {
     const [copied, setCopied] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState('pending'); // pending, processing, success, failed
@@ -44,7 +45,7 @@ const PaymentModal = ({
 
             // Simulate payment verification API call
             // In a real implementation, you would verify the transaction on Solana blockchain
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/api/spark-campaigns/verify-payment`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}${apiEndpoint}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ const PaymentModal = ({
                         {paymentStatus === 'success' && (
                             <div className="status-success">
                                 <FaCheck />
-                                <p>Payment verified! Creating campaign...</p>
+                                <p>Payment verification submitted! Awaiting admin review...</p>
                             </div>
                         )}
                         

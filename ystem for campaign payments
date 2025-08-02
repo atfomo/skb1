@@ -1,0 +1,5 @@
+[33m48babf4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix SparkCampaign model: Add pending_payment to status enum
+[33m0abd7c4[m Fix payment flow: Remove balance deduction for external Solana payments
+[33ma94f4d6[m Implement payment flow for Spark Campaign creation with Solana integration
+[33m00d68ef[m update
+[33mc972000[m update

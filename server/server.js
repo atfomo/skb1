@@ -28,6 +28,7 @@ const sparkCampaignRoutes = require('./routes/sparkCampaignRoutes');
 const boostVolumeRoutes = require('./routes/BoostVolumeRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const adminBoostVolumeRoutes = require('./routes/adminBoostVolumeRoutes');
+const adminPaymentRoutes = require('./routes/adminPaymentRoutes');
 const creatorRoutes = require('./routes/creatorRoutes');
 
 const app = express();
@@ -150,6 +151,7 @@ apiRouter.use('/drip-campaigns', dripCampaignsRoutes);
 apiRouter.use('/boost-volume', boostVolumeRoutes);
 apiRouter.use('/admin', adminRoutes);
 apiRouter.use('/admin/boost-volume', adminBoostVolumeRoutes);
+apiRouter.use('/admin', adminPaymentRoutes);
 apiRouter.use('/project', projectRoutes);
 apiRouter.use('/tasks', tasksRoutes);
 

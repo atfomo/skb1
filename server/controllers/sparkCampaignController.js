@@ -4,6 +4,7 @@ const User = require('../models/User');
 const SparkCampaign = require('../models/SparkCampaign');
 const Action = require('../models/Action'); // Make sure you have this model
 const Project = require('../models/Project'); // Correctly importing Project model
+const Payment = require('../models/Payment');
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -1020,20 +1021,15 @@ exports.getSparkCampaignsByCreatorId = async (req, res) => {
 };
 
 exports.verifyPaymentAndActivateCampaign = async (req, res, next) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
         const { campaignId, transactionHash, solAmount } = req.body;
         const creatorId = req.user?.id;
 
         if (!creatorId) {
-            await session.abortTransaction();
             return res.status(401).json({ message: 'User not authenticated.' });
         }
 
         if (!campaignId || !transactionHash || !solAmount) {
-            await session.abortTransaction();
             return res.status(400).json({ message: 'Missing required payment verification data.' });
         }
 
@@ -1042,45 +1038,40 @@ exports.verifyPaymentAndActivateCampaign = async (req, res, next) => {
             _id: campaignId,
             creatorId: creatorId,
             status: 'pending_payment'
-        }).session(session);
+        });
 
         if (!campaign) {
-            await session.abortTransaction();
             return res.status(404).json({ message: 'Campaign not found or already processed.' });
         }
 
-        // Here you would typically verify the transaction on Solana blockchain
-        // For now, we'll simulate verification
-        const paymentVerified = true; // This should be replaced with actual blockchain verification
-
-        if (paymentVerified) {
-            // Update campaign status to active
-            campaign.status = 'active';
-            campaign.paymentVerified = true;
-            campaign.transactionHash = transactionHash;
-            campaign.paymentDate = new Date();
-            await campaign.save({ session });
-
-            // No balance deduction needed since payment was sent to external Solana address
-            // The campaign budget is already "paid" via the Solana transaction
-
-            await session.commitTransaction();
-
-            res.status(200).json({
-                message: "Payment verified and campaign activated successfully!",
-                campaign: campaign
-            });
-        } else {
-            await session.abortTransaction();
-            res.status(400).json({
-                message: "Payment verification failed. Please try again.",
-                code: "PAYMENT_VERIFICATION_FAILED"
-            });
+        // Get creator info
+        const creator = await User.findById(creatorId);
+        if (!creator) {
+            return res.status(404).json({ message: 'Creator not found.' });
         }
 
+        // Create payment verification request
+        const paymentRequest = new Payment({
+            campaignId: campaign._id,
+            campaignModel: 'SparkCampaign',
+            campaignType: 'spark',
+            creatorId: creator._id,
+            creatorName: creator.username || creator.name,
+            campaignName: campaign.name,
+            amount: solAmount,
+            transactionHash: transactionHash,
+            solanaAddress: "9iEVrZhfEMYr8u58MZgYhE2vpkgSSBc2t3RWBWArGjAR"
+        });
+
+        await paymentRequest.save();
+
+        res.status(200).json({
+            message: "Payment verification request submitted successfully! Awaiting admin review.",
+            paymentId: paymentRequest._id
+        });
+
     } catch (error) {
-        await session.abortTransaction();
-        console.error("Error verifying payment:", error);
+        console.error("Error submitting payment verification:", error);
         
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(err => err.message);
@@ -1088,7 +1079,5 @@ exports.verifyPaymentAndActivateCampaign = async (req, res, next) => {
         }
 
         next(error);
-    } finally {
-        session.endSession();
     }
 };

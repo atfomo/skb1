@@ -29,6 +29,7 @@ import AdminBoostVolumeCampaignList from './components/Admin/AdminBoostVolumeCam
 import AdminBoostVolumeCampaignDetail from './components/Admin/AdminBoostVolumeCampaignDetail';
 import AdminTaskVerificationPage from './pages/AdminTaskVerificationPage';
 import AdminBannerController from './components/Admin/AdminBannerController';
+import AdminPaymentReviewPage from './pages/AdminPaymentReviewPage';
 import SparkCampaignDetail from './components/SparkCampaignDetail/SparkCampaignDetail';
 
 
@@ -263,6 +264,10 @@ function App() {
                         <Route
                             path="/admin/banner-controller"
                             element={<AdminRoute><AdminBannerController /></AdminRoute>}
+                        />
+                        <Route
+                            path="/admin/payment-review"
+                            element={<AdminRoute><AdminPaymentReviewPage /></AdminRoute>}
                         />
 
                         {}

@@ -21,8 +21,8 @@ const DripCampaignSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'paused', 'completed', 'cancelled'],
-        default: 'active',
+        enum: ['pending_payment', 'active', 'paused', 'completed', 'cancelled'],
+        default: 'pending_payment',
     },
     total_budget_usd: {
         type: Number,

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../UserContext'; // Ensure this path is correct
 import './CreateFireDrip.css'; // For styling
 import { API_BASE_URL } from '../../config';
+import PaymentModal from '../../components/PaymentModal/PaymentModal';
 
 
 
@@ -25,6 +26,8 @@ const CreateFireDrip = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [message, setMessage] = useState(null);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [campaignData, setCampaignData] = useState(null);
 
     useEffect(() => {
         if (!loadingUser && (!user || !user._id || !token)) {
@@ -73,7 +76,6 @@ const CreateFireDrip = () => {
             const response = await axios.post(`${API_BASE_URL}/api/drip-campaigns/create-drip`, {
                 creatorId: user._id,
                 packageId: selectedPackage.id,
-
                 initialTweetLink: initialTweetLink.trim(),
                 priceUSD: selectedPackage.priceUSD, // Sending price for backend validation/logging
             }, {
@@ -82,19 +84,29 @@ const CreateFireDrip = () => {
                 }
             });
 
-            setMessage(response.data.message || "Drip campaign created successfully!");
-            setInitialTweetLink(''); // Clear input after successful creation
-            setSelectedPackage(null); // Reset selected package
-
-
-            navigate(`/creator-dashboard`);
+            // Store campaign data and show payment modal
+            setCampaignData(response.data.dripCampaign);
+            setShowPaymentModal(true);
+            setLoading(false);
 
         } catch (err) {
             console.error("Error creating Drip campaign:", err.response?.data || err.message);
             setError(err.response?.data?.message || "Failed to create drip campaign.");
-        } finally {
             setLoading(false);
         }
+    };
+
+    const handlePaymentSuccess = async () => {
+        setMessage("Drip campaign activated successfully!");
+        setInitialTweetLink(''); // Clear input after successful creation
+        setSelectedPackage(null); // Reset selected package
+        setShowPaymentModal(false);
+        setCampaignData(null);
+        
+        // Navigate to dashboard after a short delay
+        setTimeout(() => {
+            navigate('/creator-dashboard');
+        }, 2000);
     };
 
     if (loadingUser) {
@@ -166,10 +178,21 @@ const CreateFireDrip = () => {
                         className="submit-drip-button"
                         disabled={loading} // This disables the button while the API request is in progress
                     >
-                        {loading ? 'Activating Drip...' : 'Activate Drip Campaign'}
+                        {loading ? 'Creating Campaign...' : 'Create Drip Campaign'}
                     </button>
                 </div>
             )}
+
+            {/* Payment Modal */}
+            <PaymentModal
+                isOpen={showPaymentModal}
+                onClose={() => setShowPaymentModal(false)}
+                amount={campaignData?.totalBudgetUSD || 0}
+                campaignName={campaignData?.package || ''}
+                campaignData={campaignData}
+                onPaymentSuccess={handlePaymentSuccess}
+                apiEndpoint="/api/drip-campaigns/verify-payment"
+            />
         </div>
     );
 };

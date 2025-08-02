@@ -81,6 +81,11 @@ const Header = () => {
         setShowUserDropdown(false);
     };
 
+    const handleGoToPaymentReview = () => {
+        navigate("/admin/payment-review");
+        setShowUserDropdown(false);
+    };
+
     return (
         <header className="app-header">
             <div className="header-container">
@@ -176,6 +181,12 @@ const Header = () => {
                                                         className="dropdown-button admin-button"
                                                     >
                                                         Banner Controller
+                                                    </button>
+                                                    <button
+                                                        onClick={handleGoToPaymentReview}
+                                                        className="dropdown-button admin-button"
+                                                    >
+                                                        Payment Review
                                                     </button>
                                                 </>
                                             )}

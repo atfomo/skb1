@@ -4,6 +4,7 @@ const router = express.Router();
 const authorize = require('../middleware/authenticateJWT');
 const db = require('../services/db'); // Your database service
 const { DripCampaign, Task, User } = require('../services/db'); // Destructure models from db service
+const Payment = require('../models/Payment');
 
 
 const DRIP_PACKAGES = [
@@ -46,7 +47,7 @@ router.post('/create-drip', authorize, async (req, res) => {
             package_id: selectedPackage.id,
             start_time: startTime,
             end_time: endTime,
-            status: 'active',
+            status: 'pending_payment', // Changed to pending_payment for payment flow
             total_budget_usd: selectedPackage.priceUSD,
             tweet_links: [{ url: initialTweetLink }],
             total_engagements_target: Math.round(selectedPackage.priceUSD * 50),
@@ -56,11 +57,11 @@ router.post('/create-drip', authorize, async (req, res) => {
 
         const createdCampaign = await db.createDripCampaign(newDripCampaignData);
 
-
-        await generateTasksForTweet(createdCampaign._id, initialTweetLink, creator);
+        // Don't generate tasks yet - wait for payment verification
+        // await generateTasksForTweet(createdCampaign._id, initialTweetLink, creator);
 
         res.status(201).json({
-            message: 'Drip campaign activated successfully!',
+            message: 'Drip campaign created successfully! Please complete payment to activate.',
             dripCampaign: {
                 id: createdCampaign._id,
                 package: selectedPackage.name,
@@ -69,7 +70,8 @@ router.post('/create-drip', authorize, async (req, res) => {
                 totalBudgetUSD: selectedPackage.priceUSD,
                 initialTweet: initialTweetLink,
                 status: createdCampaign.status,
-            }
+            },
+            requiresPayment: true
         });
 
     } catch (error) {
@@ -78,6 +80,63 @@ router.post('/create-drip', authorize, async (req, res) => {
     }
 });
 
+
+// Payment verification endpoint for Drip Campaigns
+router.post('/verify-payment', authorize, async (req, res) => {
+    const { campaignId, transactionHash, solAmount } = req.body;
+    const creatorId = req.user.id;
+
+    if (!campaignId || !transactionHash || !solAmount) {
+        return res.status(400).json({ message: 'Missing required payment verification data.' });
+    }
+
+    try {
+        // Find the campaign
+        const campaign = await db.findDripCampaignById(campaignId);
+        
+        if (!campaign) {
+            return res.status(404).json({ message: 'Drip Campaign not found.' });
+        }
+
+        if (campaign.creator_id.toString() !== creatorId) {
+            return res.status(403).json({ message: 'Unauthorized: You do not own this campaign.' });
+        }
+
+        if (campaign.status !== 'pending_payment') {
+            return res.status(400).json({ message: 'Campaign is not in pending payment status.' });
+        }
+
+        // Get creator info
+        const creator = await User.findById(creatorId);
+        if (!creator) {
+            return res.status(404).json({ message: 'Creator not found.' });
+        }
+
+        // Create payment verification request
+        const paymentRequest = new Payment({
+            campaignId: campaign._id,
+            campaignModel: 'DripCampaign',
+            campaignType: 'drip',
+            creatorId: creator._id,
+            creatorName: creator.username || creator.name,
+            campaignName: `Drip Campaign - ${campaign.package_id}`,
+            amount: solAmount,
+            transactionHash: transactionHash,
+            solanaAddress: "9iEVrZhfEMYr8u58MZgYhE2vpkgSSBc2t3RWBWArGjAR"
+        });
+
+        await paymentRequest.save();
+
+        res.status(200).json({
+            message: "Payment verification request submitted successfully! Awaiting admin review.",
+            paymentId: paymentRequest._id
+        });
+
+    } catch (error) {
+        console.error("Error submitting drip campaign payment verification:", error);
+        res.status(500).json({ message: 'Failed to submit payment verification due to a server error.' });
+    }
+});
 
 router.post('/:campaignId/add-tweet', authorize, async (req, res) => {
     const { campaignId } = req.params;
