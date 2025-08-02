@@ -201,6 +201,83 @@
     color: #fff;
 }
 
+/* Transaction Hash Section Styles */
+.transaction-hash-section {
+    margin-bottom: 25px;
+}
+
+.transaction-hash-section h4 {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.transaction-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.transaction-hash-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.transaction-hash-input:focus {
+    border-color: #E64A19;
+    box-shadow: 0 0 0 2px rgba(230, 74, 25, 0.2);
+}
+
+.transaction-hash-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.transaction-hash-input::placeholder {
+    color: #888;
+}
+
+.explorer-button.small {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ccc;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.explorer-button.small:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.transaction-help {
+    margin-top: 10px;
+    color: #888;
+    font-size: 0.9em;
+    font-style: italic;
+    text-align: center;
+}
+
 .payment-status {
     margin-bottom: 25px;
     text-align: center;

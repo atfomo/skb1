@@ -35,6 +35,11 @@ const PaymentModal = ({
     };
 
     const handlePaymentVerification = async () => {
+        if (!transactionHash.trim()) {
+            alert('Please enter the transaction hash from your Solana payment.');
+            return;
+        }
+
         setPaymentStatus('processing');
         
         try {
@@ -43,8 +48,7 @@ const PaymentModal = ({
                 throw new Error('Authentication token not found');
             }
 
-            // Simulate payment verification API call
-            // In a real implementation, you would verify the transaction on Solana blockchain
+            // Send the actual transaction hash to the backend
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}${apiEndpoint}`, {
                 method: 'POST',
                 headers: {
@@ -53,7 +57,7 @@ const PaymentModal = ({
                 },
                 body: JSON.stringify({
                     campaignId: campaignData?.id,
-                    transactionHash: 'simulated_transaction_hash',
+                    transactionHash: transactionHash.trim(),
                     solAmount: amount
                 })
             });
@@ -76,6 +80,12 @@ const PaymentModal = ({
 
     const openSolanaExplorer = () => {
         window.open(`https://solscan.io/account/${solanaAddress}`, '_blank');
+    };
+
+    const openTransactionExplorer = () => {
+        if (transactionHash.trim()) {
+            window.open(`https://solscan.io/tx/${transactionHash.trim()}`, '_blank');
+        }
     };
 
     if (!isOpen) return null;
@@ -106,7 +116,8 @@ const PaymentModal = ({
                             <li>Use the current SOL price for conversion</li>
                             <li>Include a memo with your campaign name for verification</li>
                             <li>This is an external payment - your account balance will not be affected</li>
-                            <li>Click "Verify Payment" after sending</li>
+                            <li>Copy the transaction hash from your wallet after sending</li>
+                            <li>Paste the transaction hash below and click "Verify Payment"</li>
                         </ol>
                     </div>
 
@@ -131,17 +142,43 @@ const PaymentModal = ({
                         </div>
                     </div>
 
+                    <div className="transaction-hash-section">
+                        <h4>Transaction Hash</h4>
+                        <div className="transaction-input-container">
+                            <input
+                                type="text"
+                                placeholder="Enter your Solana transaction hash here..."
+                                value={transactionHash}
+                                onChange={(e) => setTransactionHash(e.target.value)}
+                                className="transaction-hash-input"
+                                disabled={paymentStatus === 'processing'}
+                            />
+                            {transactionHash.trim() && (
+                                <button 
+                                    className="explorer-button small"
+                                    onClick={openTransactionExplorer}
+                                    title="View transaction on Solscan"
+                                >
+                                    <FaExternalLinkAlt />
+                                </button>
+                            )}
+                        </div>
+                        <p className="transaction-help">
+                            After sending payment, copy the transaction hash from your wallet and paste it here.
+                        </p>
+                    </div>
+
                     <div className="payment-status">
                         {paymentStatus === 'pending' && (
                             <div className="status-pending">
-                                <p>Waiting for payment...</p>
+                                <p>Waiting for payment and transaction hash...</p>
                             </div>
                         )}
                         
                         {paymentStatus === 'processing' && (
                             <div className="status-processing">
                                 <div className="loading-spinner"></div>
-                                <p>Verifying payment...</p>
+                                <p>Submitting payment for admin review...</p>
                             </div>
                         )}
                         
@@ -165,8 +202,9 @@ const PaymentModal = ({
                             <button 
                                 className="verify-payment-button"
                                 onClick={handlePaymentVerification}
+                                disabled={!transactionHash.trim()}
                             >
-                                Verify Payment
+                                Submit for Review
                             </button>
                         )}
                         
