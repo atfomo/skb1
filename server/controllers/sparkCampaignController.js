@@ -425,19 +425,13 @@ exports.trackReaction = async (req, res, next) => {
 
 
 exports.createSparkCampaign = async (req, res, next) => {
-    
-    
-    
-
     const validationErrors = [];
     let bannerImageUrl = null;
     const creatorId = req.user?.id; // Get creatorId from authenticated user
 
-
     if (!creatorId) {
         validationErrors.push('User not authenticated (creatorId is missing).');
     }
-
 
     if (!req.file) {
         validationErrors.push('Banner image file is required.');
@@ -465,7 +459,6 @@ exports.createSparkCampaign = async (req, res, next) => {
         }
     }
 
-
     let {
         name,
         budget,
@@ -477,7 +470,6 @@ exports.createSparkCampaign = async (req, res, next) => {
     } = req.body;
 
     const extractedTelegramChatId = extractTelegramGroupId(telegramGroupLink);
-    
 
     let parsedHashtags = [];
     try {
@@ -506,7 +498,6 @@ exports.createSparkCampaign = async (req, res, next) => {
     const numericBudget = parseFloat(budget);
     const numericDurationHours = parseInt(durationHours, 10);
 
-
     const dataForValidation = {
         name,
         budget: numericBudget,
@@ -524,7 +515,6 @@ exports.createSparkCampaign = async (req, res, next) => {
     const inputErrors = validateSparkCampaignInput(dataForValidation);
     validationErrors.push(...inputErrors);
 
-
     if (validationErrors.length > 0) {
         console.error('Final validation errors for createSparkCampaign (before Mongoose schema validation):', validationErrors);
         return res.status(400).json({
@@ -533,18 +523,15 @@ exports.createSparkCampaign = async (req, res, next) => {
         });
     }
 
-
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-
         const creator = await User.findById(creatorId).session(session);
         if (!creator) {
             await session.abortTransaction();
             return res.status(404).json({ message: 'Creator not found.' });
         }
-
 
         const project = await Project.findOne({ ownerId: creatorId }).session(session);
         if (!project) {
@@ -556,21 +543,15 @@ exports.createSparkCampaign = async (req, res, next) => {
         }
         const projectId = project._id; // Get the ID of the found project
 
-
         const effectiveBudget = (typeof numericBudget === 'number' && !isNaN(numericBudget) && numericBudget >= 1) ? numericBudget : 0;
         const userRewardPool = effectiveBudget * 0.80;
         const platformFeeAmount = effectiveBudget * 0.20;
         const currentRewardPoolBalance = userRewardPool; // Initial current balance is the full reward pool
 
-        
-        
-        
-        
-
-
+        // Create campaign with pending_payment status for payment flow
         const newSparkCampaign = new SparkCampaign({
             creatorId,
-            projectId, // Assign the fetched projectId
+            projectId,
             name: name.trim(),
             bannerImageUrl: bannerImageUrl,
             budget: numericBudget,
@@ -582,46 +563,29 @@ exports.createSparkCampaign = async (req, res, next) => {
             requiredActions: parsedRequiredActions,
             additionalInstructions: additionalInstructions ? additionalInstructions.trim() : '',
             campaignType: campaignType || 'spark',
-            status: 'pending', // Default status
-            userRewardPool,      // Set calculated values
+            status: 'pending_payment', // New status for payment flow
+            userRewardPool,
             platformFeeAmount,
             currentRewardPoolBalance
         });
 
         const savedCampaign = await newSparkCampaign.save({ session });
-        
-
-
-        if (creator.balance < numericBudget) {
-            await session.abortTransaction();
-            return res.status(400).json({
-                message: `Insufficient balance to create campaign. Required: ${numericBudget}, Available: ${creator.balance}.`,
-                code: "INSUFFICIENT_BALANCE"
-            });
-        }
-        creator.balance -= numericBudget;
-        await creator.save({ session });
-        
-
-
 
         await User.findByIdAndUpdate(creatorId, {
             $push: { createdSparkCampaigns: savedCampaign._id }
         }, { new: true, useFindAndModify: false, session });
-        
-
 
         await session.commitTransaction();
 
-        res.status(201).json({
-            message: "Spark Campaign created successfully!",
+        return res.status(201).json({
+            message: "Campaign created successfully! Please complete payment to activate.",
             campaign: savedCampaign,
+            requiresPayment: true
         });
 
     } catch (error) {
         await session.abortTransaction();
         console.error("Error creating Spark Campaign (transaction aborted):", error);
-
 
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(err => err.message);
@@ -1052,5 +1016,89 @@ exports.getSparkCampaignsByCreatorId = async (req, res) => {
     } catch (error) {
         console.error('Error fetching Spark campaigns by creator ID:', error);
         res.status(500).json({ success: false, message: 'Server error while fetching Spark campaigns.' });
+    }
+};
+
+exports.verifyPaymentAndActivateCampaign = async (req, res, next) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const { campaignId, transactionHash, solAmount } = req.body;
+        const creatorId = req.user?.id;
+
+        if (!creatorId) {
+            await session.abortTransaction();
+            return res.status(401).json({ message: 'User not authenticated.' });
+        }
+
+        if (!campaignId || !transactionHash || !solAmount) {
+            await session.abortTransaction();
+            return res.status(400).json({ message: 'Missing required payment verification data.' });
+        }
+
+        // Find the campaign
+        const campaign = await SparkCampaign.findOne({
+            _id: campaignId,
+            creatorId: creatorId,
+            status: 'pending_payment'
+        }).session(session);
+
+        if (!campaign) {
+            await session.abortTransaction();
+            return res.status(404).json({ message: 'Campaign not found or already processed.' });
+        }
+
+        // Here you would typically verify the transaction on Solana blockchain
+        // For now, we'll simulate verification
+        const paymentVerified = true; // This should be replaced with actual blockchain verification
+
+        if (paymentVerified) {
+            // Update campaign status to active
+            campaign.status = 'active';
+            campaign.paymentVerified = true;
+            campaign.transactionHash = transactionHash;
+            campaign.paymentDate = new Date();
+            await campaign.save({ session });
+
+            // Deduct balance from user
+            const creator = await User.findById(creatorId).session(session);
+            if (creator.balance < campaign.budget) {
+                await session.abortTransaction();
+                return res.status(400).json({
+                    message: `Insufficient balance. Required: ${campaign.budget}, Available: ${creator.balance}.`,
+                    code: "INSUFFICIENT_BALANCE"
+                });
+            }
+
+            creator.balance -= campaign.budget;
+            await creator.save({ session });
+
+            await session.commitTransaction();
+
+            res.status(200).json({
+                message: "Payment verified and campaign activated successfully!",
+                campaign: campaign
+            });
+        } else {
+            await session.abortTransaction();
+            res.status(400).json({
+                message: "Payment verification failed. Please try again.",
+                code: "PAYMENT_VERIFICATION_FAILED"
+            });
+        }
+
+    } catch (error) {
+        await session.abortTransaction();
+        console.error("Error verifying payment:", error);
+        
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(err => err.message);
+            return res.status(400).json({ message: `Validation Error: ${messages.join(' ')}` });
+        }
+
+        next(error);
+    } finally {
+        session.endSession();
     }
 };

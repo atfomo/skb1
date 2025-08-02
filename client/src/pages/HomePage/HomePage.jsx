@@ -440,7 +440,7 @@ const HomePage = () => {
             </section>
 
             <section className="homepage-section available-campaigns-section glassmorphism-card">
-                <h2 className="section-heading">FOMO Campaigns</h2>
+                <h2 className="section-heading">FOMO Campaigns (SOON)</h2>
                 <p className="section-description">Discover high-impact campaigns tailored for significant community growth and volume generation.</p>
                 {loadingCampaigns ? (
                     <div className="loading-state card-loading-state">

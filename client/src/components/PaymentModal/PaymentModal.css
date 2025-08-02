@@ -1,0 +1,357 @@
+.payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.payment-modal {
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(230, 74, 25, 0.1), rgba(255, 60, 0, 0.1));
+}
+
+.payment-modal-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.8em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment-modal-header h2 svg {
+    color: #E64A19;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.payment-modal-content {
+    padding: 30px;
+}
+
+.payment-summary {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payment-summary h3 {
+    margin: 0 0 15px 0;
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.campaign-details p {
+    margin: 8px 0;
+    color: #ccc;
+    font-size: 1em;
+}
+
+.campaign-details strong {
+    color: #E64A19;
+}
+
+.payment-instructions {
+    margin-bottom: 25px;
+}
+
+.payment-instructions h4 {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.payment-instructions ol {
+    color: #ccc;
+    padding-left: 20px;
+}
+
+.payment-instructions li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.payment-instructions strong {
+    color: #E64A19;
+}
+
+.solana-address-section {
+    margin-bottom: 25px;
+}
+
+.solana-address-section h4 {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.address-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.address-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.address-text {
+    color: #E64A19;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    word-break: break-all;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.copy-button {
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+}
+
+.copy-button:hover {
+    background: linear-gradient(45deg, #ff511c, #d83200);
+    transform: translateY(-1px);
+}
+
+.explorer-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ccc;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    width: 100%;
+    justify-content: center;
+}
+
+.explorer-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.payment-status {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.status-pending,
+.status-processing,
+.status-success,
+.status-failed {
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-processing {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.status-success {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-failed {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.loading-spinner {
+    border: 3px solid rgba(33, 150, 243, 0.3);
+    border-top: 3px solid #2196f3;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.payment-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.verify-payment-button,
+.retry-button,
+.cancel-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.verify-payment-button {
+    background: linear-gradient(45deg, #E64A19, #ff3c00);
+    color: white;
+}
+
+.verify-payment-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #ff511c, #d83200);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 74, 25, 0.4);
+}
+
+.retry-button {
+    background: linear-gradient(45deg, #2196f3, #1976d2);
+    color: white;
+}
+
+.retry-button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #1976d2, #1565c0);
+    transform: translateY(-2px);
+}
+
+.cancel-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.verify-payment-button:disabled,
+.retry-button:disabled,
+.cancel-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payment-modal {
+        margin: 10px;
+        max-height: 95vh;
+    }
+    
+    .payment-modal-header {
+        padding: 20px;
+    }
+    
+    .payment-modal-header h2 {
+        font-size: 1.5em;
+    }
+    
+    .payment-modal-content {
+        padding: 20px;
+    }
+    
+    .address-display {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .address-text {
+        margin-right: 0;
+        text-align: center;
+    }
+    
+    .payment-actions {
+        flex-direction: column;
+    }
+    
+    .verify-payment-button,
+    .retry-button,
+    .cancel-button {
+        width: 100%;
+    }
+} 

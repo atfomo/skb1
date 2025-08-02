@@ -54,6 +54,7 @@ router.get('/creator/:creatorId', authenticateJWT, sparkCampaignController.getSp
 
 
 router.post('/', authenticateJWT, upload.single('bannerImage'), sparkCampaignController.createSparkCampaign);
+router.post('/verify-payment', authenticateJWT, sparkCampaignController.verifyPaymentAndActivateCampaign);
 router.get('/', authenticateJWT, sparkCampaignController.getAllSparkCampaigns);
 
 

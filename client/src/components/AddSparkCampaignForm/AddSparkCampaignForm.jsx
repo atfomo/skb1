@@ -4,6 +4,7 @@ import { useUser } from '../../UserContext';
 import { useDialog } from '../../context/DialogContext';
 import axios from 'axios';
 import { API_BASE_URL } from '../../config';
+import PaymentModal from '../PaymentModal/PaymentModal';
 import './AddSparkCampaignForm.css';
 import {
     FaPaperPlane, FaDollarSign, FaCalendarAlt, FaHashtag, FaExternalLinkAlt,
@@ -47,6 +48,10 @@ const AddSparkCampaignForm = () => {
     const [loading, setLoading] = useState(false);
     const [formError, setFormError] = useState(null); // Renamed to avoid confusion with Dialog error
     const [formSuccess, setFormSuccess] = useState(null); // Renamed
+    
+    // Payment modal state
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [campaignData, setCampaignData] = useState(null);
 
 
     useEffect(() => {
@@ -104,7 +109,6 @@ const AddSparkCampaignForm = () => {
             return;
         }
 
-
         if (!campaignName.trim() || !budget || !durationHours || !telegramGroupLink.trim() || !tweetUrl.trim()) {
             const msg = "Please fill in all required fields (Campaign Name, Budget, Duration, Telegram Link, X (Twitter) URL).";
             setFormError(msg);
@@ -135,6 +139,20 @@ const AddSparkCampaignForm = () => {
             return;
         }
 
+        // Create campaign first, then show payment modal
+        const formData = new FormData();
+        formData.append('creatorId', user._id);
+        formData.append('name', campaignName.trim());
+        formData.append('budget', parseFloat(budget));
+        formData.append('durationHours', parseInt(durationHours));
+        formData.append('telegramGroupLink', telegramGroupLink.trim());
+        formData.append('tweetUrl', tweetUrl.trim());
+        formData.append('hashtags', JSON.stringify(hashtags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')));
+        formData.append('requiredActions', JSON.stringify(requiredActions));
+        formData.append('additionalInstructions', additionalInstructions.trim());
+        formData.append('campaignType', 'spark');
+        formData.append('bannerImage', bannerFile);
+
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             const msg = "Authentication token not found. Please log in.";
@@ -145,52 +163,30 @@ const AddSparkCampaignForm = () => {
             return;
         }
 
-
-
-        const formData = new FormData();
-        formData.append('creatorId', user._id);
-        formData.append('name', campaignName.trim());
-        formData.append('budget', parseFloat(budget));
-        formData.append('durationHours', parseInt(durationHours));
-        formData.append('telegramGroupLink', telegramGroupLink.trim());
-        formData.append('tweetUrl', tweetUrl.trim());
-
-        formData.append('hashtags', JSON.stringify(hashtags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')));
-        formData.append('requiredActions', JSON.stringify(requiredActions));
-        formData.append('additionalInstructions', additionalInstructions.trim());
-        formData.append('campaignType', 'spark');
-        formData.append('bannerImage', bannerFile); // Append the actual file here, backend will receive it as 'bannerImage'
-
         try {
-
             const response = await axios.post(`${API_BASE_URL}/api/spark-campaigns`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
-
                 }
             });
 
             if (response.status === 201) {
-                setFormSuccess("Spark Campaign created successfully!");
-                showAlertDialog(
-                    "Campaign Created!",
-                    `Your campaign "${campaignName}" has been successfully launched! You can view its status on your dashboard.`,
-                    () => navigate('/creator-dashboard')
-                );
+                // Store campaign data for payment
+                const campaignData = {
+                    id: response.data.campaign._id,
+                    name: campaignName.trim(),
+                    budget: parseFloat(budget),
+                    durationHours: parseInt(durationHours),
+                    telegramGroupLink: telegramGroupLink.trim(),
+                    tweetUrl: tweetUrl.trim(),
+                    hashtags: hashtags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''),
+                    requiredActions,
+                    additionalInstructions: additionalInstructions.trim(),
+                    bannerFile
+                };
 
-                setCampaignName('');
-                setBudget('');
-                setDurationHours('');
-                setTelegramGroupLink('');
-                setTweetUrl('');
-                setHashtags('');
-                setRequiredActions({
-                    like: true, retweet: true, comment: true, joinTelegram: true,
-                });
-                setAdditionalInstructions('');
-                setBannerFile(null); // Clear selected file
-                setBannerPreviewUrl(''); // Clear preview URL
-                refetchUserData(); // Refresh user data, assuming campaign creation updates user's campaigns
+                setCampaignData(campaignData);
+                setShowPaymentModal(true);
             } else {
                 const msg = response.data.message || "Failed to create campaign. Please check your inputs.";
                 setFormError(msg);
@@ -204,6 +200,33 @@ const AddSparkCampaignForm = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handlePaymentSuccess = async () => {
+        if (!campaignData) return;
+
+        setFormSuccess("Payment verified! Campaign activated successfully!");
+        showAlertDialog(
+            "Campaign Activated!",
+            `Your campaign "${campaignData.name}" has been successfully activated! You can view its status on your dashboard.`,
+            () => navigate('/creator-dashboard')
+        );
+
+        // Reset form
+        setCampaignName('');
+        setBudget('');
+        setDurationHours('');
+        setTelegramGroupLink('');
+        setTweetUrl('');
+        setHashtags('');
+        setRequiredActions({
+            like: true, retweet: true, comment: true, joinTelegram: true,
+        });
+        setAdditionalInstructions('');
+        setBannerFile(null);
+        setBannerPreviewUrl('');
+        setCampaignData(null);
+        refetchUserData();
     };
 
     if (loadingUser) {
@@ -462,6 +485,16 @@ const AddSparkCampaignForm = () => {
                     {loading ? 'Creating Campaign...' : <><FaPaperPlane /> Create Campaign</>}
                 </button>
             </form>
+
+            {/* Payment Modal */}
+            <PaymentModal
+                isOpen={showPaymentModal}
+                onClose={() => setShowPaymentModal(false)}
+                amount={campaignData?.budget || 0}
+                campaignName={campaignData?.name || ''}
+                campaignData={campaignData}
+                onPaymentSuccess={handlePaymentSuccess}
+            />
         </div>
     );
 };
