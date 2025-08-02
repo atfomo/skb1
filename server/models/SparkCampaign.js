@@ -97,7 +97,7 @@ const sparkCampaignSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'active', 'paused', 'ended', 'refunded', 'cancelled'],
+        enum: ['pending', 'pending_payment', 'active', 'paused', 'ended', 'refunded', 'cancelled'],
         default: 'pending',
     },
     campaignType: {
