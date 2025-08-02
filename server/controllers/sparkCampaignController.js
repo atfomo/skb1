@@ -1061,18 +1061,8 @@ exports.verifyPaymentAndActivateCampaign = async (req, res, next) => {
             campaign.paymentDate = new Date();
             await campaign.save({ session });
 
-            // Deduct balance from user
-            const creator = await User.findById(creatorId).session(session);
-            if (creator.balance < campaign.budget) {
-                await session.abortTransaction();
-                return res.status(400).json({
-                    message: `Insufficient balance. Required: ${campaign.budget}, Available: ${creator.balance}.`,
-                    code: "INSUFFICIENT_BALANCE"
-                });
-            }
-
-            creator.balance -= campaign.budget;
-            await creator.save({ session });
+            // No balance deduction needed since payment was sent to external Solana address
+            // The campaign budget is already "paid" via the Solana transaction
 
             await session.commitTransaction();
 

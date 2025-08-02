@@ -104,6 +104,7 @@ const PaymentModal = ({
                             <li>Send exactly <strong>${amount} USD</strong> worth of SOL to the address below</li>
                             <li>Use the current SOL price for conversion</li>
                             <li>Include a memo with your campaign name for verification</li>
+                            <li>This is an external payment - your account balance will not be affected</li>
                             <li>Click "Verify Payment" after sending</li>
                         </ol>
                     </div>
